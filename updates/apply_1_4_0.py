@@ -79,7 +79,7 @@ replace("MainActivity.java",'        horizontal.addView(chips);body.addView(hori
             b.setBackground(rounded(j==categoryFilter?VIOLET:0xffffffff,18));categoriesChips.addView(b);
         }
         categoriesScroll.addView(categoriesChips);body.addView(categoriesScroll);gap(body,8);''')
-replace("MainActivity.java",'query=t.toString();taskLimit=60;','query=t.toString();taskLimit=24;')
+replace("MainActivity.java",'query=s.toString();taskLimit=60;','query=s.toString();taskLimit=24;')
 replace("MainActivity.java",'handler.postDelayed(taskSearch,120);','handler.postDelayed(taskSearch,220);')
 replace("MainActivity.java",'            if(date==null){\n                if(filter==1',
 '''            if(date==null){
