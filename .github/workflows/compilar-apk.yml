@@ -1,4 +1,4 @@
-name: Compilar Agenda Clara 1.4.0
+name: Compilar Agenda Clara 1.5.0
 
 on:
   workflow_dispatch:
@@ -11,6 +11,8 @@ on:
       - 'updates/test_1_3_1.py'
       - 'updates/apply_1_4_0.py'
       - 'updates/test_1_4_0.py'
+      - 'updates/apply_1_5_0.py'
+      - 'updates/Phase3Tests.java'
 
 permissions:
   contents: read
@@ -42,6 +44,7 @@ jobs:
           python3 updates/test_1_3_1.py
           python3 updates/apply_1_4_0.py
           python3 updates/test_1_4_0.py
+          python3 updates/apply_1_5_0.py
 
       - name: Recuperar clave de desarrollo privada
         shell: bash
@@ -68,6 +71,17 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+
+      - name: Pruebas JVM de clasificación y contexto
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$(mktemp -d)"
+          SRC=AgendaClara/app/src/main/java/pe/agendaclara/app
+          javac -encoding UTF-8 -d "$OUT"             "$SRC/ActivityClassifier.java" "$SRC/MessageParser.java"             "$SRC/ConversationAnalyzer.java" "$SRC/HistoryTextParser.java"             "$SRC/Task.java" "$SRC/TaskLogic.java" "$SRC/TaskExpiryPolicy.java"             "$SRC/DoubleTapGate.java"             AgendaClara/tests/CoreTests.java AgendaClara/tests/ConversationTests.java             updates/Phase3Tests.java
+          java -cp "$OUT" CoreTests
+          java -cp "$OUT" ConversationTests
+          java -cp "$OUT" Phase3Tests
 
       - name: Preparar Android SDK API 35
         shell: bash
@@ -108,7 +122,7 @@ jobs:
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-1.4.0-APK
+          name: Agenda-Clara-1.5.0-APK
           path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
@@ -119,12 +133,12 @@ jobs:
           set -euo pipefail
           rm -f AgendaClara/signing/development.jks
           rm -rf AgendaClara/.gradle AgendaClara/app/build
-          zip -q -r Agenda-Clara-1.4.0-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
-          if unzip -Z1 Agenda-Clara-1.4.0-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
-      - name: Publicar fuentes 1.4.0
+          zip -q -r Agenda-Clara-1.5.0-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
+          if unzip -Z1 Agenda-Clara-1.5.0-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
+      - name: Publicar fuentes 1.5.0
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-1.4.0-Fuentes-Verificadas
-          path: Agenda-Clara-1.4.0-Fuentes-Verificadas.zip
+          name: Agenda-Clara-1.5.0-Fuentes-Verificadas
+          path: Agenda-Clara-1.5.0-Fuentes-Verificadas.zip
           retention-days: 30
           if-no-files-found: error
