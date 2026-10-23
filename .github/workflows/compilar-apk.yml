@@ -1,4 +1,4 @@
-name: Compilar Agenda Clara 1.3.1
+name: Compilar Agenda Clara 1.4.0
 
 on:
   workflow_dispatch:
@@ -9,6 +9,8 @@ on:
       - '.github/workflows/compilar-apk.yml'
       - 'updates/apply_1_3_1.py'
       - 'updates/test_1_3_1.py'
+      - 'updates/apply_1_4_0.py'
+      - 'updates/test_1_4_0.py'
 
 permissions:
   contents: read
@@ -38,6 +40,8 @@ jobs:
           python3 updates/apply_1_3_1.py
           python3 AgendaClara/tests/test_cleanup_sqlite.py
           python3 updates/test_1_3_1.py
+          python3 updates/apply_1_4_0.py
+          python3 updates/test_1_4_0.py
 
       - name: Recuperar clave de desarrollo privada
         shell: bash
@@ -104,7 +108,7 @@ jobs:
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-1.3.1-APK
+          name: Agenda-Clara-1.4.0-APK
           path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
@@ -115,12 +119,12 @@ jobs:
           set -euo pipefail
           rm -f AgendaClara/signing/development.jks
           rm -rf AgendaClara/.gradle AgendaClara/app/build
-          zip -q -r Agenda-Clara-1.3.1-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
-          if unzip -Z1 Agenda-Clara-1.3.1-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
-      - name: Publicar fuentes 1.3.1
+          zip -q -r Agenda-Clara-1.4.0-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
+          if unzip -Z1 Agenda-Clara-1.4.0-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
+      - name: Publicar fuentes 1.4.0
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-1.3.1-Fuentes-Verificadas
-          path: Agenda-Clara-1.3.1-Fuentes-Verificadas.zip
+          name: Agenda-Clara-1.4.0-Fuentes-Verificadas
+          path: Agenda-Clara-1.4.0-Fuentes-Verificadas.zip
           retention-days: 30
           if-no-files-found: error
