@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   construir-y-validar:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
       - name: Obtener el repositorio
@@ -59,14 +59,18 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Preparar Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Instalar Android SDK API 35
+      - name: Preparar Android SDK API 35
         shell: bash
         run: |
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+          set -euo pipefail
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          SDKMANAGER="$(command -v sdkmanager || true)"
+          if [ -z "$SDKMANAGER" ]; then
+            SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          fi
+          test -x "$SDKMANAGER" || { echo "Android SDK cmdline-tools no están disponibles"; exit 1; }
+          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses >/dev/null || true
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" 'platforms;android-35' 'build-tools;35.0.0'
 
       - name: Preparar cache Gradle
         uses: gradle/actions/setup-gradle@v4
