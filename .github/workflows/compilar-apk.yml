@@ -78,7 +78,7 @@ jobs:
           set -euo pipefail
           OUT="$(mktemp -d)"
           SRC=AgendaClara/app/src/main/java/pe/agendaclara/app
-          javac -encoding UTF-8 -d "$OUT"             "$SRC/ActivityClassifier.java" "$SRC/MessageParser.java"             "$SRC/ConversationAnalyzer.java" "$SRC/HistoryTextParser.java"             "$SRC/Task.java" "$SRC/TaskLogic.java" "$SRC/TaskExpiryPolicy.java"             "$SRC/DoubleTapGate.java"             AgendaClara/tests/CoreTests.java AgendaClara/tests/ConversationTests.java             updates/Phase3Tests.java
+          javac -encoding UTF-8 -d "$OUT"             "$SRC/ActivityClassifier.java" "$SRC/MessageParser.java"             "$SRC/ConversationAnalyzer.java" "$SRC/HistoryTextParser.java"             "$SRC/Task.java" "$SRC/TaskLogic.java" "$SRC/TaskExpiryPolicy.java"             "$SRC/DoubleTapGate.java" "$SRC/TextHash.java"             AgendaClara/tests/CoreTests.java AgendaClara/tests/ConversationTests.java             updates/Phase3Tests.java
           java -cp "$OUT" CoreTests
           java -cp "$OUT" ConversationTests
           java -cp "$OUT" Phase3Tests
