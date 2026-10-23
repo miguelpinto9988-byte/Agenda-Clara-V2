@@ -1,4 +1,4 @@
-name: Compilar Agenda Clara 1.5.0
+name: Compilar Agenda Clara 2.0.0
 
 on:
   workflow_dispatch:
@@ -13,6 +13,9 @@ on:
       - 'updates/test_1_4_0.py'
       - 'updates/apply_1_5_0.py'
       - 'updates/Phase3Tests.java'
+      - 'updates/apply_2_0_0.py'
+      - 'updates/test_2_0_0.py'
+      - 'updates/Phase4Tests.java'
 
 permissions:
   contents: read
@@ -45,6 +48,8 @@ jobs:
           python3 updates/apply_1_4_0.py
           python3 updates/test_1_4_0.py
           python3 updates/apply_1_5_0.py
+          python3 updates/apply_2_0_0.py
+          python3 updates/test_2_0_0.py
 
       - name: Recuperar clave de desarrollo privada
         shell: bash
@@ -78,12 +83,13 @@ jobs:
           set -euo pipefail
           OUT="$(mktemp -d)"
           SRC=AgendaClara/app/src/main/java/pe/agendaclara/app
-          javac -encoding UTF-8 -d "$OUT"             "$SRC/ActivityClassifier.java" "$SRC/MessageParser.java"             "$SRC/ConversationAnalyzer.java" "$SRC/HistoryTextParser.java"             "$SRC/Task.java" "$SRC/TaskLogic.java" "$SRC/TaskExpiryPolicy.java"             "$SRC/DoubleTapGate.java" "$SRC/TextHash.java"             AgendaClara/tests/CoreTests.java AgendaClara/tests/ConversationTests.java             updates/Phase3Tests.java
+          javac -encoding UTF-8 -d "$OUT"             "$SRC/ActivityClassifier.java" "$SRC/MessageParser.java"             "$SRC/ConversationAnalyzer.java" "$SRC/HistoryTextParser.java"             "$SRC/Task.java" "$SRC/TaskLogic.java" "$SRC/TaskExpiryPolicy.java"             "$SRC/DoubleTapGate.java" "$SRC/TextHash.java" "$SRC/TaskSummary.java"             AgendaClara/tests/CoreTests.java AgendaClara/tests/ConversationTests.java             updates/Phase3Tests.java updates/Phase4Tests.java
           java -cp "$OUT" CoreTests
           java -cp "$OUT" ConversationTests
           java -cp "$OUT" Phase3Tests
+          java -cp "$OUT" Phase4Tests
 
-      - name: Preparar Android SDK API 35
+      - name: Preparar Android SDK API 36
         shell: bash
         run: |
           set -euo pipefail
@@ -94,12 +100,12 @@ jobs:
           fi
           test -x "$SDKMANAGER" || { echo "Android SDK cmdline-tools no están disponibles"; exit 1; }
           yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses >/dev/null || true
-          "$SDKMANAGER" --sdk_root="$SDK_ROOT" 'platforms;android-35' 'build-tools;35.0.0'
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" 'platforms;android-36' 'build-tools;35.0.0'
 
       - name: Preparar cache Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.9'
+          gradle-version: '8.13'
 
       - name: Compilar APK Android
         working-directory: AgendaClara
@@ -122,7 +128,7 @@ jobs:
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-1.5.0-APK
+          name: Agenda-Clara-2.0.0-APK
           path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
@@ -133,12 +139,12 @@ jobs:
           set -euo pipefail
           rm -f AgendaClara/signing/development.jks
           rm -rf AgendaClara/.gradle AgendaClara/app/build
-          zip -q -r Agenda-Clara-1.5.0-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
-          if unzip -Z1 Agenda-Clara-1.5.0-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
-      - name: Publicar fuentes 1.5.0
+          zip -q -r Agenda-Clara-2.0.0-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
+          if unzip -Z1 Agenda-Clara-2.0.0-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
+      - name: Publicar fuentes 2.0.0
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-1.5.0-Fuentes-Verificadas
-          path: Agenda-Clara-1.5.0-Fuentes-Verificadas.zip
+          name: Agenda-Clara-2.0.0-Fuentes-Verificadas
+          path: Agenda-Clara-2.0.0-Fuentes-Verificadas.zip
           retention-days: 30
           if-no-files-found: error
