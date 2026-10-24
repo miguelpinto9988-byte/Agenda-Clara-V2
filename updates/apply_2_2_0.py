@@ -23,8 +23,8 @@ replace('filter=state.getInt("filter");categoryFilter=',
 'filter=state.getInt("filter");reviewFilter=Math.max(0,Math.min(4,state.getInt("review_filter",0)));reviewQuery=state.getString("review_query","");categoryFilter=')
 replace('out.putInt("filter",filter);out.putInt("category_filter",categoryFilter);',
 'out.putInt("filter",filter);out.putInt("review_filter",reviewFilter);out.putString("review_query",reviewQuery);out.putInt("category_filter",categoryFilter);')
-replace('if(groupSearch!=null)handler.removeCallbacks(groupSearch);',
-'if(groupSearch!=null)handler.removeCallbacks(groupSearch);if(reviewSearchTask!=null)handler.removeCallbacks(reviewSearchTask);')
+replace('if(taskSearch!=null)handler.removeCallbacks(taskSearch);if(groupSearch!=null)handler.removeCallbacks(groupSearch);',
+'if(taskSearch!=null)handler.removeCallbacks(taskSearch);if(groupSearch!=null)handler.removeCallbacks(groupSearch);if(reviewSearchTask!=null)handler.removeCallbacks(reviewSearchTask);')
 replace('body.removeAllViews();if(page==0)tasksPage();else if(page==1)calendarPage();else if(page==2)messagesPage();else settingsPage();',
 'body.removeAllViews();if(page==0)tasksPage();else if(page==1)calendarPage();else if(page==2)messagesPage();else settingsPage();if(!samePage)UiMotion.reveal(body);')
 replace('        EditText search=input("Buscar en tus tareas",query,android.text.InputType.TYPE_CLASS_TEXT);search.setTag("task_search");',
