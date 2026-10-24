@@ -25,4 +25,11 @@ source=gradle.read_text(encoding="utf-8")
 if source.count("versionCode 15")!=1 or source.count("versionName '2.6.0'")!=1:
     raise RuntimeError("La actualización requiere el código fuente Agenda Clara 2.6.0")
 gradle.write_text(source.replace("versionCode 15","versionCode 16").replace("versionName '2.6.0'","versionName '2.6.1'"),encoding="utf-8")
+# Hotfix: close ternary wrapper in the diagnostics display expression.
+reminderFile=base/"ScheduleReminders.java"
+source=reminderFile.read_text(encoding="utf-8")
+old='java.util.Locale.forLanguageTag("es-PE")));'
+new='java.util.Locale.forLanguageTag("es-PE"))));'
+if source.count(old)!=1:raise RuntimeError("Diagnostics formatting anchor changed")
+reminderFile.write_text(source.replace(old,new,1),encoding="utf-8")
 print("Agenda Clara 2.6.1 aplicada: respaldo, conflictos, cuadrícula, avisos y fotos optimizadas.")
