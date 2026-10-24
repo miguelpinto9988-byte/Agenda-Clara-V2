@@ -94,7 +94,7 @@ replacement='''    /** Cada cuenta es un acordeón independiente: sin confundir 
         String[] labels=new String[groups.size()];
         for(int i=0;i<groups.size();i++){CalendarScheduleImport.Group group=groups.get(i);
             StringBuilder days=new StringBuilder();for(ScheduleEntry entry:group.sessions){if(days.length()>0)days.append(", ");days.append(ScheduleEntry.dayName(entry.day)).append(" ").append(ScheduleEntry.clock(entry.start));}
-            labels[i]=group.name+" · "+group.sessions.size()+" día(s)\n"+days;
+            labels[i]=group.name+" · "+group.sessions.size()+" día(s)\\n"+days;
         }
         dialogBuilder().setTitle("Importar horario de "+calendar.name)
             .setMultiChoiceItems(labels,marked,(d,i,on)->marked[i]=on)
@@ -108,7 +108,7 @@ replacement='''    /** Cada cuenta es un acordeón independiente: sin confundir 
                     if(old.day==candidate.day&&old.start==candidate.start&&old.end==candidate.end&&ScheduleCourseColors.same(old.course,candidate.course)){existing++;break;}}
                 final int duplicates=existing;final int total=picked.size();
                 dialogBuilder().setTitle("Confirmar horario importado")
-                    .setMessage("Cuenta: "+calendar.account+"\nCalendario: "+calendar.name+"\nBloques propuestos: "+total+"\nPosibles duplicados: "+duplicates+".\n\nSe importarán como clases SEMANALES en Mi horario. Revisa los días, horas, y fecha de fin del semestre después de importarlos. No se editarán los eventos de Google Calendar.")
+                    .setMessage("Cuenta: "+calendar.account+"\\nCalendario: "+calendar.name+"\\nBloques propuestos: "+total+"\\nPosibles duplicados: "+duplicates+".\\n\\nSe importarán como clases SEMANALES en Mi horario. Revisa los días, horas, y fecha de fin del semestre después de importarlos. No se editarán los eventos de Google Calendar.")
                     .setNegativeButton("Volver",null).setPositiveButton("Importar clases",(agree,which)->{
                         new Thread(()->{
                             ScheduleDatabase db=ScheduleDatabase.get(this);int count=db.importReviewed(picked);ScheduleReminders.rebuild(this);
