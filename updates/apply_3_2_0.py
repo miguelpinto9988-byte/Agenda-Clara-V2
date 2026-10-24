@@ -56,3 +56,13 @@ s=s[:start]+'''if(importing){
                  }
                  dialog.dismiss();if(onDone!=null)onDone.run();return;}''' + s[end:]
 
+
+path.write_text(s,encoding="utf-8")
+gradle=root/"app/build.gradle"
+g=gradle.read_text(encoding="utf-8")
+assert g.count("versionCode 21")==1 and g.count("versionName '3.1.0'")==1
+gradle.write_text(g.replace("versionCode 21","versionCode 22").replace("versionName '3.1.0'","versionName '3.2.0'"),encoding="utf-8")
+assert "chooseScheduleDays(" not in s
+assert "Repetir este curso · Seleccionar días" not in s
+assert "selected[index]=!selected[index]" in s
+print("PASS: 3.2 usa exclusivamente los siete chips originales; edición, creación, OCR y recordatorios.")
