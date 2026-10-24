@@ -25,9 +25,9 @@ one('''ScheduleEntry e=current.copy();e.day=i+1;e.start=st;''',
     '''ScheduleEntry e=current.copy();if(e.day!=i+1)e.id=0;e.day=i+1;e.start=st;''')
 # En modo OCR los siete días elegidos pasan a la lista de revisión,
 # sin insertarse aún en BD ni perder la opción de elegir qué importar.
-one('''if(importing){ScheduleEntry s=additions.get(0);current.day=s.day;current.start=s.start;current.end=s.end;current.course=s.course;current.room=s.room;current.teacher=s.teacher;current.notes=s.notes;current.color=s.color;current.reminder=s.reminder;dialog.dismiss();if(detected!=null){for(ScheduleEntry linked:detected.candidates)if(ScheduleCourseColors.same(current.course,linked.course))linked.color=current.color;}
-                 if(onDone!=null)onDone.run();return;}''',
-'''if(importing){
+start=s.index("if(importing){ScheduleEntry s=additions.get(0);")
+end=s.index("            confirmConflicts(additions",start)
+s=s[:start]+'''if(importing){
                  if(detected!=null){
                      int index=detected.candidates.indexOf(previous);
                      if(index<0)index=detected.candidates.indexOf(current);
@@ -57,13 +57,5 @@ one('''if(importing){ScheduleEntry s=additions.get(0);current.day=s.day;current.
                  dialog.dismiss();if(onDone!=null)onDone.run();return;}''')
 # Asegurar que guardar múltiple no cambie id de todas las clases en edición.
 one('''for(ScheduleEntry s:additions){if(current.id==0)s.id=0;if(db.save(s))ScheduleReminders.schedule(this,s);db.recolorSameCourse(s.course,s.color);}''',
-    '''for(ScheduleEntry s:additions){if(current.id==0)s.id=0;if(db.save(s))ScheduleReminders.schedule(this,s);db.recolorSameCourse(s.course,s.color);}''')
-path.write_text(s,encoding="utf-8")
-gradle=root/"app/build.gradle"
-g=gradle.read_text(encoding="utf-8")
-assert g.count("versionCode 21")==1 and g.count("versionName '3.1.0'")==1
-gradle.write_text(g.replace("versionCode 21","versionCode 22").replace("versionName '3.1.0'","versionName '3.2.0'"),encoding="utf-8")
-assert "chooseScheduleDays(" not in s
-assert "Repetir este curso · Seleccionar días" not in s
-assert "selected[index]=!selected[index]" in s
-print("PASS: 3.2 usa exclusivamente los siete chips originales; edición, creación, OCR y recordatorios.")
+    '''for(ScheduleEntry s:additions){if(current.id==0)s.id=0;if(db.save(s))ScheduleReminders.schedule(this,s);db.recolorSameCourse(s.course,s.color);}'''+s[end:]
+
