@@ -32,4 +32,12 @@ old='java.util.Locale.forLanguageTag("es-PE")));'
 new='java.util.Locale.forLanguageTag("es-PE"))));'
 if source.count(old)!=1:raise RuntimeError("Diagnostics formatting anchor changed")
 reminderFile.write_text(source.replace(old,new,1),encoding="utf-8")
+# Separate cancellation of a scheduled alarm from dismissal of a delivered notification.
+# Without this fix the recurring receiver would immediately erase the reminder it had just shown.
+source=reminderFile.read_text(encoding="utf-8")
+old='public static void cancel(Context c,long id){AlarmManager mgr=c.getSystemService(AlarmManager.class);PendingIntent p=pending(c,id,PendingIntent.FLAG_NO_CREATE);if(p!=null){mgr.cancel(p);p.cancel();}c.getSystemService(NotificationManager.class).cancel("class",(int)id);}'
+new='private static void cancelAlarm(Context c,long id){AlarmManager mgr=c.getSystemService(AlarmManager.class);PendingIntent p=pending(c,id,PendingIntent.FLAG_NO_CREATE);if(p!=null){mgr.cancel(p);p.cancel();}}\\n    public static void cancel(Context c,long id){cancelAlarm(c,id);c.getSystemService(NotificationManager.class).cancel("class",(int)id);}'
+if source.count(old)!=1 or source.count('cancel(c,s.id);if(!s.enabled')!=1:raise RuntimeError("Reminder cancellation anchor changed")
+source=source.replace(old,new.replace('\\n','\n'),1).replace('cancel(c,s.id);if(!s.enabled','cancelAlarm(c,s.id);if(!s.enabled',1)
+reminderFile.write_text(source,encoding="utf-8")
 print("Agenda Clara 2.6.1 aplicada: respaldo, conflictos, cuadrícula, avisos y fotos optimizadas.")
