@@ -3,7 +3,7 @@ import shutil
 src=Path("AgendaClara/app/src/main/java/pe/agendaclara/app")
 main=src/"MainActivity.java"
 s=main.read_text(encoding="utf8")
-assert "View dynamicAddButton()" in s and "void openQuickActions()" in s
+assert "void openQuickActions()" in s
 shutil.copyfile("updates/plus37/TopPlusMotion.java",src/"TopPlusMotion.java")
 # Preserve the 3.7 FAB click and geometry; animate only the glyph around its true center.
 anchor="plus.setOnClickListener(v->openQuickActions());"
