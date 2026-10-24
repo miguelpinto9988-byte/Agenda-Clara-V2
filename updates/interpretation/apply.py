@@ -13,7 +13,7 @@ anchor='        String[] lines=bounded.split("(?:\\\\r?\\\\n)+|;\\\\s*");'
 assert s.count(anchor)==1, "MessageParser.parse anchor changed"
 s=s.replace(anchor,'''        // Each distinct activity is reviewed independently. Never create tasks automatically.
         List<MultiActivityInterpreter.Candidate> candidates=MultiActivityInterpreter.extract(bounded);
-        if(!candidates.isEmpty()){
+        // Preserve legacy continuation/date semantics for single-task messages.\n        // Only override legacy parsing for explicit multi-activity announcements.\n        boolean explicitMulti=bounded.matches("(?is).*(?:\\\\badem[aá]s\\\\b|\\\\bpor otro lado\\\\b|\\\\botra actividad\\\\b|\\\\bsegunda actividad\\\\b|\\\\n\\\\s*\\\\d+[.)]).*");\n        if(explicitMulti&&candidates.size()>1){
             for(MultiActivityInterpreter.Candidate candidate:candidates){
                 Proposal item=parseOne(candidate.text,now,zone,manual);
                 if(item.action||manual){
