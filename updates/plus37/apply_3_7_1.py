@@ -17,6 +17,12 @@ s=s.replace(needle,'''Button add=button("＋",()->openEditor(-1,null,null));add.
                     .setDuration(280).setInterpolator(new android.view.animation.OvershootInterpolator(1.2f)).start()).start();
             openEditor(-1,null,null);
         });''',1)
+# Repair legacy 3.7 template multiline Java literals before javac.
+s=s.replace('día(s)\\n"+days;', 'día(s)\\\\n"+days;')
+s=s.replace('calendar.account+"\\nCalendario:', 'calendar.account+"\\\\nCalendario:')
+s=s.replace('calendar.name+"\\nBloques propuestos:', 'calendar.name+"\\\\nBloques propuestos:')
+s=s.replace('total+"\\nPosibles duplicados:', 'total+"\\\\nPosibles duplicados:')
+s=s.replace('duplicates+".\\n\\nSe importarán', 'duplicates+".\\\\n\\\\nSe importarán')
 main.write_text(s,encoding="utf8")
 gradle=Path("AgendaClara/app/build.gradle")
 g=gradle.read_text(encoding="utf8")
