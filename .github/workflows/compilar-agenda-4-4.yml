@@ -24,6 +24,7 @@ on:
       - 'updates/phase16/**'
       - 'updates/phase17/**'
       - 'updates/phase18/**'
+      - 'updates/phase17/**'
       - 'updates/test_3_6_0.py'
       - 'updates/test_3_6_0.py'
       - 'updates/test_3_7_0.py'
