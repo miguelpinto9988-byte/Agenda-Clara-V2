@@ -31,8 +31,8 @@ replace('        EditText search=input("Buscar en tus tareas",query,android.text
 '        EditText search=input("Buscar en tus tareas",query,android.text.InputType.TYPE_CLASS_TEXT);search.setContentDescription("Buscar tareas por título, notas o fuente, con o sin tilde");search.setTag("task_search");')
 replace('            Button b=button(label,()->{categoryFilter=chosen;taskLimit=24;render();});',
 '            Button b=button(label,()->{categoryFilter=chosen;taskLimit=24;render();});b.setContentDescription("Categoría "+label+(chosen==categoryFilter?", seleccionada":""));')
-replace('            Button b=button(names[j],()->{filter=k;render();});',
-'            Button b=button(names[j],()->{filter=k;render();});b.setContentDescription("Filtro "+names[j]+(j==filter?", seleccionado":""));')
+replace('Button b=button(names[j],()->{filter=k;render();});',
+'Button b=button(names[j],()->{filter=k;render();});b.setContentDescription("Filtro "+names[j]+(j==filter?", seleccionado":""));')
 
 start=s.index('    void fillTasks(List<Task> all,LocalDate date){')
 end=s.index('    void taskCard(',start)
