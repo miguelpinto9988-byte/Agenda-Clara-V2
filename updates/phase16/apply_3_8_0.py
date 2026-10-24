@@ -130,7 +130,7 @@ rep("MainActivity.java",
                 .setPositiveButton("Entendido",null).show();
         }));''')
 rep("MainActivity.java",
-    '        if(Prefs.get(this).getBoolean("wa_linked",false)&&Prefs.get(this).getBoolean("wa_reading",false)&&!WhatsAppSessionService.running)session("resume",null);new Thread(',
+    'if(Prefs.get(this).getBoolean("wa_linked",false)&&Prefs.get(this).getBoolean("wa_reading",false)&&!WhatsAppSessionService.running)session("resume",null);new Thread(',
     '''        if(Prefs.get(this).getBoolean("wa_linked",false)&&Prefs.get(this).getBoolean("wa_reading",false)&&!WhatsAppSessionService.running)session("resume",null);
         if(Prefs.get(this).getBoolean("capture",false)&&notificationAccess()){
             try{android.service.notification.NotificationListenerService.requestRebind(
