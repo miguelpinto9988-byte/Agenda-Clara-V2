@@ -1,4 +1,4 @@
-name: Compilar Agenda Clara 2.3.0
+name: Compilar Agenda Clara 2.4.0
 
 on:
   workflow_dispatch:
@@ -25,6 +25,7 @@ on:
       - 'updates/apply_2_3_0.py'
       - 'updates/test_2_3_0.py'
       - 'updates/phase7/**'
+      - 'updates/apply_2_4_0.py'
 
 permissions:
   contents: read
@@ -65,6 +66,7 @@ jobs:
           python3 updates/test_2_2_0.py
           python3 updates/apply_2_3_0.py
           python3 updates/test_2_3_0.py
+          python3 updates/apply_2_4_0.py
 
       - name: Recuperar clave de desarrollo privada
         shell: bash
@@ -98,7 +100,7 @@ jobs:
           set -euo pipefail
           OUT="$(mktemp -d)"
           SRC=AgendaClara/app/src/main/java/pe/agendaclara/app
-          javac -encoding UTF-8 -d "$OUT"             "$SRC/ActivityClassifier.java" "$SRC/MessageParser.java"             "$SRC/ConversationAnalyzer.java" "$SRC/HistoryTextParser.java"             "$SRC/Task.java" "$SRC/TaskLogic.java" "$SRC/TaskExpiryPolicy.java"             "$SRC/DoubleTapGate.java" "$SRC/TextHash.java" "$SRC/TaskSummary.java"             AgendaClara/tests/CoreTests.java AgendaClara/tests/ConversationTests.java             updates/Phase3Tests.java updates/Phase4Tests.java
+          javac -encoding UTF-8 -d "$OUT"             "$SRC/ActivityClassifier.java" "$SRC/MessageParser.java"             "$SRC/ConversationAnalyzer.java" "$SRC/ConversationIntent.java" "$SRC/HistoryTextParser.java"             "$SRC/Task.java" "$SRC/TaskLogic.java" "$SRC/TaskExpiryPolicy.java"             "$SRC/DoubleTapGate.java" "$SRC/TextHash.java" "$SRC/TaskSummary.java"             AgendaClara/tests/CoreTests.java AgendaClara/tests/ConversationTests.java             updates/Phase3Tests.java updates/Phase4Tests.java
           java -cp "$OUT" CoreTests
           java -cp "$OUT" ConversationTests
           java -cp "$OUT" Phase3Tests
@@ -109,6 +111,8 @@ jobs:
           java -cp "$OUT" Phase6Tests
           javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/WeeklyPlanner.java" updates/phase7/Phase7Tests.java
           java -cp "$OUT" Phase7Tests
+          javac -encoding UTF-8 -cp "$OUT" -d "$OUT" AgendaClara/tests/Phase8Tests.java
+          java -cp "$OUT" Phase8Tests
 
       - name: Preparar Android SDK API 36
         shell: bash
@@ -149,7 +153,7 @@ jobs:
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-2.3.0-APK
+          name: Agenda-Clara-2.4.0-APK
           path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
@@ -160,13 +164,13 @@ jobs:
           set -euo pipefail
           rm -f AgendaClara/signing/development.jks
           rm -rf AgendaClara/.gradle AgendaClara/app/build
-          zip -q -r Agenda-Clara-2.3.0-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
-          if unzip -Z1 Agenda-Clara-2.3.0-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
+          zip -q -r Agenda-Clara-2.4.0-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
+          if unzip -Z1 Agenda-Clara-2.4.0-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
       - name: Publicar fuentes 2.2.0
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-2.3.0-Fuentes-Verificadas
-          path: Agenda-Clara-2.3.0-Fuentes-Verificadas.zip
+          name: Agenda-Clara-2.4.0-Fuentes-Verificadas
+          path: Agenda-Clara-2.4.0-Fuentes-Verificadas.zip
           retention-days: 30
           if-no-files-found: error
 
@@ -180,7 +184,7 @@ jobs:
       - name: Recuperar APK compilada
         uses: actions/download-artifact@v4
         with:
-          name: Agenda-Clara-2.3.0-APK
+          name: Agenda-Clara-2.4.0-APK
           path: artifact-apk
       - name: Preparar aceleración para emulador
         run: |
@@ -199,6 +203,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-2.3.0-Emulator-Capturas
+          name: Agenda-Clara-2.4.0-Emulator-Capturas
           path: screenshots/
           if-no-files-found: ignore
