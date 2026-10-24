@@ -54,8 +54,5 @@ s=s[:start]+'''if(importing){
                      current.teacher=updated.teacher;current.notes=updated.notes;
                      current.color=updated.color;current.reminder=updated.reminder;
                  }
-                 dialog.dismiss();if(onDone!=null)onDone.run();return;}''')
-# Asegurar que guardar múltiple no cambie id de todas las clases en edición.
-one('''for(ScheduleEntry s:additions){if(current.id==0)s.id=0;if(db.save(s))ScheduleReminders.schedule(this,s);db.recolorSameCourse(s.course,s.color);}''',
-    '''for(ScheduleEntry s:additions){if(current.id==0)s.id=0;if(db.save(s))ScheduleReminders.schedule(this,s);db.recolorSameCourse(s.course,s.color);}'''+s[end:]
+                 dialog.dismiss();if(onDone!=null)onDone.run();return;}''' + s[end:]
 
