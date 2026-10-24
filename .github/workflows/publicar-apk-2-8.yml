@@ -1,0 +1,45 @@
+name: Publicar APK Agenda Clara 2.8.0
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publicar-apk-2-8.yml'
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Recuperar APK firmada desde GitHub Actions
+        uses: actions/download-artifact@v4
+        with:
+          name: Agenda-Clara-2.8.0-APK
+          run-id: 40059874199
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: apk
+      - name: Verificar huella y generar alternativa ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s apk/app-debug.apk
+          echo '9caaf7e9f65f0040dda90b6d67d8d917c0986596ec759def884dbbb796a92ae8  apk/app-debug.apk' | sha256sum -c
+          unzip -t apk/app-debug.apk | tail -1
+          mv apk/app-debug.apk apk/AgendaClara_2_8_Horarios.apk
+          printf 'Agenda Clara 2.8.0: 72 colores, mezclador HSV, agrupacion de cursos repetidos y OCR flexible. Instala sobre tu version anterior sin desinstalar.\n' > apk/LEEME.txt
+          (cd apk && zip -q -9 AgendaClara_2_8_Horarios_Alternativa.zip AgendaClara_2_8_Horarios.apk LEEME.txt)
+      - name: Publicar APK en GitHub Releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO="$GITHUB_REPOSITORY"
+          if gh release view v2.8.0 --repo "$REPO" >/dev/null 2>&1; then
+            gh release upload v2.8.0 apk/AgendaClara_2_8_Horarios.apk apk/AgendaClara_2_8_Horarios_Alternativa.zip --repo "$REPO" --clobber
+          else
+            gh release create v2.8.0 apk/AgendaClara_2_8_Horarios.apk apk/AgendaClara_2_8_Horarios_Alternativa.zip --repo "$REPO" --target main --title 'Agenda Clara 2.8.0 - Horarios multicolor' --notes 'Novedades: gama HSV con 72 tonos prefijados y ajuste libre, correlación de cursos repetidos y color compartido, lectura alternativa de cuadrículas sin recuadros nítidos, revisión obligatoria tras OCR. APK Android compatible con firma de desarrollo anterior.'
+          fi
+          gh release view v2.8.0 --repo "$REPO" --json url,assets
