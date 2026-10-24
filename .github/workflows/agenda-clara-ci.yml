@@ -1,24 +1,23 @@
-# Nueva recompilación verificada de Agenda Clara 2.7.0 solicitada por el usuario.
-name: Compilar Agenda Clara 3.2.0 Dias multiples en fila existente
+# Único flujo vigente de compilación, pruebas JVM y emulador Android.
+name: Agenda Clara 3.8.2 · Compilación y validación
 on:
   push:
     branches: [main]
     paths:
-      - 'updates/apply_2_6_0.py'
-      - 'updates/apply_2_6_1.py'
-      - 'updates/apply_2_7_0.py'
-      - 'updates/apply_2_8_0.py'
-      - 'updates/apply_2_9_0.py'
-      - 'updates/apply_3_0_0.py'
-      - 'updates/apply_3_1_0.py'
-      - 'updates/apply_3_2_0.py'
-      - 'updates/phase13/**'
-      - 'updates/phase14/**'
-      - 'updates/phase12/**'
-      - 'updates/phase11/**'
-      - 'updates/phase10/**'
-      - '.github/workflows/compilar-agenda-3-2.yml'
+      - 'updates/**'
+      - 'Agenda-Clara-1.3.0-Fuentes-Sin-Clave.zip'
+      - '.github/workflows/agenda-clara-ci.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'updates/**'
+      - 'Agenda-Clara-1.3.0-Fuentes-Sin-Clave.zip'
+      - '.github/workflows/agenda-clara-ci.yml'
   workflow_dispatch:
+
+concurrency:
+  group: agenda-clara-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -70,6 +69,22 @@ jobs:
           python3 updates/apply_3_0_0.py
           python3 updates/apply_3_1_0.py
           python3 updates/apply_3_2_0.py
+          python3 updates/apply_3_3_0.py
+          python3 updates/apply_3_4_0.py
+          python3 updates/apply_3_5_0.py
+          python3 updates/apply_3_6_0.py
+          python3 updates/apply_3_7_0.py
+          python3 updates/interpretation/apply.py
+          python3 updates/phase15/apply_3_7_1.py
+          python3 updates/phase15/test_3_7_1.py
+          python3 updates/test_3_7_0.py
+          python3 updates/test_3_6_0.py
+          python3 updates/phase16/apply_3_8_0.py
+          python3 updates/phase16/test_3_8_0.py
+          python3 updates/phase17/apply_3_8_1.py
+          python3 updates/phase17/test_3_8_1.py
+          python3 updates/phase18/apply_3_8_2.py
+          python3 updates/phase18/test_3_8_2.py
 
       - name: Recuperar clave de desarrollo privada
         shell: bash
@@ -103,11 +118,14 @@ jobs:
           set -euo pipefail
           OUT="$(mktemp -d)"
           SRC=AgendaClara/app/src/main/java/pe/agendaclara/app
-          javac -encoding UTF-8 -d "$OUT"             "$SRC/ActivityClassifier.java" "$SRC/MessageParser.java"             "$SRC/ConversationAnalyzer.java" "$SRC/ConversationIntent.java" "$SRC/HistoryTextParser.java"             "$SRC/Task.java" "$SRC/TaskLogic.java" "$SRC/TaskExpiryPolicy.java"             "$SRC/DoubleTapGate.java" "$SRC/TextHash.java" "$SRC/TaskSummary.java"             AgendaClara/tests/CoreTests.java AgendaClara/tests/ConversationTests.java             updates/Phase3Tests.java updates/Phase4Tests.java
+          javac -encoding UTF-8 -d "$OUT" "$SRC/MultiActivityInterpreter.java"
+          javac -encoding UTF-8 -cp "$OUT" -d "$OUT"             "$SRC/ActivityClassifier.java" "$SRC/MessageParser.java"             "$SRC/ConversationAnalyzer.java" "$SRC/ConversationIntent.java" "$SRC/HistoryTextParser.java"             "$SRC/Task.java" "$SRC/TaskLogic.java" "$SRC/TaskExpiryPolicy.java"             "$SRC/DoubleTapGate.java" "$SRC/TextHash.java" "$SRC/TaskSummary.java"             AgendaClara/tests/CoreTests.java AgendaClara/tests/ConversationTests.java             updates/Phase3Tests.java updates/Phase4Tests.java
           java -cp "$OUT" CoreTests
           java -cp "$OUT" ConversationTests
           java -cp "$OUT" Phase3Tests
           java -cp "$OUT" Phase4Tests
+          javac -encoding UTF-8 -d "$OUT" "$SRC/NotificationSummaryPolicy.java" updates/phase16/NotificationSummaryPolicyTest.java
+          java -cp "$OUT" pe.agendaclara.app.NotificationSummaryPolicyTest
           javac -encoding UTF-8 -d "$OUT" "$SRC/SecureArchive.java" updates/phase5/Phase5Tests.java
           java -cp "$OUT" Phase5Tests
           javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/TaskOrganization.java" "$SRC/AgendaFilters.java" "$SRC/ReviewFilters.java" updates/phase6/Phase6Tests.java
@@ -126,6 +144,8 @@ jobs:
           java -cp "$OUT" Phase13CoreTest
           javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/ScheduleColorSpectrum.java" updates/phase14/ScheduleStage14Test.java
           java -cp "$OUT" ScheduleStage14Test
+          javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/SchedulePhotoReview.java" updates/phase17/SchedulePhotoReviewTests.java
+          java -cp "$OUT" SchedulePhotoReviewTests
 
       - name: Preparar Android SDK API 36
         shell: bash
@@ -163,13 +183,13 @@ jobs:
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK"
           BADGING="$("$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK")"
           printf '%s\n' "$BADGING" | head -12
-          echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='22' versionName='3.2.0'"
-          echo "PASS: package pe.agendaclara.app, version 3.2.0 (22), signed Android APK"
+          echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='30' versionName='3.8.2'"
+          echo "PASS: package pe.agendaclara.app, version 3.8.2 (30), signed Android APK"
 
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.2.0-APK
+          name: Agenda-Clara-3.8.2-APK
           path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
@@ -179,14 +199,14 @@ jobs:
         run: |
           set -euo pipefail
           rm -f AgendaClara/signing/development.jks
-          rm -rf AgendaClara/.gradle AgendaClara/app/build
-          zip -q -r Agenda-Clara-3.2.0-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
-          if unzip -Z1 Agenda-Clara-3.2.0-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
-      - name: Publicar fuentes 3.2.0
+          rm -rf AgendaClara/.gradle AgendaClara/app/build AgendaClara/build
+          zip -q -r Agenda-Clara-3.8.2-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
+          if unzip -Z1 Agenda-Clara-3.8.2-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
+      - name: Publicar fuentes 3.8.2
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.2.0-Fuentes-Verificadas
-          path: Agenda-Clara-3.2.0-Fuentes-Verificadas.zip
+          name: Agenda-Clara-3.8.2-Fuentes-Verificadas
+          path: Agenda-Clara-3.8.2-Fuentes-Verificadas.zip
           retention-days: 30
           if-no-files-found: error
 
@@ -200,7 +220,7 @@ jobs:
       - name: Recuperar APK compilada
         uses: actions/download-artifact@v4
         with:
-          name: Agenda-Clara-3.2.0-APK
+          name: Agenda-Clara-3.8.2-APK
           path: artifact-apk
       - name: Preparar aceleración para emulador
         run: |
@@ -214,11 +234,11 @@ jobs:
           profile: pixel_6
           avd-name: agenda-clara-ui
           disable-animations: true
-          script: bash updates/phase11/emulator_schedule_plus.sh
+          script: bash updates/phase16/emulator_3_8.sh
       - name: Publicar capturas sintéticas del emulador
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.2.0-Emulator-Capturas
+          name: Agenda-Clara-3.8.2-Emulator-Capturas
           path: screenshots/
           if-no-files-found: ignore
