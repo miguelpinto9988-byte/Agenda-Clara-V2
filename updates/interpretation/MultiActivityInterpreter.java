@@ -37,6 +37,9 @@ public final class MultiActivityInterpreter {
    if(!course.isEmpty())inheritedCourse=course;
    if(!INTENT.matcher(part).find())continue;
    if(NEG.matcher(part).find())continue;
+   // Reject quotations and questions about whether an activity exists: not an assignment.
+   if(part.matches("(?is)^\\\\s*[¿?].*") && !part.matches("(?is).*\\\\b(?:deben|hay que|tenemos que)\\\\b.*"))continue;
+   if(part.matches("(?is).*\\\\b(?:quiz[aá]s|tal vez|puede que|creo que|rumor|supuestamente)\\\\b.*"))continue;
    String kind=kind(part);
    int score=48+(date.isEmpty()?0:16)+(time.isEmpty()?0:12)+(course.isEmpty()?0:8)+(part.length()>25?7:0);
    if(CHANGE.matcher(part).find())score-=15;
