@@ -1,5 +1,5 @@
 # Nueva recompilación verificada de Agenda Clara 2.7.0 solicitada por el usuario.
-name: Compilar Agenda Clara 3.8.0 WhatsApp y rediseño nativo
+name: Compilar Agenda Clara 3.8.1 Reconocimiento de horario en 3 etapas
 on:
   push:
     branches: [main]
@@ -20,6 +20,7 @@ on:
       - 'updates/interpretation/**'
       - 'updates/phase15/**'
       - 'updates/phase16/**'
+      - 'updates/phase17/**'
       - 'updates/test_3_7_0.py'
       - 'updates/test_3_6_0.py'
       - 'updates/phase13/**'
@@ -92,6 +93,8 @@ jobs:
           python3 updates/test_3_6_0.py
           python3 updates/phase16/apply_3_8_0.py
           python3 updates/phase16/test_3_8_0.py
+          python3 updates/phase17/apply_3_8_1.py
+          python3 updates/phase17/test_3_8_1.py
 
       - name: Recuperar clave de desarrollo privada
         shell: bash
@@ -151,6 +154,8 @@ jobs:
           java -cp "$OUT" Phase13CoreTest
           javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/ScheduleColorSpectrum.java" updates/phase14/ScheduleStage14Test.java
           java -cp "$OUT" ScheduleStage14Test
+          javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/SchedulePhotoReview.java" updates/phase17/SchedulePhotoReviewTests.java
+          java -cp "$OUT" SchedulePhotoReviewTests
 
       - name: Preparar Android SDK API 36
         shell: bash
@@ -188,13 +193,13 @@ jobs:
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK"
           BADGING="$("$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK")"
           printf '%s\n' "$BADGING" | head -12
-          echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='28' versionName='3.8.0'"
+          echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='29' versionName='3.8.1'"
           echo "PASS: package pe.agendaclara.app, version 3.8.0 (28), signed Android APK"
 
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.8.0-APK
+          name: Agenda-Clara-3.8.1-APK
           path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
@@ -205,13 +210,13 @@ jobs:
           set -euo pipefail
           rm -f AgendaClara/signing/development.jks
           rm -rf AgendaClara/.gradle AgendaClara/app/build
-          zip -q -r Agenda-Clara-3.8.0-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
-          if unzip -Z1 Agenda-Clara-3.8.0-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
+          zip -q -r Agenda-Clara-3.8.1-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
+          if unzip -Z1 Agenda-Clara-3.8.1-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
       - name: Publicar fuentes 3.8.0
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.8.0-Fuentes-Verificadas
-          path: Agenda-Clara-3.8.0-Fuentes-Verificadas.zip
+          name: Agenda-Clara-3.8.1-Fuentes-Verificadas
+          path: Agenda-Clara-3.8.1-Fuentes-Verificadas.zip
           retention-days: 30
           if-no-files-found: error
 
@@ -225,7 +230,7 @@ jobs:
       - name: Recuperar APK compilada
         uses: actions/download-artifact@v4
         with:
-          name: Agenda-Clara-3.8.0-APK
+          name: Agenda-Clara-3.8.1-APK
           path: artifact-apk
       - name: Preparar aceleración para emulador
         run: |
@@ -244,6 +249,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.8.0-Emulator-Capturas
+          name: Agenda-Clara-3.8.1-Emulator-Capturas
           path: screenshots/
           if-no-files-found: ignore
