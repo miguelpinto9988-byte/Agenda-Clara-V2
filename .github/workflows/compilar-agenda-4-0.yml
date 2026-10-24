@@ -20,6 +20,7 @@ on:
       - 'updates/apply_3_8_0.py'
       - 'updates/apply_3_9_0.py'
       - 'updates/apply_4_0_0.py'
+      - 'updates/test_3_6_0.py'
       - 'updates/test_3_7_0.py'
       - 'updates/test_3_6_0.py'
       - 'updates/phase13/**'
