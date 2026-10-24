@@ -74,12 +74,12 @@ newheader='''        List<Store.Inbox> inbox=Store.get(this).inbox();
         search.setContentDescription("Buscar propuestas por actividad, grupo o contenido del mensaje");
         body.addView(search);gap(body,8);
         HorizontalScrollView scroller=new HorizontalScrollView(this);scroller.setHorizontalScrollBarEnabled(false);
-        LinearLayout chips=row();String[] options={"Todas","Sin fecha","Vencidas","Del historial","Próximas"};
-        for(int i=0;i<options.length;i++){
-            final int chosen=i;Button chip=button(options[i],()->{reviewFilter=chosen;inboxLimit=25;render();});
+        LinearLayout chips=row();String[] reviewModes={"Todas","Sin fecha","Vencidas","Del historial","Próximas"};
+        for(int i=0;i<reviewModes.length;i++){
+            final int chosen=i;Button chip=button(reviewModes[i],()->{reviewFilter=chosen;inboxLimit=25;render();});
             chip.setTextColor(chosen==reviewFilter?0xffffffff:MUTED);
             chip.setBackground(rounded(chosen==reviewFilter?GREEN:PALE,18));
-            chip.setContentDescription("Mostrar propuestas "+options[i]+(chosen==reviewFilter?", filtro activo":""));
+            chip.setContentDescription("Mostrar propuestas "+reviewModes[i]+(chosen==reviewFilter?", filtro activo":""));
             chips.addView(chip);
         }
         scroller.addView(chips);body.addView(scroller);gap(body,10);
