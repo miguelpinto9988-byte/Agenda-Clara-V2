@@ -28,7 +28,8 @@ s=s.replace(anchor,helper+anchor,1)
 # Ajuste en el punto real de instalación de la vista, independientemente de onCreate.
 import re
 calls=list(re.finditer(r"setContentView\\([^;]+\\);",s))
-if not calls:raise RuntimeError("No se halló setContentView")
+if not calls:
+ print("SCHEDULE_SOURCE_HEAD",s[:11000]);raise RuntimeError("No se halló setContentView")
 first=calls[0]
 replacement='''androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(),false);
         '''+first.group(0)+'''
