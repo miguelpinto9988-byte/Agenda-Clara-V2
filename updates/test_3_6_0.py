@@ -7,7 +7,7 @@ listener=(root/"WhatsAppListener.java").read_text(encoding="utf-8")
 store=(root/"Store.java").read_text(encoding="utf-8")
 review=(root/"ReviewFlow.java").read_text(encoding="utf-8")
 checks={
-  "expandir/contraer comunidades":("inner.setVisibility(expanded?View.VISIBLE:View.GONE)" in main or "inner.animate().alpha(0f)" in main),
+  "expandir/contraer comunidades":("inner.setVisibility(expanded?View.VISIBLE:View.GONE)" in main or "MotionKit.collapse(inner)" in main),
   "expandir/contraer conversación":"details.setVisibility(expanding?View.VISIBLE:View.GONE)" in main,
   "estado persistido":"putStringArrayList(\"expanded_chat_cards\"" in main,
   "sin auto autorizar":"Autorizar lectura" in main and "Revocar lectura" in main,
