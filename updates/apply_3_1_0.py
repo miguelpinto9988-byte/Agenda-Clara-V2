@@ -96,10 +96,10 @@ edit(target2,'''        if(current.id==0){
             form.addView(btn("Repetir este curso · Seleccionar días (1–7)",()->{
                 ScheduleEntry draft=new ScheduleEntry();
                 draft.course=course.getText().toString().trim();
-                draft.room=room.getText().toString().trim();
-                draft.start=ScheduleEntry.minutes(start.getText().toString());
-                draft.end=ScheduleEntry.minutes(end.getText().toString());
-                draft.day=day.getSelectedItemPosition()+1;
+                draft.room=current.room;
+                draft.start=current.start;
+                draft.end=current.end;
+                draft.day=current.day;
                 draft.color=current.color;
                 if(!ScheduleEntry.valid(draft)){toast("Completa el curso y las horas válidas antes de elegir días");return;}
                 chooseScheduleDays(draft,()->{});
