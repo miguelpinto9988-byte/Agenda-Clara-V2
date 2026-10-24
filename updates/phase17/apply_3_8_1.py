@@ -47,9 +47,9 @@ public final class SchedulePhotoReview {
             if(value.isEmpty())continue;
             readable++;
             String lower=ScheduleParser.fold(value).trim();
-            Matcher m=Pattern.compile("(?i)^(lunes|martes|miercoles|jueves|viernes|sabado|domingo|lun|mar|mie|jue|vie|sab|dom)\\\\b").matcher(lower);
+            Matcher m=Pattern.compile("(?i)^(lunes|martes|miercoles|jueves|viernes|sabado|domingo|lun|mar|mie|jue|vie|sab|dom)\\b").matcher(lower);
             if(m.find())days.add(m.group(1).substring(0,3));
-            if(Pattern.compile("(?i)\\\\b\\\\d{1,2}[:h.]\\\\d{2}\\\\b").matcher(value).find())times++;
+            if(Pattern.compile("(?i)\\b\\d{1,2}[:h.]\\d{2}\\b").matcher(value).find())times++;
         }
         return new Overview(readable,days.size(),times);
     }
@@ -78,7 +78,7 @@ public final class SchedulePhotoReview {
     }
     private static boolean possibleSame(String a,String b){
         if(a==null||b==null||a.trim().isEmpty()||b.trim().isEmpty())return false;
-        if(a.matches("(?i).*\\\\(grupo [0-9]+\\\\)$")||b.matches("(?i).*\\\\(grupo [0-9]+\\\\)$"))return false;
+        if(a.matches("(?i).*\\(grupo [0-9]+\\)$")||b.matches("(?i).*\\(grupo [0-9]+\\)$"))return false;
         String la=finalNumber(a),lb=finalNumber(b);
         if(!la.equals(lb))return false; // "Historia I" != "Historia II"; also avoid dropping a level.
         if(ScheduleCourseColors.same(a,b))return true;
@@ -122,7 +122,7 @@ public final class SchedulePhotoReview {
     }
     public static void reject(List<ScheduleEntry> entries,Pair pair){
         ScheduleEntry later=entries.get(pair.later);
-        String base=later.course.replaceAll("(?i)\\\\s*\\\\(grupo [0-9]+\\\\)$","").trim();
+        String base=later.course.replaceAll("(?i)\\s*\\(grupo [0-9]+\\)$","").trim();
         int n=2;
         String proposal;
         boolean used;
@@ -238,7 +238,7 @@ one("ScheduleActivity.java",
             " "+ScheduleEntry.clock(second.start)+"–"+ScheduleEntry.clock(second.end)+
             "\\n\\nSi aceptas, será un curso con dos sesiones independientes. "+
             "Si rechazas, se guardarán como dos cursos. Sus horas no se modificarán.";
-        dialogBuilder().setTitle(pair.exact?"Confirmar curso repetido":"¿Nombres parecidos?")
+        new AlertDialog.Builder(this).setTitle(pair.exact?"Confirmar curso repetido":"¿Nombres parecidos?")
             .setMessage(message)
             .setPositiveButton("Sí · mismo curso",(d,w)->{
                 SchedulePhotoReview.accept(approved,pair);
