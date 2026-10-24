@@ -5,23 +5,18 @@ main=src/"MainActivity.java"
 s=main.read_text(encoding="utf8")
 import re
 shutil.copyfile("updates/plus37/TopPlusMotion.java",src/"TopPlusMotion.java")
-print("FAB MATCHES:",repr([s[max(0,m.start()-100):m.end()+180] for m in list(re.finditer(r'openQuickActions|new_task_button|setOnTouchListener|dynamicAddButton|quickActions|setOnClickListener',s))[:30]]),flush=True)
-# Attach animation to the native quick action entry point without relying on exact whitespace.
-# No changes to the existing button geometry or action callbacks.
-needle='void openQuickActions(){'
-if needle not in s:
-    needle='void openQuickActions() {'
-assert needle in s,"Quick-action method not found"
-s=s.replace(needle,needle+'''
-        if(addButton!=null){
-            View target=addButton;
-            target.animate().cancel();
-            target.setPivotX(target.getWidth()/2f);target.setPivotY(target.getHeight()/2f);
-            target.animate().rotation(45f).scaleX(.92f).scaleY(.92f).setDuration(125)
-                .withEndAction(()->target.animate().rotation(0f).scaleX(1f).scaleY(1f)
+# Actual 3.7 upper button: U+FF0B and openEditor, not openQuickActions.
+needle='Button add=button("＋",()->openEditor(-1,null,null));add.setTag("new_task_button");'
+assert s.count(needle)==1,"Upper plus button anchor missing"
+s=s.replace(needle,'''Button add=button("＋",()->openEditor(-1,null,null));add.setTag("new_task_button");
+        add.setOnClickListener(v->{
+            v.animate().cancel();
+            v.setPivotX(v.getWidth()/2f);v.setPivotY(v.getHeight()/2f);
+            v.animate().rotation(45f).scaleX(.92f).scaleY(.92f).setDuration(125)
+                .withEndAction(()->v.animate().rotation(0f).scaleX(1f).scaleY(1f)
                     .setDuration(280).setInterpolator(new android.view.animation.OvershootInterpolator(1.2f)).start()).start();
-        }
-''',1)
+            openEditor(-1,null,null);
+        });''',1)
 main.write_text(s,encoding="utf8")
 gradle=Path("AgendaClara/app/build.gradle")
 g=gradle.read_text(encoding="utf8")
