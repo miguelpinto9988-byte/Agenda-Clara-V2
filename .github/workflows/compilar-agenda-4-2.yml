@@ -23,6 +23,7 @@ on:
       - 'updates/phase15/**'
       - 'updates/phase16/**'
       - 'updates/test_3_6_0.py'
+      - 'updates/test_3_6_0.py'
       - 'updates/test_3_7_0.py'
       - 'updates/test_3_6_0.py'
       - 'updates/phase13/**'
