@@ -25,20 +25,15 @@ if s.count(anchor)!=1:raise RuntimeError("Ancla ScheduleActivity modificada")
 s=s.replace(anchor,helper+anchor,1)
 # Fijar decorFitsSystemWindows(false) hace que el listener gestione padding superior,
 # evita la superposición observada en encabezados y respeta la barra inferior.
-target="        super.onCreate(savedInstanceState);"
-if target not in s:raise RuntimeError("Activity onCreate sin ancla")
-s=s.replace(target,target+"""
-        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(),false);
-""",1)
-# Registrar listener justo después de inflar el contenido, sin suponer root concreto.
+# Ajuste en el punto real de instalación de la vista, independientemente de onCreate.
 import re
-calls=list(re.finditer(r"setContentView\([^;]+\);",s))
+calls=list(re.finditer(r"setContentView\\([^;]+\\);",s))
 if not calls:raise RuntimeError("No se halló setContentView")
-# Primer setContentView en pantalla única de ScheduleActivity.
-pos=calls[0].end()
-s=s[:pos]+"""
-        applyScheduleInsets(getWindow().getDecorView().findViewById(android.R.id.content));
-"""+s[pos:]
+first=calls[0]
+replacement='''androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(),false);
+        '''+first.group(0)+'''
+        applyScheduleInsets(getWindow().getDecorView().findViewById(android.R.id.content));'''
+s=s[:first.start()]+replacement+s[first.end():]
 path.write_text(s,encoding="utf-8")
 gradle=root/"app/build.gradle"
 g=gradle.read_text(encoding="utf-8")
