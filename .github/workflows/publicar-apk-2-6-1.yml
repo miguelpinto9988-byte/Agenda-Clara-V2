@@ -1,0 +1,47 @@
+name: Publicar APK directa Agenda Clara 2.6.1
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publicar-apk-2-6-1.yml'
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Descargar APK compilada de Agenda Clara 2.6.1
+        uses: actions/download-artifact@v4
+        with:
+          name: Agenda-Clara-2.6.1-APK
+          run-id: 40055728923
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: apk
+      - name: Verificar y preparar enlace de descarga
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s apk/app-debug.apk
+          echo '83f472c6dec434f8872ba3ea60b01f7efeba4448ade017e467cbbf164ef9597f  apk/app-debug.apk' | sha256sum --check
+          unzip -t apk/app-debug.apk | tail -1
+          mv apk/app-debug.apk apk/AgendaClara_2_6_1_Horario.apk
+          printf 'Agenda Clara 2.6.1: copias cifradas del horario, conflictos, diagnostico y cuadrícula semanal. Instalar sobre 2.6.0, sin desinstalar.\n' > apk/LEEME.txt
+          (cd apk && zip -q AgendaClara_2_6_1_Alternativa.zip AgendaClara_2_6_1_Horario.apk LEEME.txt)
+      - name: Publicar archivos en GitHub Releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO="$GITHUB_REPOSITORY"
+          if gh release view v2.6.1 --repo "$REPO" >/dev/null 2>&1; then
+            gh release upload v2.6.1 apk/AgendaClara_2_6_1_Horario.apk apk/AgendaClara_2_6_1_Alternativa.zip --repo "$REPO" --clobber
+          else
+            gh release create v2.6.1 apk/AgendaClara_2_6_1_Horario.apk apk/AgendaClara_2_6_1_Alternativa.zip \
+              --repo "$REPO" --target main --title 'Agenda Clara 2.6.1 · Horario mejorado' \
+              --notes 'Actualización compatible con 2.6.0. Incluye respaldo cifrado independiente de horarios, advertencias de conflictos, cuadrícula semanal, avisos de prueba, periodos académicos y OCR optimizado en memoria. Prueba la restauración de copias y los avisos reales en tu teléfono antes de depender exclusivamente de ellos.'
+          fi
+          gh release view v2.6.1 --repo "$REPO" --json url,assets
