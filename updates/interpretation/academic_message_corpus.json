@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "source": "synthetic examples and user-supplied anonymized example; no private WhatsApp scraping",
+  "examples": [
+    {
+      "message": "Buen día compañeros. Cada estudiante con sus capítulos asignados. Deben hacer sus diapositivas. La presentación será por Google Meet, grabada, entre 1 minuto y medio y 5 minutos máximo. Entrega: enlace abierto al correo UNSA. Plazo máximo para reunirnos y verificar: miércoles 28. Deben haber leído la obra. Si el enlace no abre son 3 puntos menos. Para la próxima semana elegir y leer una novela corta del Boom Latinoamericano: Aura, Los cachorros o El coronel no tiene quien le escriba.",
+      "expected": [
+        {
+          "type": "PRESENTACION",
+          "title": "Preparar y grabar presentación de capítulos",
+          "subtasks": [
+            "Leer capítulos asignados",
+            "Crear diapositivas",
+            "Grabar por Google Meet",
+            "Enviar enlace abierto al correo UNSA"
+          ],
+          "constraints": [
+            "Duración 1:30–5:00",
+            "Enlace accesible; penalización de 3 puntos"
+          ],
+          "deadline": "miércoles 28: reunión/verificación; no asumir fecha de entrega final"
+        },
+        {
+          "type": "LECTURA",
+          "title": "Elegir y leer novela corta del Boom Latinoamericano",
+          "deadline": "próxima semana, sin día",
+          "options": [
+            "Aura",
+            "Los cachorros",
+            "El coronel no tiene quien le escriba"
+          ]
+        }
+      ]
+    },
+    {
+      "message": "Chicos mañana exposición de Historia a las 9; además el viernes entregamos ensayo de Literatura",
+      "expected": [
+        {
+          "type": "EXPOSICION",
+          "date": "mañana",
+          "time": "09:00"
+        },
+        {
+          "type": "ENTREGA",
+          "date": "viernes"
+        }
+      ]
+    },
+    {
+      "message": "La prueba de mañana se suspendió, pero el informe sí se entrega el viernes",
+      "expected": [
+        {
+          "type": "ENTREGA",
+          "date": "viernes"
+        }
+      ]
+    },
+    {
+      "message": "Para el martes: leer páginas 30-45, hacer un mapa conceptual y llevar el cuaderno",
+      "expected": [
+        {
+          "type": "ACTIVIDAD_COMPUESTA",
+          "date": "martes",
+          "subtasks": [
+            "Leer páginas 30-45",
+            "Hacer mapa conceptual",
+            "Llevar cuaderno"
+          ]
+        }
+      ]
+    },
+    {
+      "message": "El trabajo de Psicología ya no se entrega el lunes sino el miércoles a las 8 pm",
+      "expected": [
+        {
+          "type": "CAMBIO_FECHA",
+          "old": "lunes",
+          "new": "miércoles 20:00"
+        }
+      ]
+    },
+    {
+      "message": "¿Alguien sabe si habrá examen mañana?",
+      "expected": []
+    },
+    {
+      "message": "La profe dijo que tal vez hagamos una exposición, todavía no confirma",
+      "expected": []
+    },
+    {
+      "message": "Mañana 7:30 traer cartulina. Miércoles 28 exposición 10 am. Viernes 30 enviar informe PDF",
+      "expected": [
+        {
+          "type": "MATERIAL"
+        },
+        {
+          "type": "EXPOSICION"
+        },
+        {
+          "type": "ENTREGA"
+        }
+      ]
+    },
+    {
+      "message": "Buenas, gracias por ayudar, nos vemos luego",
+      "expected": []
+    },
+    {
+      "message": "IMPORTANTE: ensayo final, mínimo 5 páginas, formato APA, subir a plataforma hasta las 23:59 del domingo",
+      "expected": [
+        {
+          "type": "ENTREGA",
+          "constraints": [
+            "5 páginas mínimo",
+            "APA",
+            "Plataforma"
+          ],
+          "deadline": "domingo 23:59"
+        }
+      ]
+    },
+    {
+      "message": "Actividad 1: leer el cuento. Actividad 2: responder las preguntas. La entrega es el jueves",
+      "expected": [
+        {
+          "type": "LECTURA"
+        },
+        {
+          "type": "TAREA",
+          "deadline": "jueves (alcance ambiguo, confirmar)"
+        }
+      ]
+    },
+    {
+      "message": "La exposición era el jueves, corrección: será el viernes. Los grupos siguen iguales",
+      "expected": [
+        {
+          "type": "CAMBIO_FECHA",
+          "old": "jueves",
+          "new": "viernes"
+        }
+      ]
+    }
+  ]
+}
