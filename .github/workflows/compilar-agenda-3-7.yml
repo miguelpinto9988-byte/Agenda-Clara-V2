@@ -239,7 +239,7 @@ jobs:
           profile: pixel_6
           avd-name: agenda-clara-ui
           disable-animations: true
-          script: bash updates/phase11/emulator_schedule_plus.sh
+          script: bash updates/phase16/emulator_3_8.sh
       - name: Publicar capturas sintéticas del emulador
         if: always()
         uses: actions/upload-artifact@v4
