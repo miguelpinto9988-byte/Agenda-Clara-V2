@@ -48,8 +48,6 @@ jobs:
           python3 updates/apply_2_4_0.py
           python3 updates/apply_2_5_0.py
           python3 updates/apply_2_6_0.py
-          javac -encoding UTF-8 -cp "$OUT" -d "$OUT" AgendaClara/app/src/main/java/pe/agendaclara/app/ScheduleEntry.java AgendaClara/app/src/main/java/pe/agendaclara/app/ScheduleParser.java AgendaClara/tests/ScheduleCoreTests.java
-          java -cp "$OUT" ScheduleCoreTests
           python3 updates/test_2_5_0.py
 
       - name: Recuperar clave de desarrollo privada
@@ -97,6 +95,8 @@ jobs:
           java -cp "$OUT" Phase7Tests
           javac -encoding UTF-8 -cp "$OUT" -d "$OUT" AgendaClara/tests/Phase8Tests.java
           java -cp "$OUT" Phase8Tests
+          javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/ScheduleEntry.java" "$SRC/ScheduleParser.java" AgendaClara/tests/ScheduleCoreTests.java
+          java -cp "$OUT" ScheduleCoreTests
 
       - name: Preparar Android SDK API 36
         shell: bash
