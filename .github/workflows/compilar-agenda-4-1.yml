@@ -186,8 +186,8 @@ jobs:
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK"
           BADGING="$("$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK")"
           printf '%s\n' "$BADGING" | head -12
-          echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='30' versionName='4.1.0'"
-          echo "PASS: package pe.agendaclara.app, version 4.1.0 (29), signed Android APK"
+          echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='31' versionName='4.1.0'"
+          echo "PASS: package pe.agendaclara.app, version 4.1.0 (31), signed Android APK"
 
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
