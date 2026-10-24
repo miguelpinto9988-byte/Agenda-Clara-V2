@@ -3,7 +3,7 @@ import shutil
 src=Path("AgendaClara/app/src/main/java/pe/agendaclara/app")
 main=src/"MainActivity.java"
 s=main.read_text(encoding="utf8")
-assert 'Button plus=button("+",()->openQuickActions());' in s
+assert 'Button plus=button("+",()->openQuickActions());plus.setTag("new_task_button");' in s
 shutil.copyfile("updates/plus37/TopPlusMotion.java",src/"TopPlusMotion.java")
 s=s.replace('Button plus=button("+",()->openQuickActions());','Button plus=button("+",()->openQuickActions());',1)
 needle='plus.setOnTouchListener((v,e)->{'
