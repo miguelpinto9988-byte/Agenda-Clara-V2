@@ -25,16 +25,13 @@ if s.count(anchor)!=1:raise RuntimeError("Ancla ScheduleActivity modificada")
 s=s.replace(anchor,helper+anchor,1)
 # Fijar decorFitsSystemWindows(false) hace que el listener gestione padding superior,
 # evita la superposición observada en encabezados y respeta la barra inferior.
-# Ajuste en el punto real de instalación de la vista, independientemente de onCreate.
-import re
-calls=list(re.finditer(r"setContentView\\([^;]+\\);",s))
-if not calls:
- print("SCHEDULE_SOURCE_HEAD",s[:11000]);raise RuntimeError("No se halló setContentView")
-first=calls[0]
-replacement='''androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(),false);
-        '''+first.group(0)+'''
-        applyScheduleInsets(getWindow().getDecorView().findViewById(android.R.id.content));'''
-s=s[:first.start()]+replacement+s[first.end():]
+# Toda navegación de esta actividad pasa por show(int screen): instalar insets en su root.
+old="private void show(int screen){page=screen;root=col();root.setBackgroundColor(BG);setContentView(root);"
+if s.count(old)!=1:raise RuntimeError("No se halló el constructor real de pantalla")
+new='''private void show(int screen){page=screen;root=col();root.setBackgroundColor(BG);
+        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(),false);
+        setContentView(root);applyScheduleInsets(root);'''
+s=s.replace(old,new,1)
 path.write_text(s,encoding="utf-8")
 gradle=root/"app/build.gradle"
 g=gradle.read_text(encoding="utf-8")
