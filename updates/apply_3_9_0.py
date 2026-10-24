@@ -134,3 +134,7 @@ s=s.replace('inner.setVisibility(expanded?View.VISIBLE:View.GONE);arrow.setText(
 s=s.replace('dateBtn.setBackground(outlined(PALE,16,0xffc8dafe));','dateBtn.setBackground(outlined(0xffffffff,18,0xffc8dafe));dateBtn.setMinHeight(dp(56));',1)
 p.write_text(s)
 print('PATCH 3.9 OK',len(s))
+gradle=Path('AgendaClara/app/build.gradle')
+g=gradle.read_text()
+assert 'versionCode 28' in g and "versionName '3.8.0'" in g
+gradle.write_text(g.replace('versionCode 28','versionCode 29').replace("versionName '3.8.0'","versionName '3.9.0'"))
