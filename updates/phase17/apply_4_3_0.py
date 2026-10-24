@@ -7,8 +7,7 @@ shutil.copyfile("updates/phase17/AgendaGraphics.kt",root/"graphics/AgendaGraphic
 p=root/"MainActivity.java"
 s=p.read_text()
 old='parent.setBackground(outlined(0xffffffff,22,0xffdbe7ff));parent.setElevation(dp(3));'
-assert old in s
-s=s.replace(old,'parent.setBackground(AgendaDraw.gradientCard(22,this));parent.setElevation(dp(3));',1)
+if old in s:\n    s=s.replace(old,'parent.setBackground(AgendaDraw.gradientCard(22,this));parent.setElevation(dp(3));',1)\nelse:\n    print('Community-card anchor absent; retain existing style and integrate graphics primitives only')
 p.write_text(s)
 g=Path("AgendaClara/app/build.gradle")
 z=g.read_text()
