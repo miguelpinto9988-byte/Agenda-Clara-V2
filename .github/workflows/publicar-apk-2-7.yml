@@ -1,0 +1,52 @@
+name: Publicar APK directa Agenda Clara 2.7.0
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publicar-apk-2-7.yml'
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Recuperar APK verificada de la compilación 2.7
+        uses: actions/download-artifact@v4
+        with:
+          name: Agenda-Clara-2.7.0-APK
+          run-id: 40056923101
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: apk
+      - name: Verificar integridad y preparar descarga
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s apk/app-debug.apk
+          echo '1dc850657c387e1c64e51493193b73ea3dcabfdd1ce50f5f54d043ed6782aa07  apk/app-debug.apk' | sha256sum --check
+          unzip -t apk/app-debug.apk | tail -1
+          mv apk/app-debug.apk apk/AgendaClara_2_7_OCR_Horarios.apk
+          cat > apk/LEEME.txt <<'EOT'
+          Agenda Clara 2.7.0. OCR geométrico local para horarios académicos.
+          Instala sobre Agenda Clara 2.6.1 sin desinstalar, después de hacer copia de seguridad.
+          El reconocimiento de foto sigue necesitando confirmación de los cursos y horas.
+          Firmada con el certificado de desarrollo histórico de Agenda Clara.
+          EOT
+          (cd apk && zip -q AgendaClara_2_7_Alternativa.zip AgendaClara_2_7_OCR_Horarios.apk LEEME.txt)
+      - name: Publicar APK y alternativa ZIP
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO="$GITHUB_REPOSITORY"
+          if gh release view v2.7.0 --repo "$REPO" >/dev/null 2>&1; then
+            gh release upload v2.7.0 apk/AgendaClara_2_7_OCR_Horarios.apk apk/AgendaClara_2_7_Alternativa.zip --clobber --repo "$REPO"
+          else
+            gh release create v2.7.0 apk/AgendaClara_2_7_OCR_Horarios.apk apk/AgendaClara_2_7_Alternativa.zip \
+              --repo "$REPO" --target main --title 'Agenda Clara 2.7.0 · OCR de horarios académicos' \
+              --notes 'Mejora de lectura offline de horarios con columnas, bloques de clase y celdas de múltiples franjas. Revisa y confirma antes de importar; sin cambios en base SQLite. Compilación de desarrollo firmada con certificado histórico.'
+          fi
+          gh release view v2.7.0 --repo "$REPO" --json url,assets
