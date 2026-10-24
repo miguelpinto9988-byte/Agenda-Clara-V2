@@ -17,7 +17,7 @@ checks={
   "origen notificaciones":"NOTIFICACIONES" in main,
   "origen vinculado":"VINCULADO" in main,
   "reconocimiento notificaciones activo":"getBoolean(\"discover\"" in listener,
-  "metadatos sin leer mensajes no seleccionados":"!chat.selected)return;" in listener,
+  "metadatos sin leer mensajes no seleccionados":'if(chat==null||!chat.selected){' in listener and 'putString("wa_diag_state","Chat detectado: selección pendiente")' in listener,
   "captura bajo autorización explícita":"putBoolean(\"capture\",true)" in main,
   "autorizar no es guardar tarea":"Store.get(this).selectChat(chat.key,true)" in main,
   "importacion individual explícita":"recordImportedMessage(key,m)" in main,
