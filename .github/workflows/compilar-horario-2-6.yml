@@ -1,10 +1,12 @@
-name: Compilar Agenda Clara 2.6.1 Horario
+name: Compilar Agenda Clara 2.7.0 OCR de cuadrículas
 on:
   push:
     branches: [main]
     paths:
       - 'updates/apply_2_6_0.py'
       - 'updates/apply_2_6_1.py'
+      - 'updates/apply_2_7_0.py'
+      - 'updates/phase12/**'
       - 'updates/phase11/**'
       - 'updates/phase10/**'
       - '.github/workflows/compilar-horario-2-6.yml'
@@ -54,6 +56,7 @@ jobs:
           python3 updates/test_2_5_0.py
           python3 updates/apply_2_6_0.py
           python3 updates/apply_2_6_1.py
+          python3 updates/apply_2_7_0.py
 
       - name: Recuperar clave de desarrollo privada
         shell: bash
@@ -102,6 +105,8 @@ jobs:
           java -cp "$OUT" Phase8Tests
           javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/ScheduleEntry.java" "$SRC/ScheduleParser.java" updates/phase10/ScheduleCoreTests.java
           java -cp "$OUT" ScheduleCoreTests
+          javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/ScheduleGridInterpreter.java" updates/phase12/SchedulePhotoGridTests.java
+          java -cp "$OUT" SchedulePhotoGridTests
           javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/ScheduleConflict.java" "$SRC/SchedulePeriod.java" updates/phase11/ScheduleImprovementTests.java
           java -cp "$OUT" ScheduleImprovementTests
 
@@ -144,7 +149,7 @@ jobs:
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-2.6.1-APK
+          name: Agenda-Clara-2.7.0-APK
           path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
@@ -155,13 +160,13 @@ jobs:
           set -euo pipefail
           rm -f AgendaClara/signing/development.jks
           rm -rf AgendaClara/.gradle AgendaClara/app/build
-          zip -q -r Agenda-Clara-2.6.1-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
-          if unzip -Z1 Agenda-Clara-2.6.1-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
-      - name: Publicar fuentes 2.6.1
+          zip -q -r Agenda-Clara-2.7.0-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
+          if unzip -Z1 Agenda-Clara-2.7.0-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
+      - name: Publicar fuentes 2.7.0
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-2.6.1-Fuentes-Verificadas
-          path: Agenda-Clara-2.6.1-Fuentes-Verificadas.zip
+          name: Agenda-Clara-2.7.0-Fuentes-Verificadas
+          path: Agenda-Clara-2.7.0-Fuentes-Verificadas.zip
           retention-days: 30
           if-no-files-found: error
 
@@ -175,7 +180,7 @@ jobs:
       - name: Recuperar APK compilada
         uses: actions/download-artifact@v4
         with:
-          name: Agenda-Clara-2.6.1-APK
+          name: Agenda-Clara-2.7.0-APK
           path: artifact-apk
       - name: Preparar aceleración para emulador
         run: |
@@ -194,6 +199,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-2.6.1-Emulator-Capturas
+          name: Agenda-Clara-2.7.0-Emulator-Capturas
           path: screenshots/
           if-no-files-found: ignore
