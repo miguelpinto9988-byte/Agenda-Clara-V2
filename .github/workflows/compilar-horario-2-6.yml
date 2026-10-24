@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - 'updates/apply_2_6_0.py'
+      - 'updates/phase10/**'
+      - '.github/workflows/compilar-horario-2-6.yml'
   workflow_dispatch:
 
 permissions:
@@ -47,8 +49,8 @@ jobs:
           python3 updates/test_2_3_0.py
           python3 updates/apply_2_4_0.py
           python3 updates/apply_2_5_0.py
-          python3 updates/apply_2_6_0.py
           python3 updates/test_2_5_0.py
+          python3 updates/apply_2_6_0.py
 
       - name: Recuperar clave de desarrollo privada
         shell: bash
@@ -95,7 +97,7 @@ jobs:
           java -cp "$OUT" Phase7Tests
           javac -encoding UTF-8 -cp "$OUT" -d "$OUT" AgendaClara/tests/Phase8Tests.java
           java -cp "$OUT" Phase8Tests
-          javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/ScheduleEntry.java" "$SRC/ScheduleParser.java" AgendaClara/tests/ScheduleCoreTests.java
+          javac -encoding UTF-8 -cp "$OUT" -d "$OUT" "$SRC/ScheduleEntry.java" "$SRC/ScheduleParser.java" updates/phase10/ScheduleCoreTests.java
           java -cp "$OUT" ScheduleCoreTests
 
       - name: Preparar Android SDK API 36
@@ -182,7 +184,7 @@ jobs:
           profile: pixel_6
           avd-name: agenda-clara-ui
           disable-animations: true
-          script: bash updates/phase9/emulator_25.sh
+          script: bash updates/phase10/emulator_schedule.sh
       - name: Publicar capturas sintéticas del emulador
         if: always()
         uses: actions/upload-artifact@v4
