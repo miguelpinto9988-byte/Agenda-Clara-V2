@@ -17,7 +17,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: Agenda-Clara-2.6.1-APK
-          run-id: 40055728923
+          run-id: 40055942163
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: apk
       - name: Verificar y preparar enlace de descarga
@@ -25,7 +25,7 @@ jobs:
         run: |
           set -euo pipefail
           test -s apk/app-debug.apk
-          echo '83f472c6dec434f8872ba3ea60b01f7efeba4448ade017e467cbbf164ef9597f  apk/app-debug.apk' | sha256sum --check
+          echo '4e470a215864bc154fb29fe637d6e4897e684653a37c690f9eccdbb37d445ffd  apk/app-debug.apk' | sha256sum --check
           unzip -t apk/app-debug.apk | tail -1
           mv apk/app-debug.apk apk/AgendaClara_2_6_1_Horario.apk
           printf 'Agenda Clara 2.6.1: copias cifradas del horario, conflictos, diagnostico y cuadrícula semanal. Instalar sobre 2.6.0, sin desinstalar.\n' > apk/LEEME.txt
