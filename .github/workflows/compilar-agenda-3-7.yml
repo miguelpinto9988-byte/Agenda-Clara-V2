@@ -18,6 +18,7 @@ on:
       - 'updates/apply_3_6_0.py'
       - 'updates/apply_3_7_0.py'
       - 'updates/interpretation/**'
+      - 'updates/phase15/**'
       - 'updates/test_3_7_0.py'
       - 'updates/test_3_6_0.py'
       - 'updates/phase13/**'
@@ -84,6 +85,8 @@ jobs:
           python3 updates/apply_3_6_0.py
           python3 updates/apply_3_7_0.py
           python3 updates/interpretation/apply.py
+          python3 updates/phase15/apply_3_7_1.py
+          python3 updates/phase15/test_3_7_1.py
           python3 updates/test_3_7_0.py
           python3 updates/test_3_6_0.py
 
