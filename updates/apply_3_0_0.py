@@ -32,6 +32,8 @@ public final class ScheduleCourseColors {
     public static String identity(String title){
         String clean=key(title);if(clean.isEmpty())return clean;
         String[] words=clean.split(" ");
+        // Materias de una sola palabra solo usan identidad exacta: Historia != Historias.
+        if(words.length<2)return clean;
         for(int i=0;i<words.length;i++){
             String w=words[i];if(w.length()<5)continue;
             if((w.endsWith("os")||w.endsWith("as"))&&w.length()>4){
