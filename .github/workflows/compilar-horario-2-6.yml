@@ -1,3 +1,4 @@
+# Nueva recompilación verificada de Agenda Clara 2.7.0 solicitada por el usuario.
 name: Compilar Agenda Clara 2.7.0 OCR de cuadrículas
 on:
   push:
@@ -144,7 +145,10 @@ jobs:
           test -s "$APK"
           unzip -t "$APK" | tail -1
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK"
-          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | head -12
+          BADGING="$("$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK")"
+          printf '%s\n' "$BADGING" | head -12
+          echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='16' versionName='2.7.0'"
+          echo "PASS: package pe.agendaclara.app, version 2.7.0 (16), signed Android APK"
 
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
