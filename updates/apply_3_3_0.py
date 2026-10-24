@@ -56,9 +56,6 @@ change("ScheduleActivity.java",
                          }
                      }''')
 # Exponer conteo y días por curso durante revisión de foto.
-change("ScheduleActivity.java",
-'''related.get(ScheduleCourseColors.identity(s.course)).size()''',
-'''related.get(ScheduleCourseColors.identity(s.course)).size()''')
 gradle=base/"app/build.gradle";g=gradle.read_text(encoding="utf-8")
 if "versionCode 22" not in g or "versionName '3.2.0'" not in g:raise RuntimeError("Requiere 3.2.0")
 gradle.write_text(g.replace("versionCode 22","versionCode 23").replace("versionName '3.2.0'","versionName '3.3.0'"),encoding="utf-8")
