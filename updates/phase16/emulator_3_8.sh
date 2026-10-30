@@ -62,8 +62,15 @@ PY
 )"
 adb shell input tap "$TAP_X" "$TAP_Y"
 sleep 3
-adb shell uiautomator dump /sdcard/calendar_ui.xml >/dev/null
-adb shell cat /sdcard/calendar_ui.xml > calendar_ui.xml
+# The redesigned calendar gives its month grid precedence over the class-schedule card.
+# Scroll until the original class-schedule button is visible; never tap blind.
+for scroll in 1 2 3 4 5; do
+  adb shell uiautomator dump /sdcard/calendar_ui.xml >/dev/null
+  adb shell cat /sdcard/calendar_ui.xml > calendar_ui.xml
+  if grep -q 'Abrir mi horario' calendar_ui.xml; then break; fi
+  adb shell input swipe 540 1740 540 660 300
+  sleep 2
+done
 eval "$(python3 - <<'PY'
 import xml.etree.ElementTree as ET,re
 for item in ET.parse('calendar_ui.xml').getroot().iter("node"):
