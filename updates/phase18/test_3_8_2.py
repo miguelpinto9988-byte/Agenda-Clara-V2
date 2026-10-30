@@ -32,3 +32,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase20/test_remove_co
 
 # Validate custom categories, automatic priority and responsive UI.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase21/test_redesign.py"), run_name="__main__")
+
+# Regression of typography, icons, modal bounds, schedule, and unchanged +.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase22/test_visual_system.py"),run_name="__main__")
