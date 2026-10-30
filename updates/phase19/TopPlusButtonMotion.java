@@ -1,5 +1,8 @@
 package pe.agendaclara.app;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.StateListAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.res.ColorStateList;
@@ -9,7 +12,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -116,31 +118,23 @@ public final class TopPlusButtonMotion {
         if (view.getContentDescription() == null || view.getContentDescription().length() == 0)
             view.setContentDescription("Añadir");
         if (Build.VERSION.SDK_INT >= 26 && !ValueAnimator.areAnimatorsEnabled()) return;
-        // Returning false is deliberate: Android dispatches the original click unchanged.
-        view.setOnTouchListener((target, event) -> {
-            switch (event.getActionMasked()) {
-                case MotionEvent.ACTION_DOWN:
-                    target.animate().cancel();
-                    target.animate().scaleX(0.91f).scaleY(0.91f).rotation(-7f)
-                            .setDuration(105).start();
-                    break;
-                case MotionEvent.ACTION_UP:
-                    target.animate().cancel();
-                    target.animate().scaleX(1.04f).scaleY(1.04f).rotation(45f)
-                            .setDuration(170).withEndAction(() -> target.animate()
-                                    .scaleX(1f).scaleY(1f).rotation(0f)
-                                    .setDuration(170).start()).start();
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                    target.animate().cancel();
-                    target.animate().scaleX(1f).scaleY(1f).rotation(0f)
-                            .setDuration(120).start();
-                    break;
-                default:
-                    break;
-            }
-            return false;
-        });
+        // Android's native state animator preserves the original click and touch handlers.
+        // The released state also restores the transform after touch cancellation.
+        StateListAnimator motion = new StateListAnimator();
+        motion.addState(new int[] { android.R.attr.state_pressed },
+                animate(view, 0.91f, -7f, 105));
+        motion.addState(new int[0], animate(view, 1f, 0f, 170));
+        view.setStateListAnimator(motion);
+    }
+
+    private static AnimatorSet animate(View view, float scale, float rotation, long duration) {
+        AnimatorSet motion = new AnimatorSet();
+        motion.playTogether(
+                ObjectAnimator.ofFloat(view, View.SCALE_X, scale),
+                ObjectAnimator.ofFloat(view, View.SCALE_Y, scale),
+                ObjectAnimator.ofFloat(view, View.ROTATION, rotation));
+        motion.setDuration(duration);
+        return motion;
     }
 
     private static int dp(Activity activity, float value) {
