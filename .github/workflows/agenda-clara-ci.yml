@@ -2,7 +2,7 @@
 name: Agenda Clara 3.8.2 · Compilación y validación
 on:
   push:
-    branches: [main, feat/top-plus-png-motion-3-8-2, feat/remove-compose-daily-view-3-8-2]
+    branches: [main, feat/top-plus-png-motion-3-8-2, feat/remove-compose-daily-view-3-8-2, feat/full-ui-categories-responsive-3-8-2]
     paths:
       - 'updates/**'
       - 'Agenda-Clara-1.3.0-Fuentes-Sin-Clave.zip'
