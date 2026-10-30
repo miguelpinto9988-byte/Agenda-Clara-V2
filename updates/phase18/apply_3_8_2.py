@@ -47,3 +47,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase19/apply_top_plus
 
 # Remove the unused Compose-only landing card and its secondary activity.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase20/apply_remove_compose_view.py"), run_name="__main__")
+
+# Final native design stage after obsolete Compose screen removal.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase21/apply_redesign.py"), run_name="__main__")
