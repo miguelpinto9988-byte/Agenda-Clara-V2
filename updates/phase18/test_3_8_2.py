@@ -29,3 +29,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase19/test_top_plus_
 
 # Check removal of Compose without changing the approved add-task button.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase20/test_remove_compose_view.py"), run_name="__main__")
+
+# Validate custom categories, automatic priority and responsive UI.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase21/test_redesign.py"), run_name="__main__")
