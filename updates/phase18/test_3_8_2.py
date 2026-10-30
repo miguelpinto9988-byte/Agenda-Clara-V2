@@ -12,7 +12,7 @@ for used in (
     "ScheduleActivity", "Store",
 ):
     assert (src / (used + ".java")).exists(), used
-assert (src / "ComposeDayActivity.kt").exists()
+assert not (src / "ComposeDayActivity.kt").exists()
 manifest = (root / "app/src/main/AndroidManifest.xml").read_text(encoding="utf-8")
 assert "WhatsAppListener" in manifest and "ScheduleActivity" in manifest
 gradle = (root / "app/build.gradle").read_text(encoding="utf-8")
@@ -26,3 +26,6 @@ print("PASS: unused classes pruned, active modules retained, version 3.8.2")
 # The phase-19 add-button regression runs as part of the active 3.8.2 CI.
 import runpy
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase19/test_top_plus_button.py"), run_name="__main__")
+
+# Check removal of Compose without changing the approved add-task button.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase20/test_remove_compose_view.py"), run_name="__main__")
