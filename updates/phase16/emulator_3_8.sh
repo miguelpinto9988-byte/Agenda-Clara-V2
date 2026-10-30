@@ -121,3 +121,6 @@ sleep 3
 adb shell pidof "$PKG" >/dev/null
 for file in screenshots/*.png;do test -s "$file";done
 echo "PASS: 2.6.1 instalada; Calendario y Horario; opciones OCR/manual; cuadrícula semanal; reinicio."
+
+# Additional design review: category modal, new task, review, and connections.
+bash updates/phase22/emulator_design_qa.sh
