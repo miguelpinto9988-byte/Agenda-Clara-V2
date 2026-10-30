@@ -50,3 +50,7 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase20/apply_remove_c
 
 # Final native design stage after obsolete Compose screen removal.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase21/apply_redesign.py"), run_name="__main__")
+
+# Phase22: full native visual system across main screens and academic schedule.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase22/apply_visual_system.py"),run_name="__main__")
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase22/apply_schedule_design.py"),run_name="__main__")
