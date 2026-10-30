@@ -7,14 +7,11 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Collections;
@@ -35,69 +32,15 @@ public final class TopPlusButtonMotion {
         // Scan only after the current page's layout is complete.
         root.post(() -> {
             if (activity.isFinishing() || (Build.VERSION.SDK_INT >= 17 && activity.isDestroyed())) return;
-            View add = findTopRightAdd(root, activity);
+            View add = findTopRightAdd(root);
             if (add != null) style(activity, add);
         });
     }
 
-    private static View findTopRightAdd(View root, Activity activity) {
-        Rect bounds = new Rect();
-        if (!root.getGlobalVisibleRect(bounds)) return null;
-        final int maxY = Math.min(bounds.top + dp(activity, 240),
-                bounds.top + Math.round(bounds.height() * 0.34f));
-        final int minX = bounds.left + Math.round(bounds.width() * 0.54f);
-        return search(root, minX, maxY, activity);
-    }
-
-    private static View search(View node, int minX, int maxY, Activity activity) {
-        if (node.getVisibility() != View.VISIBLE) return null;
-        View best = null;
-        if (matchesPlus(node)) {
-            View clickable = node;
-            for (int i = 0; i < 2 && !clickable.isClickable(); i++) {
-                if (!(clickable.getParent() instanceof View)) break;
-                clickable = (View) clickable.getParent();
-            }
-            Rect area = new Rect();
-            if (clickable.isClickable() && clickable.getGlobalVisibleRect(area)
-                    && area.centerX() >= minX && area.centerY() <= maxY
-                    && area.width() <= dp(activity, 110)
-                    && area.height() <= dp(activity, 110)) {
-                best = clickable;
-            }
-        }
-        if (node instanceof ViewGroup) {
-            ViewGroup parent = (ViewGroup) node;
-            for (int i = 0; i < parent.getChildCount(); i++) {
-                View candidate = search(parent.getChildAt(i), minX, maxY, activity);
-                if (candidate != null && (best == null || isEarlier(candidate, best))) best = candidate;
-            }
-        }
-        return best;
-    }
-
-    private static boolean isEarlier(View a, View b) {
-        Rect ar = new Rect(); Rect br = new Rect();
-        if (!a.getGlobalVisibleRect(ar) || !b.getGlobalVisibleRect(br)) return false;
-        return ar.top < br.top || (ar.top == br.top && ar.centerX() > br.centerX());
-    }
-
-    private static boolean matchesPlus(View view) {
-        if (view instanceof TextView) {
-            String label = String.valueOf(((TextView) view).getText()).trim();
-            if ("+".equals(label) || "＋".equals(label) || "✚".equals(label)
-                    || "➕".equals(label)) return true;
-        }
-        if (view instanceof ImageButton) {
-            CharSequence desc = view.getContentDescription();
-            if (desc != null) {
-                String label = desc.toString().trim().toLowerCase(java.util.Locale.ROOT);
-                return label.equals("añadir") || label.equals("agregar")
-                        || label.equals("nueva tarea") || label.equals("añadir tarea")
-                        || label.equals("agregar tarea") || label.equals("crear tarea");
-            }
-        }
-        return false;
+    /** Match the original stable tag, not an unrelated plus in the page content. */
+    private static View findTopRightAdd(View root) {
+        View add = root.findViewWithTag("new_task_button");
+        return add != null && add.isShown() && add.isClickable() ? add : null;
     }
 
     private static void style(Activity activity, View view) {
@@ -111,7 +54,6 @@ public final class TopPlusButtonMotion {
         RippleDrawable ripple = new RippleDrawable(ColorStateList.valueOf(0x44FFFFFF), artwork, mask);
         view.setBackground(ripple);
         if (view instanceof TextView) ((TextView) view).setText("");
-        if (view instanceof ImageButton) ((ImageButton) view).setImageDrawable(null);
         view.setMinimumWidth(dp(activity, 52));
         view.setMinimumHeight(dp(activity, 52));
         view.setPadding(0, 0, 0, 0);
