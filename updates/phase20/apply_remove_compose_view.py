@@ -26,8 +26,8 @@ OLD_DEPENDENCIES = """dependencies {
 
 """
 KOTLIN_PLUGINS = (
-    "    id 'org.jetbrains.kotlin.android' version '2.4.10' apply false\\n",
-    "    id 'org.jetbrains.kotlin.plugin.compose' version '2.4.10' apply false\\n",
+    "    id 'org.jetbrains.kotlin.android' version '2.4.10' apply false\n",
+    "    id 'org.jetbrains.kotlin.plugin.compose' version '2.4.10' apply false\n",
 )
 
 
@@ -43,7 +43,7 @@ def transform_files() -> dict:
     if len(line) != 1 or "ComposeDayActivity.class" not in line[0] or "primaryButton" not in line[0]:
         raise RuntimeError("Unexpected card code; refusing to remove other UI")
     revised_java = exactly_once(java, line[0], "", "daily-view card")
-    if "setTag(\\\"new_task_button\\\")" not in revised_java or "openEditor(-1,null,null)" not in revised_java:
+    if "setTag(\"new_task_button\")" not in revised_java or "openEditor(-1,null,null)" not in revised_java:
         raise RuntimeError("Existing + button or native editor not detected")
 
     manifest = MANIFEST.read_text(encoding="utf-8")
@@ -61,8 +61,8 @@ def transform_files() -> dict:
     gradle = APP_BUILD.read_text(encoding="utf-8")
     gradle = exactly_once(gradle, OLD_APP_PLUGINS,
                           "plugins { id 'com.android.application' }", "Compose/Kotlin app plugins")
-    gradle = exactly_once(gradle, "    buildFeatures { compose true }\\n", "", "Compose build flag")
-    gradle = exactly_once(gradle, "    kotlinOptions { jvmTarget = '1.8' }\\n", "", "Kotlin options")
+    gradle = exactly_once(gradle, "    buildFeatures { compose true }\n", "", "Compose build flag")
+    gradle = exactly_once(gradle, "    kotlinOptions { jvmTarget = '1.8' }\n", "", "Kotlin options")
     gradle = exactly_once(gradle, OLD_DEPENDENCIES, "", "Compose dependencies")
 
     root_gradle = ROOT_BUILD.read_text(encoding="utf-8")
