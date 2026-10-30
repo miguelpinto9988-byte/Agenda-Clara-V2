@@ -25,7 +25,18 @@ assert "safe.width()-dp(a,48)" in window and "safe.height()-dp(a,56)" in window,
 
 assert 'lp.bottomMargin=dp(16)' in java and 'body.setPadding(dp(18),dp(12),dp(18),dp(32))' in java
 assert "nav.addView(item,new LinearLayout.LayoutParams(0,dp(76),1))" in java, "Navigation labels must not be clipped"
-assert "chipMargin.rightMargin=dp(8)" in java, "Filter chips must be separated"
+assert 'lp.rightMargin=dp(8)' in java, "Category chips must have spacing"
+assert 'String[] names={"Todas","Urgentes","Pendientes","Próximas","Hechas"}' not in java, "Legacy status row must not render"
+assert 'HorizontalScrollView horizontal=new HorizontalScrollView(this)' not in java, "Legacy status scroller must be removed"
+assert 'String[] choices=new String[categories.length+1]' not in java, "Duplicate Todas category must not render"
+assert 'Button create=button("＋ Nueva"' not in java, "Keep category creation in the manager only"
+assert 'for(String label:categories)' in java, "Only persisted categories become chips"
+assert 'String query="",selectedCategory="General";' in java, "General must be selected by default"
+assert 'selectedCategory=state.getString("selected_category","General")' in java, "Restore General safely"
+assert 'if(selectedCategory.equalsIgnoreCase(entry.name))selectedCategory="General";' in java, "Deleted active category falls back"
+assert 'if(!AgendaFilters.matches(t,0,0,query,date,now))continue;' in java, "No hidden status filters"
+assert 'if(date==null&&!selectedCategory.equalsIgnoreCase(TaskOrganization.category(t.category)))continue;' in java, "Categories still actually filter tasks"
+assert '"No hay tareas en "+selectedCategory' in java, "Category empty state should be clear"
 assert "Avance estimado =" not in java, "Avoid redundant lengthy formula in the header"
 assert 'ComposeDayActivity' not in java and not (p/"ComposeDayActivity.kt").exists()
 assert 'getWritableDatabase().update("tasks",values,"category=? COLLATE NOCASE"' in store
@@ -37,4 +48,4 @@ assert 'items.add(new Entry("General",COLORS[0]))' in registry
 assert 'return custom.isEmpty()?"General"' in org, "Custom names cannot be erased"
 for text in ('"Urgente"','"Alta"','"Media"','"Baja"','"Vencida"','"Sin fecha"'):
     assert text in priority,text
-print("PASS: custom categories and data preservation, native UI, 2x plus, deadlines, recurrence and dialog spacing")
+print("PASS: General-only initial chip, no status filters or duplicate Todos, category filtering and data preservation")
