@@ -52,9 +52,9 @@ def install():
         "static final int BG=0xfff5f8ff,INK=0xff142346,GREEN=0xff405be8,MUTED=0xff617494,RED=0xffd45063;","palette")
     java=one(java,"static final int VIOLET=0xff8466dc,SUCCESS=0xff0d8d83,SURFACE=0xffffffff,PALE=0xffedf0ff,STROKE=0xffdfe5f1;",
         "static final int VIOLET=0xff7159ed,SUCCESS=0xff0d9488,SURFACE=0xffffffff,PALE=0xffeef1ff,STROKE=0xffdce5f5;","palette-secondary")
-    java=one(java,'String query="";','String query="",selectedCategory="";',"filter state")
+    java=one(java,'String query="";','String query="",selectedCategory="General";',"filter state")
     java=one(java,'query=state.getString("query","");',
-        'query=state.getString("query","");selectedCategory=state.getString("selected_category","");',"restore category filter")
+        'query=state.getString("query","");selectedCategory=state.getString("selected_category","General");if(selectedCategory==null||selectedCategory.trim().isEmpty())selectedCategory="General";',"restore category filter")
     java=one(java,'out.putString("query",query);',
         'out.putString("query",query);out.putString("selected_category",selectedCategory);',"save category filter")
     java=one(java,'header.addView(add,new LinearLayout.LayoutParams(dp(54),dp(54)));',
@@ -80,6 +80,10 @@ def install():
     # Remove the 7-row statistics chart; keep a useful compact progress summary.
     java=section(java,'        LinearLayout trend=card(body);','        if(!Reminders.canNotify(this)',
          '',"simplified agenda header")
+    # Category chips replace the redundant status-filter chips entirely.
+    java=section(java,
+        '        HorizontalScrollView horizontal=new HorizontalScrollView(this);horizontal.setHorizontalScrollBarEnabled(false);LinearLayout chips=row();',
+        '        TextView categoriesLabel=', '',"remove redundant status filter row")
     java=one(java,'text("Filtrar por categoría",12,MUTED,true)',
         'text("Mis categorías",16,INK,true)',"categories heading")
     java=section(java,'        HorizontalScrollView categoriesScroll=', '        taskList=column();',
@@ -89,10 +93,9 @@ def install():
         HorizontalScrollView categoriesScroll=new HorizontalScrollView(this);
         categoriesScroll.setHorizontalScrollBarEnabled(false);
         LinearLayout categoryChips=row();String[] categories=CategoryRegistry.names(this);
-        String[] choices=new String[categories.length+1];choices[0]="Todas";
-        System.arraycopy(categories,0,choices,1,categories.length);
-        for(String label:choices){
-            final String chosen="Todas".equals(label)?"":label;
+        if(!java.util.Arrays.asList(categories).contains(selectedCategory))selectedCategory="General";
+        for(String label:categories){
+            final String chosen=label;
             Button chip=button(label,()->{selectedCategory=chosen;taskLimit=24;render();});
             boolean active=selectedCategory.equalsIgnoreCase(chosen);
             chip.setTextColor(active?0xffffffff:GREEN);
@@ -100,14 +103,15 @@ def install():
             LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-2,dp(48));lp.rightMargin=dp(8);
             categoryChips.addView(chip,lp);
         }
-        Button create=button("＋ Nueva",()->showCategoryEditor(null,null));
-        categoryChips.addView(create);
         categoriesScroll.addView(categoryChips);body.addView(categoriesScroll);gap(body,12);
 ''',"dynamic categories chips")
     java=one(java,'if(!AgendaFilters.matches(t,filter,categoryFilter,query,date,now))continue;',
-'''if(!AgendaFilters.matches(t,filter==1?0:filter,0,query,date,now))continue;
-            if(filter==1&&!java.util.Arrays.asList("Vencida","Urgente").contains(TaskPriority.label(t,now)))continue;
-            if(date==null&&!selectedCategory.isEmpty()&&!selectedCategory.equalsIgnoreCase(TaskOrganization.category(t.category)))continue;''',"dynamic category filter")
+'''if(!AgendaFilters.matches(t,0,0,query,date,now))continue;
+            if(date==null&&!selectedCategory.equalsIgnoreCase(TaskOrganization.category(t.category)))continue;''',"dynamic category filter")
+    java=one(java,'date==null?"Espacio para tus pendientes":"Este día está libre"',
+        'date==null?"No hay tareas en "+selectedCategory:"Este día está libre"',"category-specific empty headline")
+    java=one(java,'date==null?"Toca ＋ para crear tu primera tarea o comparte un mensaje para revisarlo.":"Toca ＋ para planificar una actividad."',
+        'date==null?"Crea una tarea o elige otra categoría para verla.":"Toca ＋ para planificar una actividad."',"category-specific empty guidance")
     java=one(java,'TextView guide=text("Urgente: hasta 48 h · Pendiente: hasta 7 días · Próxima: más de 7 días. La prioridad se actualiza con el tiempo.",11,MUTED,false);',
         'TextView guide=text("La prioridad se calcula sola según la fecha límite. Puedes personalizar tus categorías.",12,MUTED,false);',"priority legend")
 
@@ -242,7 +246,7 @@ def install():
                     .setNegativeButton("Cancelar",null)
                     .setPositiveButton("Eliminar",(dialog,which)->{
                         if(CategoryRegistry.delete(this,entry.name)){
-                            if(selectedCategory.equalsIgnoreCase(entry.name))selectedCategory="";
+                            if(selectedCategory.equalsIgnoreCase(entry.name))selectedCategory="General";
                             for(AlertDialog open:new ArrayList<>(dialogs))if(open.isShowing())open.dismiss();
                             render();handler.post(this::showCategories);
                         }
@@ -283,9 +287,6 @@ def install():
     # Mobile QA: leave breathing room around filter chips and avoid cropped nav labels.
     java=one(java,'nav.addView(item,new LinearLayout.LayoutParams(0,dp(56),1));',
         'nav.addView(item,new LinearLayout.LayoutParams(0,dp(76),1));',"bottom bar label height")
-    java=one(java,'chips.addView(b);',
-        'LinearLayout.LayoutParams chipMargin=new LinearLayout.LayoutParams(-2,dp(48));chipMargin.rightMargin=dp(8);chips.addView(b,chipMargin);',
-        "status filter chip gutters")
     java=one(java,'summary.addView(heading);gap(summary,8);summary.addView(text("Avance estimado = completadas últimos 7 días / (completadas últimos 7 días + pendientes actuales).",11,MUTED,false));gap(summary,12);',
         'summary.addView(heading);gap(summary,12);',"compact progress header")
     java=section(java,'        LinearLayout stats=row();',
