@@ -24,6 +24,9 @@ window=(p/"WindowLayout.java").read_text(encoding="utf-8")
 assert "safe.width()-dp(a,48)" in window and "safe.height()-dp(a,56)" in window, "Modal safety insets"
 
 assert 'lp.bottomMargin=dp(16)' in java and 'body.setPadding(dp(18),dp(12),dp(18),dp(32))' in java
+assert "nav.addView(item,new LinearLayout.LayoutParams(0,dp(76),1))" in java, "Navigation labels must not be clipped"
+assert "chipMargin.rightMargin=dp(8)" in java, "Filter chips must be separated"
+assert "Avance estimado =" not in java, "Avoid redundant lengthy formula in the header"
 assert 'ComposeDayActivity' not in java and not (p/"ComposeDayActivity.kt").exists()
 assert 'getWritableDatabase().update("tasks",values,"category=? COLLATE NOCASE"' in store
 assert 'if(oldIndex==0)return false' in registry, "General cannot be renamed"
