@@ -280,6 +280,19 @@ def install():
 '''
     java=one(java,marker,methods+marker,"category manager methods")
 
+    # Mobile QA: leave breathing room around filter chips and avoid cropped nav labels.
+    java=one(java,'nav.addView(item,new LinearLayout.LayoutParams(0,dp(56),1));',
+        'nav.addView(item,new LinearLayout.LayoutParams(0,dp(76),1));',"bottom bar label height")
+    java=one(java,'chips.addView(b);',
+        'LinearLayout.LayoutParams chipMargin=new LinearLayout.LayoutParams(-2,dp(48));chipMargin.rightMargin=dp(8);chips.addView(b,chipMargin);',
+        "status filter chip gutters")
+    java=one(java,'summary.addView(heading);gap(summary,8);summary.addView(text("Avance estimado = completadas últimos 7 días / (completadas últimos 7 días + pendientes actuales).",11,MUTED,false));gap(summary,12);',
+        'summary.addView(heading);gap(summary,12);',"compact progress header")
+    java=section(java,'        LinearLayout stats=row();',
+        '        if(!Reminders.canNotify(this)', '',"remove redundant statistic tiles")
+    java=one(java,'progress.setProgressTintList(ColorStateList.valueOf(GREEN));',
+        'progress.setProgressTintList(ColorStateList.valueOf(VIOLET));',"progress palette")
+
     # Ensure modal windows never sit flush against screen edges or the IME.
     windowpath=SRC/"WindowLayout.java"
     window=windowpath.read_text(encoding="utf-8")
