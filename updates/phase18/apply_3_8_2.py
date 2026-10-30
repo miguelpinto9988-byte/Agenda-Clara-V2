@@ -44,3 +44,6 @@ print("PASS: safe native source cleanup, build 3.8.2")
 # after all legacy 3.8.2 migrations, leaving original navigation untouched.
 import runpy
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase19/apply_top_plus_button.py"), run_name="__main__")
+
+# Remove the unused Compose-only landing card and its secondary activity.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase20/apply_remove_compose_view.py"), run_name="__main__")
