@@ -16,7 +16,7 @@ def one(value, old, new, label):
     return value.replace(old,new,1)
 
 def section(value, start, end, replacement, label):
-    if value.count(start)!=1 or value.count(end)!=1:raise RuntimeError(f"redesign: anchor mismatch {label}")
+    if value.count(start)!=1 or end not in value:raise RuntimeError(f"redesign: anchor mismatch {label}")
     a=value.index(start);b=value.index(end,a)
     if b<=a:raise RuntimeError(f"redesign: bad ordering {label}")
     return value[:a]+replacement+value[b:]
