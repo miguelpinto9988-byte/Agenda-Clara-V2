@@ -27,12 +27,16 @@ for sample_bad in ("class Main {}", patch.ANCHOR * 2, changed):
 main = patch.SOURCE.read_text(encoding="utf-8")
 assert main.count("TopPlusButtonMotion.install(this)") == 1
 assert main.count(patch.ANCHOR) == 1
+# Verify the exact original add-task button still opens the existing editor.
+assert 'setTag("new_task_button")' in main
+assert '()->openEditor(-1,null,null)' in main
 java = patch.MOTION.read_text(encoding="utf-8")
 assert "setOnClickListener(" not in java
 assert "setOnTouchListener(" not in java
 assert "performClick(" not in java
 assert "setStateListAnimator(motion)" in java
 assert "state_pressed" in java
+assert 'findViewWithTag("new_task_button")' in java
 assert "areAnimatorsEnabled()" in java
 assert "getContentDescription" in java
 png = patch.RESOURCE.read_bytes()
