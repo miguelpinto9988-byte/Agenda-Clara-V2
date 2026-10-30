@@ -20,6 +20,9 @@ assert '"Cada día"' in java and '"Cada semana"' in java, "Original alarm recurr
 assert 't.repeatMinutes=intervals[repeat.getSelectedItemPosition()]' in java
 assert 'Reminders.schedule(this,t)' in java and 'Reminders.cancel(this,t.id)' in java
 assert 'new WindowLayout.DialogScroll(this)' in java, "Dialogs must scroll on small displays"
+window=(p/"WindowLayout.java").read_text(encoding="utf-8")
+assert "safe.width()-dp(a,48)" in window and "safe.height()-dp(a,56)" in window, "Modal safety insets"
+
 assert 'lp.bottomMargin=dp(16)' in java and 'body.setPadding(dp(18),dp(12),dp(18),dp(32))' in java
 assert 'ComposeDayActivity' not in java and not (p/"ComposeDayActivity.kt").exists()
 assert 'getWritableDatabase().update("tasks",values,"category=? COLLATE NOCASE"' in store
