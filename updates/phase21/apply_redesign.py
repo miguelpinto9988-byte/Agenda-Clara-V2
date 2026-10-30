@@ -280,6 +280,13 @@ def install():
 '''
     java=one(java,marker,methods+marker,"category manager methods")
 
+    # Ensure modal windows never sit flush against screen edges or the IME.
+    windowpath=SRC/"WindowLayout.java"
+    window=windowpath.read_text(encoding="utf-8")
+    window=one(window,"safe.width()-dp(a,32)","safe.width()-dp(a,48)","dialog horizontal insets")
+    window=one(window,"safe.height()-dp(a,24)","safe.height()-dp(a,56)","dialog vertical insets")
+    windowpath.write_text(window,encoding="utf-8")
+
     # All text remains within scrolling dialogs (including display cutouts/keyboard).
     mainpath.write_text(java,encoding="utf-8")
     storepath.write_text(store,encoding="utf-8")
