@@ -39,3 +39,8 @@ text = text.replace("versionCode 29", "versionCode 30")
 text = text.replace("versionName '3.8.1'", "versionName '3.8.2'")
 build.write_text(text, encoding="utf-8")
 print("PASS: safe native source cleanup, build 3.8.2")
+
+# Install the optional approved top-right + artwork and native press state
+# after all legacy 3.8.2 migrations, leaving original navigation untouched.
+import runpy
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase19/apply_top_plus_button.py"), run_name="__main__")
