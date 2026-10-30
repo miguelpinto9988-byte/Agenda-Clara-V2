@@ -22,3 +22,7 @@ for f in src.glob("*.java"):
     assert "AcademicAnnouncementInterpreter" not in text, f
     assert "ScheduleMultiDays" not in text, f
 print("PASS: unused classes pruned, active modules retained, version 3.8.2")
+
+# The phase-19 add-button regression runs as part of the active 3.8.2 CI.
+import runpy
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase19/test_top_plus_button.py"), run_name="__main__")
