@@ -74,7 +74,21 @@ sleep 4
 capture "13-conexiones-whatsapp"
 find_and_tap "Calendario"
 capture "14-conexiones-calendario"
-adb shell am start -W -n "$PKG/.ScheduleActivity" >/dev/null
+# ScheduleActivity is private by design: enter through normal app navigation.
+adb shell am force-stop "$PKG" || true
+adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
 sleep 3
+find_and_tap "Calendario, abrir pestaña"
+find_and_tap "Abrir mi horario"
 capture "15-horario-iconografia"
-echo "PASS phase26 emulator: native date, 12h time, category/color selectors, connections icons and schedule back/help"
+# Exercise new notification-repeat popup and its custom interval screen.
+adb shell am force-stop "$PKG" || true
+adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
+sleep 3
+find_and_tap "Crear una tarea"
+find_and_tap "Más opciones"
+find_and_tap "No se repite"
+capture "16-repeticion-avisos-png"
+find_and_tap "Personalizada"
+capture "17-repeticion-personalizada"
+echo "PASS phase27 emulator: date, hour, category, transparent iconography, repeat dialogs and private academic route"
