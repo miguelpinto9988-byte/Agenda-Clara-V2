@@ -32,6 +32,7 @@ PY
     sleep 1
   done
   echo "No visible Android UI node for: $term" >&2
+  adb exec-out screencap -p > "screenshots/99-diagnostico-selector.png" || true
   return 1
 }
 capture(){
@@ -51,8 +52,10 @@ adb shell uiautomator dump /sdcard/ref_visual.xml >/dev/null 2>&1
 adb exec-out cat /sdcard/ref_visual.xml >ref_visual.xml
 grep -q 'Seleccionar hora' ref_visual.xml
 capture "10-selector-hora-moderno"
-adb shell input keyevent KEYCODE_BACK
-sleep 2
+adb shell am force-stop "$PKG" || true
+adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
+sleep 4
+find_and_tap "Crear una tarea"
 find_and_tap "Seleccionar categoría:"
 adb shell uiautomator dump /sdcard/ref_visual.xml >/dev/null 2>&1
 adb exec-out cat /sdcard/ref_visual.xml >ref_visual.xml
