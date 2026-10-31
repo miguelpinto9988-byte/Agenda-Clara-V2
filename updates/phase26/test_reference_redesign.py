@@ -13,6 +13,7 @@ assert "new DatePickerDialog(this" not in main
 assert "new TimePickerDialog(this" not in main
 assert "categoryPicker.setVisibility(View.GONE)" in main
 assert "ModernPickers.showCategory(this" in main
+assert 'if(button.getContentDescription()==null)button.setContentDescription(button.getText());' in glyph, "Never overwrite custom accessibility labels"
 assert "categoryDisplay.setText(newName" in main
 assert "LinearLayout palette=column();LinearLayout paletteRow=null;" in main and "colors.setVisibility(View.GONE)" in main
 assert "CategoryRegistry.COLORS.length" in main
