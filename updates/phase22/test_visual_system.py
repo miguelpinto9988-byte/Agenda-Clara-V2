@@ -25,7 +25,7 @@ assert 'UiDesign.text(t,bold)' in main and 'UiDesign.text(t,bold)' in schedule
 assert 'UiDesign.button(b,false)' in main and 'UiDesign.button(b,primary)' in schedule
 assert 'UiDesign.card(c)' in main and 'UiDesign.card(c)' in schedule
 assert 'UiDesign.input(e)' in main and 'UiDesign.input(e)' in schedule
-assert 'ImageView icon=ModernGlyph.view(this,iconTypes[n]' in main
+assert 'ImageView icon=new ImageView(this)' in main and 'UiDesign.statusIcon(labels[n])' in main, 'Bottom navigation uses restored outlined icons'
 assert 'ApprovedPng.view(this,entry.icon,26)' in main
 assert 'ModernGlyph.view(this,"date",ModernGlyph.BLUE,24)' in main
 assert 'ModernGlyph.view(this,"bell",ModernGlyph.AMBER,24)' in main
