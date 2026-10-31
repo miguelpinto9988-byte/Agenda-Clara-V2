@@ -91,7 +91,7 @@ public final class ModernPickers {
         monthBar.addView(monthName,new LinearLayout.LayoutParams(0,dp(a,48),1));
         monthBar.addView(next,new LinearLayout.LayoutParams(dp(a,44),dp(a,48)));
         content.addView(monthBar);gap(a,content,8);
-        GridLayout grid=new GridLayout(a);grid.setColumnCount(7);
+        LinearLayout grid=column(a);
         content.addView(grid,new LinearLayout.LayoutParams(-1,-2));
         gap(a,content,14);
         LinearLayout selectedRow=row(a);selectedRow.setPadding(dp(a,12),dp(a,12),dp(a,12),dp(a,12));
@@ -106,33 +106,37 @@ public final class ModernPickers {
             monthName.setText(month[0].format(DateTimeFormatter.ofPattern("MMMM yyyy",ES)));
             chosenText.setText(chosen[0].format(DateTimeFormatter.ofPattern("EEEE, d 'de' MMMM 'de' yyyy",ES)));
             grid.removeAllViews();String[] weekdays={"L","M","M","J","V","S","D"};
+            LinearLayout weekdayRow=row(a);
             for(int i=0;i<7;i++){
                 TextView day=label(a,weekdays[i],11,MUTED);day.setGravity(Gravity.CENTER);
-                GridLayout.LayoutParams lp=new GridLayout.LayoutParams(GridLayout.spec(0),GridLayout.spec(i,1f));
-                lp.width=0;lp.height=dp(a,35);grid.addView(day,lp);
+                weekdayRow.addView(day,new LinearLayout.LayoutParams(0,dp(a,35),1));
             }
+            grid.addView(weekdayRow);
             int offset=month[0].atDay(1).getDayOfWeek().getValue()-1;
             int days=month[0].lengthOfMonth();
-            int slots=(int)(Math.ceil((offset+days)/7.0)*7);
-            for(int slot=0;slot<slots;slot++){
-                int day=slot-offset+1;int col=slot%7,row=1+slot/7;
-                TextView cell=label(a,day>=1&&day<=days?String.valueOf(day):"",13,INK);
-                cell.setGravity(Gravity.CENTER);
-                if(day>=1&&day<=days){
-                    LocalDate selectedDate=month[0].atDay(day);
-                    boolean selected=selectedDate.equals(chosen[0]);
-                    if(selected){
-                        cell.setTextColor(0xffffffff);
-                        cell.setBackground(ModernGlyph.rounded(a,BLUE,0,22));
-                    }else if(selectedDate.equals(LocalDate.now())){
-                        cell.setBackground(ModernGlyph.rounded(a,0xffe8efff,UiDesign.BORDER,22));
+            int rows=(offset+days+6)/7;
+            for(int r=0;r<rows;r++){
+                LinearLayout week=row(a);
+                for(int col=0;col<7;col++){
+                    int n=r*7+col-offset+1;
+                    TextView cell=label(a,n>=1&&n<=days?String.valueOf(n):"",13,INK);
+                    cell.setGravity(Gravity.CENTER);
+                    if(n>=1&&n<=days){
+                        LocalDate selectedDate=month[0].atDay(n);
+                        if(selectedDate.equals(chosen[0])){
+                            cell.setTextColor(0xffffffff);
+                            cell.setBackground(ModernGlyph.rounded(a,BLUE,0,22));
+                        }else if(selectedDate.equals(LocalDate.now())){
+                            cell.setBackground(ModernGlyph.rounded(a,0xffe8efff,UiDesign.BORDER,22));
+                        }
+                        cell.setContentDescription(selectedDate.format(DateTimeFormatter.ofPattern("EEEE d 'de' MMMM",ES)));
+                        cell.setOnClickListener(v->{chosen[0]=selectedDate;render[0].run();});
                     }
-                    cell.setContentDescription(selectedDate.format(DateTimeFormatter.ofPattern("EEEE d 'de' MMMM",ES)));
-                    cell.setOnClickListener(v->{chosen[0]=selectedDate;render[0].run();});
+                    LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,dp(a,42),1);
+                    lp.setMargins(dp(a,1),dp(a,1),dp(a,1),dp(a,1));
+                    week.addView(cell,lp);
                 }
-                GridLayout.LayoutParams lp=new GridLayout.LayoutParams(GridLayout.spec(row),GridLayout.spec(col,1f));
-                lp.width=0;lp.height=dp(a,43);lp.setMargins(dp(a,1),dp(a,1),dp(a,1),dp(a,1));
-                grid.addView(cell,lp);
+                grid.addView(week,new LinearLayout.LayoutParams(-1,dp(a,44)));
             }
         };
         prev.setOnClickListener(v->{month[0]=month[0].minusMonths(1);render[0].run();});
