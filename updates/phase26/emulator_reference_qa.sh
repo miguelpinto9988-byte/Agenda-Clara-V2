@@ -46,7 +46,7 @@ grep -q 'Seleccionar fecha' ref_visual.xml
 capture "09-selector-fecha-moderno"
 adb shell input keyevent KEYCODE_BACK
 sleep 2
-find_and_tap "Hora límite"
+find_and_tap "Elegir hora límite"
 adb shell uiautomator dump /sdcard/ref_visual.xml >/dev/null 2>&1
 adb exec-out cat /sdcard/ref_visual.xml >ref_visual.xml
 grep -q 'Seleccionar hora' ref_visual.xml
