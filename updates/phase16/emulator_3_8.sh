@@ -124,3 +124,6 @@ echo "PASS: 2.6.1 instalada; Calendario y Horario; opciones OCR/manual; cuadríc
 
 # Additional design review: category modal, new task, review, and connections.
 bash updates/phase22/emulator_design_qa.sh
+
+# Reference-approved colour iconography and real picker screenshots.
+bash updates/phase26/emulator_reference_qa.sh
