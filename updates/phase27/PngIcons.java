@@ -14,11 +14,11 @@ public final class PngIcons {
     private PngIcons(){}
     public static final String[] CATEGORY_SYMBOLS={
         "folder","school","work","heart","home","travel","book","projects",
-        "calendar","bell","star","color","photo","check","notes","widgets"
+        "calendar","bell","urgent","color","photo","check","notes","widgets"
     };
     public static final String[] CATEGORY_LABELS={
         "General","Estudios","Trabajo","Salud","Personal","Viajes","Lectura","Proyectos",
-        "Calendario","Recordatorios","Favoritos","Creatividad","Fotografía","Objetivos","Notas","Otros"
+        "Calendario","Recordatorios","Importantes","Creatividad","Fotografía","Objetivos","Notas","Otros"
     };
     public static String safe(String requested){
         if(requested==null||requested.length()>24)return "folder";
@@ -43,6 +43,13 @@ public final class PngIcons {
         iv.setContentDescription(CATEGORY_LABELS[0].equals(name)?"General":name);
         iv.setPadding(UiDesign.dp(c,1),UiDesign.dp(c,1),UiDesign.dp(c,1),UiDesign.dp(c,1));
         return iv;
+    }
+    /** Compatibility signature for existing colour-aware native calls. */
+    public static ImageView view(Context c,String name,int accent,int sizeDp){
+        return view(c,name,sizeDp);
+    }
+    public static void button(Button b,String name,int accent,int sizeDp){
+        button(b,name,sizeDp);
     }
     public static void button(Button b,String name,int sizeDp){
         if("new_task_button".equals(b.getTag()))return;
