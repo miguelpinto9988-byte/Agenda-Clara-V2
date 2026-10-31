@@ -19,7 +19,7 @@ assert 'card.setBackground(UiDesign.tintedBackground(this,categoryColor,20,14))'
 assert 'PngIcons.view(this,CategoryRegistry.icon(this,category),17)' in main
 assert 'pane.setBackground(UiDesign.tintedBackground(this,CategoryRegistry.color(this,task.category),20,11))' in main
 assert 'categoryPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()' in main
-assert 'previewIcon.setImageResource(PngIcons.id(a,selectedIcon[0]))' in main
+assert 'previewIcon.setImageResource(PngIcons.id(a,selectedIcon[0]))' in (p/'CategoryDesigner.java').read_text()
 assert 'preview.setBackground(UiDesign.tintedBackground(MainActivity.this,selected,16,24))' in main
 assert 'UiDesign.tintedBackground(this,s.color,20,16)' in schedule
 assert 'UiDesign.tintedBackground(this,s.color,20,14)' in schedule
