@@ -13,7 +13,7 @@ go=(R/"whatsapp-native/main.go").read_text()
 assert '"already_processed":true' in go
 assert 't.processHistory(e.Data, requested, map[string]bool{requested:true})' in go
 assert 'go t.history(r.JID)' in go
-assert 'if !t.allowed(r.JID)' in go
+assert 'if r.JID == "" || !t.allowed(r.JID)' in go
 assert "go t.history(\"\")" not in go
 m=(J/"UiMotion.java").read_text()
 p=(J/"CreationChoices.java").read_text()
