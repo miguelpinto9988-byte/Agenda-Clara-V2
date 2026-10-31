@@ -232,6 +232,17 @@ def apply():
        'dialogBuilder().setTitle("Gestión de categorías").setView(scroll)',
        "category dialog title")
 
+    # Spacing confirmed against Android 15 UI screenshots: no adjacent chips touch.
+    java=one(java,'quick.addView(b,new LinearLayout.LayoutParams(0,-2,1));',
+       'LinearLayout.LayoutParams quickParams=new LinearLayout.LayoutParams(0,dp(48),1);quickParams.setMargins(dp(4),0,dp(4),dp(4));b.setTextSize(UiPreferences.scaled(this,12));quick.addView(b,quickParams);',
+       "date shortcuts safe horizontal gutters")
+    java=one(java,'chips.addView(chip);',
+       'LinearLayout.LayoutParams reviewChip=new LinearLayout.LayoutParams(-2,dp(48));reviewChip.rightMargin=dp(8);chips.addView(chip,reviewChip);',
+       "review filter chip separation")
+    java=one(java,'options.addView(button("Mis grupos",()->{page=3;connectionTab=0;render();}),new LinearLayout.LayoutParams(0,-2,1));',
+       'options.addView(button("Mis grupos",()->{page=3;connectionTab=0;render();}),new LinearLayout.LayoutParams(0,-2,1));View reviewGap=new View(this);options.addView(reviewGap,new LinearLayout.LayoutParams(dp(8),1));',
+       "review top buttons gap")
+
     # A single palette for all dialogs, including nested pickers.
     main_styles=RES/"values/styles.xml"
     xml=main_styles.read_text(encoding="utf-8")
