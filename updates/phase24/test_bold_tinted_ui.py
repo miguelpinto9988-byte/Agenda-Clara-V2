@@ -16,10 +16,10 @@ for visual in ("tintedBackground(", "accentInk(", "categoryChip(", "case \"folde
 assert 'UiDesign.categoryChip(chip,CategoryRegistry.color(this,label),active)' in main
 assert 'card.setBackground(UiDesign.tintedBackground(this,entry.color,19,17))' in main
 assert 'card.setBackground(UiDesign.tintedBackground(this,categoryColor,20,14))' in main
-assert 'UiDesign.icon(this,"folder",UiDesign.accentInk(categoryColor),17)' in main
+assert 'PngIcons.view(this,CategoryRegistry.icon(this,category),17)' in main
 assert 'pane.setBackground(UiDesign.tintedBackground(this,CategoryRegistry.color(this,task.category),20,11))' in main
 assert 'categoryPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()' in main
-assert 'colorIcon.setImageDrawable(new UiDesign.OutlineIcon("folder",UiDesign.accentInk(selected)))' in main
+assert 'previewIcon.setImageResource(PngIcons.id(a,selectedIcon[0]))' in main
 assert 'preview.setBackground(UiDesign.tintedBackground(MainActivity.this,selected,16,24))' in main
 assert 'UiDesign.tintedBackground(this,s.color,20,16)' in schedule
 assert 'UiDesign.tintedBackground(this,s.color,20,14)' in schedule
