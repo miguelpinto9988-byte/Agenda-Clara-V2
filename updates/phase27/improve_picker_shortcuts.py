@@ -16,10 +16,10 @@ one('''        content.addView(selectedRow);
         content.addView(label(a,"Fechas rápidas",14,INK));gap(a,content,8);
         final Runnable[] render={null};
         LinearLayout extra=row(a);
-        int[] days={1,7,30};
+        int[] quickOffsets={1,7,30};
         String[] names={"En 1 día","En 1 semana","En 30 días"};
         for(int k=0;k<days.length;k++){
-            final int offset=days[k];
+            final int offset=quickOffsets[k];
             Button b=chip(a,names[k],false);
             LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(0,dp(a,49),1);
             params.setMargins(dp(a,3),0,dp(a,3),0);extra.addView(b,params);
