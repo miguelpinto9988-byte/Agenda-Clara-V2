@@ -133,3 +133,6 @@ python3 updates/phase29/performance_qa.py --mode emulator --out screenshots/16-r
 
 # Validate the new floating + menu, date-only sticky editor and PNG preview.
 bash updates/phase30/emulator_notes_qa.sh
+
+# Widget de notas: proveedor Android y acceso desde el botón +.
+bash updates/phase31/emulator_widget_qa.sh
