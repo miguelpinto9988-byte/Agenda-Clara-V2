@@ -86,7 +86,7 @@ public final class UiDesign {
         else if(s.contains("calendario"))name="calendar";
         else if(s.contains("buscar"))name="search";
         if(name==null)return;
-        OutlineIcon icon=new OutlineIcon(name,BLUE);
+        OutlineIcon icon=new OutlineIcon(name,b.getCurrentTextColor()==0xffffffff?0xffffffff:BLUE);
         icon.setBounds(0,0,dp(b.getContext(),18),dp(b.getContext(),18));
         b.setCompoundDrawables(icon,null,null,null);b.setCompoundDrawablePadding(dp(b.getContext(),7));
     }
