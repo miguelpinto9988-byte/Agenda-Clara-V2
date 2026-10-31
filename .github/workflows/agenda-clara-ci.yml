@@ -85,6 +85,7 @@ jobs:
           python3 updates/phase17/test_3_8_1.py
           python3 updates/phase18/apply_3_8_2.py
           python3 updates/phase18/test_3_8_2.py
+          python3 updates/phase29/test_performance_qa.py
 
       - name: Recuperar clave de desarrollo privada
         shell: bash

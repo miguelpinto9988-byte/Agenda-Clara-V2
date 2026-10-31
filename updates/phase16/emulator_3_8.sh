@@ -127,3 +127,6 @@ bash updates/phase22/emulator_design_qa.sh
 
 # Reference-approved colour iconography and real picker screenshots.
 bash updates/phase26/emulator_reference_qa.sh
+
+# Perfil de navegación, fotogramas y memoria (sin datos personales).
+python3 updates/phase29/performance_qa.py --mode emulator --out screenshots/16-rendimiento.json
