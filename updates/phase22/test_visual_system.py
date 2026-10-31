@@ -46,6 +46,10 @@ assert (Path("updates/phase22/UiDesign.java").read_text()).count('b.getCurrentTe
 assert (Path("updates/phase22/emulator_design_qa.sh")).is_file()
 
 assert 'translationY(0f)' in motion and 'ValueAnimator.areAnimatorsEnabled()' in motion
+assert 'quickParams.setMargins(dp(4),0,dp(4),dp(4))' in main, "Date buttons must not touch"
+assert 'reviewChip.rightMargin=dp(8)' in main, "Review filters must be separated"
+assert 'options.addView(reviewGap,new LinearLayout.LayoutParams(dp(8),1))' in main, "Review action buttons need a gap"
+assert 'dayChip.setMargins(dp(2),0,dp(2),0)' in schedule, "Class weekdays need gutters"
 assert 'android:radius="26dp"' in dialogs
 assert (src/"WindowLayout.java").read_text().count('safe.width()-dp(a,48)')==1
 for label in ('Mi agenda','Calendario','Revisión','Conexiones','Más opciones','Gestión de categorías','Recordatorios','Repetición del aviso'):
