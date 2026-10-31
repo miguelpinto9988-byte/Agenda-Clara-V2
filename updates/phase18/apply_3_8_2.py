@@ -67,3 +67,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase25/apply_global_l
 
 # Phase26: reference-approved two/three-colour glyphs and native branded selectors.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase26/apply_reference_redesign.py"),run_name="__main__")
+
+# Phase27: original transparent PNG artwork, custom symbols and recurrence controls.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase27/apply_png_visuals.py"),run_name="__main__")
