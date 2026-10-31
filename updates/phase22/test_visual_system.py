@@ -16,7 +16,7 @@ assert len(plus)==1 and 'new LinearLayout.LayoutParams(dp(108),dp(108))' in plus
 assert '()->openEditor(-1,null,null)' in plus[0]
 assert 'TopPlusButtonMotion.install(this)' in main
 assert (root/"src/main/res/drawable-nodpi/ic_top_plus_animated.png").is_file()
-assert 'new_task_button' not in ui
+assert 'if(root instanceof TextView && !"new_task_button".equals(root.getTag()))' in ui, 'Approved plus must be excluded from global font pass'
 assert 'TopPlusButtonMotion.java' not in Path("updates/phase22/apply_visual_system.py").read_text()
 
 for label in ('shared typography','navigation','input','card','modal','category'):
