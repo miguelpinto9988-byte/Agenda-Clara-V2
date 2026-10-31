@@ -3,7 +3,37 @@ set -euo pipefail
 PKG=pe.agendaclara.app
 mkdir -p screenshots
 adb shell am force-stop "$PKG" || true
-adb shell am start -W -n "$PKG/.ScheduleActivity" >/dev/null
+adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
+sleep 3
+adb shell uiautomator dump /sdcard/schedule_from_calendar.xml >/dev/null 2>&1
+adb exec-out cat /sdcard/schedule_from_calendar.xml >schedule_from_calendar.xml
+python3 - <<'PY'
+import re,subprocess,xml.etree.ElementTree as ET
+root=ET.parse('schedule_from_calendar.xml').getroot()
+for node in root.iter('node'):
+    label=(node.get('content-desc','')+' '+node.get('text',''))
+    if 'Calendario' in label and 'pestaña' in label:
+        b=list(map(int,re.findall(r'\\d+',node.get('bounds',''))))
+        if len(b)==4:
+            subprocess.run(['adb','shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2)],check=True)
+            break
+else:raise SystemExit('Missing Calendar navigation tab')
+PY
+sleep 2
+adb shell uiautomator dump /sdcard/schedule_from_calendar.xml >/dev/null 2>&1
+adb exec-out cat /sdcard/schedule_from_calendar.xml >schedule_from_calendar.xml
+python3 - <<'PY'
+import re,subprocess,xml.etree.ElementTree as ET
+root=ET.parse('schedule_from_calendar.xml').getroot()
+for node in root.iter('node'):
+    label=(node.get('content-desc','')+' '+node.get('text',''))
+    if 'Abrir mi horario' in label:
+        b=list(map(int,re.findall(r'\\d+',node.get('bounds',''))))
+        if len(b)==4:
+            subprocess.run(['adb','shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2)],check=True)
+            break
+else:raise SystemExit('Missing class schedule entry in Calendar')
+PY
 sleep 3
 adb shell uiautomator dump /sdcard/schedule_day_editor.xml >/dev/null 2>&1
 adb exec-out cat /sdcard/schedule_day_editor.xml >schedule_day_editor.xml

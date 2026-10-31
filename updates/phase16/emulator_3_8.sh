@@ -141,3 +141,6 @@ bash updates/phase34/emulator_sticky_font_qa.sh
 
 # Modal de clase: sesiones independientes y selección AM/PM
 bash updates/phase37/emulator_days_qa.sh
+
+# Nuevos PNG de Calendario; las cuatro pestañas inferiores no se modifican.
+bash updates/phase38/emulator_calendar_icons_qa.sh
