@@ -153,7 +153,7 @@ public final class ModernGlyph extends Drawable {
         button.setCompoundDrawables(glyph,null,null,null);
         button.setCompoundDrawablePadding(UiDesign.dp(button.getContext(),8));
         // Important: icon is a stable compound drawable, not a transient overlay.
-        button.setContentDescription(button.getText());
+        if(button.getContentDescription()==null)button.setContentDescription(button.getText());
     }
     public static GradientDrawable rounded(Context context,int color,int border,int radius){
         GradientDrawable shape=UiDesign.shape(context,color,radius,0);
