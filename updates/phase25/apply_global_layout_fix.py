@@ -206,7 +206,7 @@ def apply():
 
     photo=once(photo,
        '        File f=new File(getFilesDir(),PhotoWidget.filename(id));',
-       '        body.post(()->UiDesign.polishTree(body));\\n        File f=new File(getFilesDir(),PhotoWidget.filename(id));'.replace('\\\\n','\\n'),
+       '        body.post(()->UiDesign.polishTree(body));'+chr(10)+'        File f=new File(getFilesDir(),PhotoWidget.filename(id));',
        "all photo widget controls are bold and spaced")
 
     if next((line for line in main.splitlines() if 'setTag("new_task_button")' in line),None)!=plus:
