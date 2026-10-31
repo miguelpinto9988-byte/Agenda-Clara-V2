@@ -28,7 +28,7 @@ assert 'UiDesign.tintedBackground(this,primary.color,20,14)' in schedule
 # No changes to user data, historical task colors, alarms or approved top-right +.
 assert 'for(Entry e:all(c))if(e.name.equalsIgnoreCase(name))return e.color;' in registry
 assert 'selectedCategory="General"' in main
-assert 't.repeatMinutes=intervals[repeat.getSelectedItemPosition()]' in main
+assert 't.repeatMinutes=repeatMinutes[0]' in main
 assert 'Reminders.schedule(this,t)' in main and 'Reminders.cancel(this,t.id)' in main
 assert '"Duración del evento"' not in main
 assert 'new LinearLayout.LayoutParams(dp(108),dp(108))' in main
