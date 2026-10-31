@@ -64,6 +64,7 @@ def apply():
         categoryPicker.setVisibility(View.GONE);
         Button categoryDisplay=button(TaskOrganization.category(currentCategory)+"  ›",()->{});
         categoryDisplay.setGravity(Gravity.CENTER_VERTICAL|Gravity.START);
+        categoryDisplay.setContentDescription("Seleccionar categoría: "+TaskOrganization.category(currentCategory));
         categoryDisplay.setMinHeight(dp(58));
         categoryDisplay.setBackground(UiDesign.tintedBackground(this,
             CategoryRegistry.color(this,currentCategory),16,18));
@@ -73,6 +74,7 @@ def apply():
                 for(int i=0;i<categoriesAdapter.getCount();i++)
                     if(selected.equalsIgnoreCase(categoriesAdapter.getItem(i)))categoryPicker.setSelection(i);
                 categoryDisplay.setText(selected+"  ›");
+                categoryDisplay.setContentDescription("Seleccionar categoría: "+selected);
                 categoryDisplay.setBackground(UiDesign.tintedBackground(this,
                     CategoryRegistry.color(this,selected),16,18));
                 ModernGlyph.button(categoryDisplay,"folder",CategoryRegistry.color(this,selected),24);
@@ -84,6 +86,7 @@ def apply():
       '''for(int i=0;i<categoriesAdapter.getCount();i++)
                 if(categoriesAdapter.getItem(i).equalsIgnoreCase(newName))categoryPicker.setSelection(i);
             categoryDisplay.setText(newName+"  ›");
+            categoryDisplay.setContentDescription("Seleccionar categoría: "+newName);
             categoryDisplay.setBackground(UiDesign.tintedBackground(this,
                 CategoryRegistry.color(this,newName),16,18));
             ModernGlyph.button(categoryDisplay,"folder",CategoryRegistry.color(this,newName),24);''',
