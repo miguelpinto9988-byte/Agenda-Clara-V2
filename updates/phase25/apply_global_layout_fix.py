@@ -73,6 +73,24 @@ def apply():
                 }
             }
         }
+        if(root instanceof android.widget.LinearLayout
+                && ((android.widget.LinearLayout)root).getOrientation()==android.widget.LinearLayout.HORIZONTAL){
+            for(int i=0;i<group.getChildCount();i++){
+                View child=group.getChildAt(i);
+                if(!(child instanceof Button)||"new_task_button".equals(child.getTag()))continue;
+                boolean left=i>0&&group.getChildAt(i-1) instanceof Button;
+                boolean right=i+1<group.getChildCount()&&group.getChildAt(i+1) instanceof Button;
+                if(!left&&!right)continue;
+                android.view.ViewGroup.LayoutParams base=child.getLayoutParams();
+                if(!(base instanceof android.widget.LinearLayout.LayoutParams))continue;
+                android.widget.LinearLayout.LayoutParams params=(android.widget.LinearLayout.LayoutParams)base;
+                int gutter=dp(root.getContext(),4);
+                boolean changed=false;
+                if(left&&params.leftMargin<gutter){params.leftMargin=gutter;changed=true;}
+                if(right&&params.rightMargin<gutter){params.rightMargin=gutter;changed=true;}
+                if(changed)child.setLayoutParams(params);
+            }
+        }
         for(int i=0;i<group.getChildCount();i++)polishTree(group.getChildAt(i));
     }
 '''
@@ -102,6 +120,11 @@ def apply():
        'contentScroll.setFillViewport(true);contentScroll.setClipToPadding(true);'
        'contentScroll.setVerticalFadingEdgeEnabled(true);contentScroll.setFadingEdgeLength(dp(18));',
        "visually intentional screen scrolling")
+    main=once(main,
+       'tabs.addView(b,new LinearLayout.LayoutParams(0,dp(50),1));',
+       'tabs.addView(b,new LinearLayout.LayoutParams(0,dp(64),1));',
+       "connections tab labels fit when bold")
+
     # Dialogs must start at the beginning of their content, rather than
     # focusing an EditText and placing its label behind the dialog title.
     main=once(main,
