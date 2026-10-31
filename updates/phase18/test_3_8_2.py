@@ -44,3 +44,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase24/test_bold_tint
 
 # Validate safe layouts and all-screen bold without altering user data.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase25/test_global_layout_fix.py"), run_name="__main__")
+
+# Validate stable iconography, category picker, date/time flows and unchanged +.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase26/test_reference_redesign.py"),run_name="__main__")
