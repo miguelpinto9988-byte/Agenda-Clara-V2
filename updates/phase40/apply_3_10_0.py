@@ -183,6 +183,17 @@ def run():
             JSONObject req=request(action).put("jid",jid);
             if("more".equals(action))req.put("count",count);
             WhatsAppNative.call(req);
+            // Native request accepted does not guarantee that WhatsApp delivered data.
+            worker.schedule(()->{
+                Store.Chat current=db.getChat(key);
+                if(current!=null&&current.selected
+                        &&(current.scanState.startsWith("Solicitando")
+                            ||current.scanState.startsWith("Revisando"))){
+                    db.scanState(key,"WhatsApp todavía no confirmó la entrega de mensajes. "
+                        +"Comprueba la conexión o importa el chat .txt.");
+                    ReviewFlow.changed(this);
+                }
+            },45,TimeUnit.SECONDS);
         }catch(Exception failure){
             db.scanState(key,"Error al recuperar mensajes. Comprueba el acceso y vuelve a intentarlo.");
             ReviewFlow.changed(this);
