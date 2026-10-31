@@ -40,6 +40,18 @@ def apply():
         categoryHeadingSpace.rightMargin=dp(10);
         categoryHeading.addView(categoryHeadingIcon,categoryHeadingSpace);''',
         "category editor title icon")
+    # currentCategory was originally declared just after the heading. The PNG
+    # needs it earlier; move that declaration without changing its value.
+    main=one(main,
+        '        LinearLayout categoryHeading=row();ImageView categoryHeadingIcon=',
+        '        String currentCategory=draft!=null?draft.getString("category",t.category):t.category;\n'
+        '        LinearLayout categoryHeading=row();ImageView categoryHeadingIcon=',
+        "initial category must exist before header icon")
+    main=one(main,
+        '        String currentCategory=draft!=null?draft.getString("category",t.category):t.category;\n'
+        '        for(int i=0;i<categoriesAdapter.getCount();i++)',
+        '        for(int i=0;i<categoriesAdapter.getCount();i++)',
+        "remove original later duplicate currentCategory declaration")
     main=one(main,
         '''                ApprovedPng.button(categoryDisplay,CategoryRegistry.icon(this,selected),24);''',
         '''                ApprovedPng.button(categoryDisplay,CategoryRegistry.icon(this,selected),24);
