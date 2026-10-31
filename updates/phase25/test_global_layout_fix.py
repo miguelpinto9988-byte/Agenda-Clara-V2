@@ -39,7 +39,7 @@ assert 'body.post(()->UiDesign.polishTree(body))' in photo
 assert 'UiDesign.tintedBackground(this,entry.color,19,17)' in m
 assert 'UiDesign.tintedBackground(this,categoryColor,20,14)' in m
 assert 'UiDesign.categoryChip(chip,CategoryRegistry.color(this,label),active)' in m
-assert 't.repeatMinutes=intervals[repeat.getSelectedItemPosition()]' in m
+assert 't.repeatMinutes=repeatMinutes[0]' in m
 assert 'Reminders.schedule(this,t)' in m and 'Reminders.cancel(this,t.id)' in m
 assert 'selectedCategory="General"' in m
 assert '"Duración del evento"' not in m
