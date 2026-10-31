@@ -13,7 +13,7 @@ root=ET.parse('schedule_from_calendar.xml').getroot()
 for node in root.iter('node'):
     label=(node.get('content-desc','')+' '+node.get('text',''))
     if 'Calendario' in label and 'pestaña' in label:
-        b=list(map(int,re.findall(r'\\d+',node.get('bounds',''))))
+        b=list(map(int,re.findall(r'\d+',node.get('bounds',''))))
         if len(b)==4:
             subprocess.run(['adb','shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2)],check=True)
             break
@@ -28,7 +28,7 @@ root=ET.parse('schedule_from_calendar.xml').getroot()
 for node in root.iter('node'):
     label=(node.get('content-desc','')+' '+node.get('text',''))
     if 'Abrir mi horario' in label:
-        b=list(map(int,re.findall(r'\\d+',node.get('bounds',''))))
+        b=list(map(int,re.findall(r'\d+',node.get('bounds',''))))
         if len(b)==4:
             subprocess.run(['adb','shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2)],check=True)
             break
