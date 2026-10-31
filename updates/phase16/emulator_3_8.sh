@@ -24,7 +24,7 @@ labels=" ".join((node.attrib.get("text","")+" "+node.attrib.get("content-desc","
 if not any(tag in labels for tag in ("pixel launcher isn't responding","pixel launcher is not responding","pixel launcher no responde")):
     raise SystemExit(0)
 for node in nodes:
-    if node.attrib.get("text","").strip().lower() in ("wait","esperar"):
+    if node.attrib.get("text","").strip().lower() in ("close app","cerrar aplicación","cerrar app","esperar","wait"):
         xy=[int(n) for n in re.findall(r"\d+",node.attrib.get("bounds",""))]
         if len(xy)==4:
             print((xy[0]+xy[2])//2,(xy[1]+xy[3])//2)
@@ -32,7 +32,7 @@ for node in nodes:
 PY
     if [ -s launcher_tap.txt ]; then
         read -r px py <launcher_tap.txt
-        echo "Emulator-only launcher ANR: tapping Wait at $px,$py"
+        echo "Emulator-only Pixel Launcher ANR: closing stalled launcher dialog at $px,$py"
         adb shell input tap "$px" "$py" || true
         sleep 4
     fi
