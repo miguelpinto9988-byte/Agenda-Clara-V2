@@ -50,3 +50,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase26/test_reference
 
 # Verify original PNG assets, category icon persistence and UI compatibility.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase27/test_png_visuals.py"),run_name="__main__")
+
+# Confirm prior navigation appearance, cached resources and original app behavior.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase28/test_navigation_and_performance.py"),run_name="__main__")
