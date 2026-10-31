@@ -61,3 +61,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase23/apply_remove_d
 
 # Phase24: colors cover entire category/task/class cards; fonts and icon outlines gain weight.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase24/apply_bold_tinted_ui.py"), run_name="__main__")
+
+# Phase25 global bold typography, safe gaps and bounded scrollable windows.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase25/apply_global_layout_fix.py"), run_name="__main__")
