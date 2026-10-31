@@ -32,6 +32,21 @@ PY
 }
 tap(){ local xy;xy="$(find_node "$1" "${2:-5}")";read -r x y <<<"$xy";adb shell input tap "$x" "$y";sleep 2;}
 capture(){ adb exec-out screencap -p >"screenshots/$1.png";test -s "screenshots/$1.png";}
+# The + belongs to the Activity window. Capture its bounds before
+# opening the PopupWindow, because UIAutomator then sees the popup window only.
+find_node 'Crear una tarea o nota' 1 >/dev/null
+python3 - <<'PY' >sticky_plus_bounds.txt
+import re,xml.etree.ElementTree as ET
+root=ET.parse("sticky_qa.xml").getroot()
+for node in root.iter("node"):
+    if node.get("content-desc","")=="Crear una tarea o nota":
+        xy=[int(n) for n in re.findall(r"\d+",node.get("bounds",""))]
+        if len(xy)==4:
+            print(*xy)
+            break
+else:
+    raise SystemExit("Top + bounds not found before opening menu")
+PY
 tap 'Crear una tarea o nota' 1
 find_node 'Nueva tarea' 1 >/dev/null
 find_node 'Nueva nota' 1 >/dev/null
@@ -46,7 +61,8 @@ def bounds(description):
             value=[int(n) for n in re.findall(r"\d+",node.get("bounds",""))]
             if len(value)==4:return value
     raise SystemExit("UI anchor not found: "+description)
-plus=bounds("Crear una tarea o nota")
+plus=list(map(int,open("sticky_plus_bounds.txt",encoding="utf-8").read().split()))
+if len(plus)!=4:raise SystemExit("Invalid stored + bounds")
 task=bounds("Nueva tarea")
 note=bounds("Nueva nota")
 plus_width=plus[2]-plus[0]
