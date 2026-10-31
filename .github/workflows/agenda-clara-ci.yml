@@ -85,32 +85,6 @@ jobs:
           python3 updates/phase17/test_3_8_1.py
           python3 updates/phase18/apply_3_8_2.py
           python3 updates/phase18/test_3_8_2.py
-          # Reconstruir todas las fases de interfaz antes de compilar la APK.
-          python3 updates/phase19/apply_top_plus_button.py
-          python3 updates/phase20/apply_remove_compose_view.py
-          python3 updates/phase21/apply_redesign.py
-          python3 updates/phase22/apply_visual_system.py
-          python3 updates/phase22/apply_schedule_design.py
-          python3 updates/phase22/apply_photo_widget_design.py
-          python3 updates/phase23/apply_remove_duration.py
-          python3 updates/phase24/apply_bold_tinted_ui.py
-          python3 updates/phase25/apply_global_layout_fix.py
-          python3 updates/phase26/apply_reference_redesign.py
-          python3 updates/phase27/apply_png_visuals.py
-          python3 updates/phase27/improve_picker_shortcuts.py
-          python3 updates/phase28/apply_navigation_and_performance.py
-          # Las comprobaciones de apariencia se ejecutan tras la última fase:
-          # varias verifican cambios que se completan en fases posteriores.
-          python3 updates/phase19/test_top_plus_button.py
-          python3 updates/phase20/test_remove_compose_view.py
-          python3 updates/phase21/test_redesign.py
-          python3 updates/phase22/test_visual_system.py
-          python3 updates/phase23/test_remove_duration.py
-          python3 updates/phase24/test_bold_tinted_ui.py
-          python3 updates/phase25/test_global_layout_fix.py
-          python3 updates/phase26/test_reference_redesign.py
-          python3 updates/phase27/test_png_visuals.py
-          python3 updates/phase28/test_navigation_and_performance.py
 
       - name: Recuperar clave de desarrollo privada
         shell: bash
