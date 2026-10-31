@@ -138,3 +138,6 @@ bash updates/phase30/emulator_notes_qa.sh
 bash updates/phase31/emulator_widget_qa.sh
 # Ampliaciones de fuente Android y vista de notas sin recortes de encabezado.
 bash updates/phase34/emulator_sticky_font_qa.sh
+
+# Modal de clase: sesiones independientes y selección AM/PM
+bash updates/phase37/emulator_days_qa.sh
