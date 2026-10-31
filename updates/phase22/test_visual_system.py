@@ -26,7 +26,7 @@ assert 'UiDesign.button(b,false)' in main and 'UiDesign.button(b,primary)' in sc
 assert 'UiDesign.card(c)' in main and 'UiDesign.card(c)' in schedule
 assert 'UiDesign.input(e)' in main and 'UiDesign.input(e)' in schedule
 assert 'UiDesign.icon(this,UiDesign.statusIcon(labels[n]),MUTED,26)' in main
-assert 'UiDesign.icon(this,"folder",entry.color,26)' in main
+assert 'UiDesign.icon(this,"folder",UiDesign.accentInk(entry.color),26)' in main
 assert 'UiDesign.icon(this,"calendar",GREEN,24)' in main
 assert 'UiDesign.icon(this,"bell",GREEN,24)' in main
 assert 'String query="",selectedCategory="General";' in main
