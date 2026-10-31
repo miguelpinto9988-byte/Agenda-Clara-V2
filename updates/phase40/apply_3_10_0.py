@@ -204,6 +204,14 @@ def run():
 
     reminder=src["Reminders.java"]
     reminder=one(reminder,
+        'public static final String CHANNEL="task_deadlines",IMPORT_CHANNEL="message_proposals";',
+        'public static final String CHANNEL="task_deadlines",IMPORT_CHANNEL="message_proposals",ACTION_CHANNEL="task_actions_v1";',
+        "confirmation channel name")
+    reminder=one(reminder,
+        '        nm.createNotificationChannel(due);',
+        '        nm.createNotificationChannel(due);\n        nm.createNotificationChannel(new NotificationChannel(ACTION_CHANNEL,"Confirmaciones de avisos",NotificationManager.IMPORTANCE_LOW));',
+        "confirmation low-importance channel")
+    reminder=one(reminder,
         '''        return (Build.VERSION.SDK_INT<33||c.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)==PackageManager.PERMISSION_GRANTED)&&c.getSystemService(NotificationManager.class).areNotificationsEnabled();''',
         '''        NotificationManager nm=c.getSystemService(NotificationManager.class);
         if(Build.VERSION.SDK_INT>=33&&c.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)return false;
@@ -218,9 +226,9 @@ def run():
             .setData(Uri.parse("agenda://task/"+t.id)).putExtra("task_id",t.id)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent click=PendingIntent.getActivity(c,0,open,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
-        Notification n=new Notification.Builder(c,CHANNEL).setSmallIcon(R.drawable.ic_notify)
+        Notification n=new Notification.Builder(c,ACTION_CHANNEL).setSmallIcon(R.drawable.ic_notify)
             .setContentTitle(status).setContentText(t.title).setContentIntent(click)
-            .setOnlyAlertOnce(true).setSilent(true).setAutoCancel(true)
+            .setOnlyAlertOnce(true).setAutoCancel(true)
             .setCategory(Notification.CATEGORY_STATUS).build();
         c.getSystemService(NotificationManager.class).notify("task_action", (int)t.id,n);
     }
