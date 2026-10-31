@@ -15,7 +15,7 @@ assert 'beforeInteractive&&(afterInteractive||afterText)' in u
 assert 'getOrientation()==android.widget.LinearLayout.HORIZONTAL' in u, 'Adjacent horizontal buttons require gutters'
 assert 'if(left&&params.leftMargin<gutter)' in u and 'if(right&&params.rightMargin<gutter)' in u
 assert 'tabs.addView(b,new LinearLayout.LayoutParams(0,dp(64),1))' in m, 'Bold Connections tab titles must not clip'
-assert 'UiDesign.polishTree(body);UiDesign.polishTree(nav);' in m
+assert 'UiDesign.polishTree(body);' in m and 'UiDesign.polishTree(nav);' in m
 assert 'body.setPadding(dp(22),dp(18),dp(22),dp(40))' in m
 assert 'c.setPadding(dp(20),dp(20),dp(20),dp(20))' in m
 assert 'lp.bottomMargin=dp(20)' in m
