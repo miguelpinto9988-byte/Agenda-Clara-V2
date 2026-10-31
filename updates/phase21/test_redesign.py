@@ -16,7 +16,7 @@ assert 'this::showCategories' in java and 'showCategoryEditor(' in java
 assert "TaskPriority.label(t,System.currentTimeMillis())" in java
 assert 't.urgent=false;' in java and 'advanced.addView(urgent)' not in java
 assert '"Hora límite · "' in java and '"Repetir el aviso"' in java
-assert '"Cada día"' in java and '"Cada semana"' in java, "Original alarm recurrence must remain"
+assert 'ModernRepeat.show(this,repeatMinutes[0]' in java and 't.repeatMinutes=repeatMinutes[0]' in java, "Original recurring reminders must remain functional"
 assert 't.repeatMinutes=repeatMinutes[0]' in java
 assert 'Reminders.schedule(this,t)' in java and 'Reminders.cancel(this,t.id)' in java
 assert 'new WindowLayout.DialogScroll(this)' in java, "Dialogs must scroll on small displays"
