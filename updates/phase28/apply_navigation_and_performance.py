@@ -48,6 +48,21 @@ def apply():
         '''String[] labels={"Agenda","Calendario","Revisar","Conexiones"};''',
         "remove unused obsolete navigation resource array")
 
+    # Update active/inactive line-art color explicitly. Android's image tint does
+    # not reliably recolor custom Canvas drawables after page changes; previously
+    # the original page kept blue while the chosen page stayed grey.
+    main=once(main,
+        '((ImageView)item.getChildAt(0)).setImageTintList(ColorStateList.valueOf(page==n?GREEN:MUTED));',
+        '''ImageView tabIcon=(ImageView)item.getChildAt(0);
+        int tabColor=page==n?GREEN:MUTED;
+        if(!(tabIcon.getTag() instanceof Integer)||((Integer)tabIcon.getTag())!=tabColor){
+            tabIcon.setImageTintList(null);
+            tabIcon.setImageDrawable(new UiDesign.OutlineIcon(
+                UiDesign.statusIcon(new String[]{"Agenda","Calendario","Revisar","Conexiones"}[n]),tabColor));
+            tabIcon.setTag(tabColor);
+        }''',
+        "dynamic selected tab outline color")
+
     # 2) Top-right + never changes; install its background/animation once when
     # the shell is constructed instead of scheduling two posts on every render.
     main=once(main,
