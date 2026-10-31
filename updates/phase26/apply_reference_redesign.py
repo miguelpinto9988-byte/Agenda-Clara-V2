@@ -98,7 +98,7 @@ def apply():
       'pane.addView(colors);gap(pane,12);',
       '''pane.addView(colors,new LinearLayout.LayoutParams(dp(1),dp(1)));
         colors.setVisibility(View.GONE);
-        GridLayout palette=new GridLayout(this);palette.setColumnCount(3);
+        LinearLayout palette=column();LinearLayout paletteRow=null;
         java.util.ArrayList<LinearLayout> tiles=new java.util.ArrayList<>();
         final Runnable[] repaintTiles={null};
         repaintTiles[0]=()->{
@@ -112,6 +112,7 @@ def apply():
             }
         };
         for(int i=0;i<CategoryRegistry.COLORS.length;i++){
+            if(i%3==0){paletteRow=row();palette.addView(paletteRow,new LinearLayout.LayoutParams(-1,-2));}
             final int index=i;int tone=CategoryRegistry.COLORS[i];
             LinearLayout tile=column();tile.setGravity(Gravity.CENTER);
             tile.setPadding(dp(4),dp(10),dp(4),dp(10));
@@ -120,10 +121,9 @@ def apply():
                          new LinearLayout.LayoutParams(dp(36),dp(36)));
             TextView nameLabel=text(CategoryRegistry.COLOR_NAMES[i],12,UiDesign.accentInk(tone),true);
             nameLabel.setGravity(Gravity.CENTER);tile.addView(nameLabel);
-            GridLayout.LayoutParams lp=new GridLayout.LayoutParams(
-                GridLayout.spec(i/3),GridLayout.spec(i%3,1f));
-            lp.width=0;lp.height=dp(90);lp.setMargins(dp(3),dp(3),dp(3),dp(3));
-            palette.addView(tile,lp);tiles.add(tile);
+            LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,dp(90),1);
+            lp.setMargins(dp(3),dp(3),dp(3),dp(3));
+            paletteRow.addView(tile,lp);tiles.add(tile);
             tile.setOnClickListener(v->{colors.setSelection(index);repaintTiles[0].run();});
         }
         repaintTiles[0].run();pane.addView(palette);gap(pane,12);''',
