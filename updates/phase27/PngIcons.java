@@ -22,6 +22,7 @@ public final class PngIcons {
     };
     public static String safe(String requested){
         if(requested==null||requested.length()>24)return "folder";
+        requested=requested.replace('-','_');
         for(String s:CATEGORY_SYMBOLS)if(s.equals(requested))return requested;
         for(String s:new String[]{"date","time","clock","bell","repeat","notes","check",
             "whatsapp","google_calendar","device_calendar","backup","cloud","settings",
