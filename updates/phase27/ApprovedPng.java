@@ -36,6 +36,8 @@ public final class ApprovedPng {
             case "study":return "study";
             case "book":return "book";
             case "reminder-settings":return "reminder_settings";
+            case "health":case "projects":case "work":case "personal":case "travel":
+            case "finance":case "sport":case "leisure":case "food":case "family":case "other":return "cat_"+name;
             case "palette":case "color":return "palette";
             default:return name.replace('-','_');
         }
