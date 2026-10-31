@@ -26,7 +26,7 @@ assert 'UiDesign.button(b,false)' in main and 'UiDesign.button(b,primary)' in sc
 assert 'UiDesign.card(c)' in main and 'UiDesign.card(c)' in schedule
 assert 'UiDesign.input(e)' in main and 'UiDesign.input(e)' in schedule
 assert 'ImageView icon=ModernGlyph.view(this,iconTypes[n]' in main
-assert 'ModernGlyph.view(this,"folder",UiDesign.accentInk(entry.color),26)' in main
+assert 'ApprovedPng.view(this,entry.icon,26)' in main
 assert 'ModernGlyph.view(this,"date",ModernGlyph.BLUE,24)' in main
 assert 'ModernGlyph.view(this,"bell",ModernGlyph.AMBER,24)' in main
 assert 'String query="",selectedCategory="General";' in main
