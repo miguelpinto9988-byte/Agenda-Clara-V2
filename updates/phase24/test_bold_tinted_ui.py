@@ -8,7 +8,7 @@ schedule=(p/"ScheduleActivity.java").read_text(encoding="utf-8")
 registry=(p/"CategoryRegistry.java").read_text(encoding="utf-8")
 
 # Visual semantics: matching category color on the entire card, icon and label.
-assert 't.setTypeface(Typeface.create("sans-serif",Typeface.BOLD))' in ui
+assert 't.setTypeface(SHARED_BOLD)' in ui
 assert 'b.setTypeface(Typeface.create("sans-serif",Typeface.BOLD))' in ui
 assert "paint.setStrokeWidth(2.65f)" in ui
 for visual in ("tintedBackground(", "accentInk(", "categoryChip(", "case \"folder\"", "case \"calendar\"", "case \"bell\""):
