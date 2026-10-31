@@ -35,7 +35,7 @@ assert "n>=1&&n<=days" in pickers and "week.addView(cell,lp)" in pickers
 assert 'callback.accept(chosen[0])' in pickers
 assert 'callback.accept(LocalTime.of(h,minute[0]))' in pickers
 assert "CategoryRegistry.all(a)" in pickers
-assert 't.repeatMinutes=intervals[repeat.getSelectedItemPosition()]' in main
+assert 't.repeatMinutes=repeatMinutes[0]' in main
 assert 'Reminders.schedule(this,t)' in main and 'Reminders.cancel(this,t.id)' in main
 assert 't.calendarEnabled=google.isChecked()&&schedule.isChecked()' in main
 assert '"Duración del evento"' not in main
