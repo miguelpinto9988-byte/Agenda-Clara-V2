@@ -140,7 +140,7 @@ def apply():
     # 7) A click on the active page is handled without redundant rendering.
     # Existing tab navigation already checks page!=index: preserve it exactly.
     if 'if(page!=index)' not in main:raise RuntimeError("Tab route guard was lost")
-    if not {'UiDesign.statusIcon(labels[n])','new UiDesign.OutlineIcon('}.issubset(main):
+    if not all(fragment in main for fragment in ('UiDesign.statusIcon(labels[n])','new UiDesign.OutlineIcon(')):
         raise RuntimeError("Original bottom-nav outlined glyphs not installed")
     if next((line for line in main.splitlines() if 'setTag("new_task_button")' in line),None)!=original_plus:
         raise RuntimeError("The top-right plus was modified")
