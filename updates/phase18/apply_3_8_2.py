@@ -64,3 +64,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase24/apply_bold_tin
 
 # Phase25 global bold typography, safe gaps and bounded scrollable windows.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase25/apply_global_layout_fix.py"), run_name="__main__")
+
+# Phase26: reference-approved two/three-colour glyphs and native branded selectors.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase26/apply_reference_redesign.py"),run_name="__main__")
