@@ -55,3 +55,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase21/apply_redesign
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase22/apply_visual_system.py"),run_name="__main__")
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase22/apply_schedule_design.py"),run_name="__main__")
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase22/apply_photo_widget_design.py"),run_name="__main__")
+
+# Phase23: simplify task form by removing the confusing event-duration option.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase23/apply_remove_duration.py"), run_name="__main__")
