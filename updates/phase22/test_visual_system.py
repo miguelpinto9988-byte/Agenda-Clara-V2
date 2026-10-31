@@ -38,6 +38,13 @@ assert 'Reminders.schedule(this,t)' in main and 'Reminders.cancel(this,t.id)' in
 assert 'android:windowAnimationStyle' in styles and 'AgendaDialogMotion' in styles
 assert 'scheduleDialog()' in schedule and 'WindowLayout.boundDialog(ScheduleActivity.this,dialog)' in schedule
 assert 'new AlertDialog.Builder(this)' not in schedule
+photo=(src/"PhotoConfigActivity.java").read_text(encoding="utf-8")
+assert 'UiDesign.button(choose,false)' in photo and 'UiDesign.button(save,true)' in photo
+assert 'UiDesign.input(e)' not in photo, "Photo widget uses dedicated SeekBar controls"
+assert 'UiDesign.BG' in photo and 'UiDesign.text(title,true)' in photo
+assert (Path("updates/phase22/UiDesign.java").read_text()).count('b.getCurrentTextColor()==0xffffffff')==1, "Primary icons use white on blue"
+assert (Path("updates/phase22/emulator_design_qa.sh")).is_file()
+
 assert 'translationY(0f)' in motion and 'ValueAnimator.areAnimatorsEnabled()' in motion
 assert 'android:radius="26dp"' in dialogs
 assert (src/"WindowLayout.java").read_text().count('safe.width()-dp(a,48)')==1
