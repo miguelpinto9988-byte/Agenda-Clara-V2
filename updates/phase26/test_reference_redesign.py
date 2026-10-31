@@ -30,7 +30,7 @@ assert "FrameLayout dial=new FrameLayout(a)" in pickers
 assert "minutes.setMinValue(0);minutes.setMaxValue(59)" in pickers
 assert "private static ScrollView scroll" in pickers and "WindowLayout.boundDialog(a,result)" in pickers
 assert "month[0].lengthOfMonth()" in pickers
-assert "day>=1&&day<=days" in pickers
+assert "n>=1&&n<=days" in pickers and "week.addView(cell,lp)" in pickers
 assert 'callback.accept(chosen[0])' in pickers
 assert 'callback.accept(LocalTime.of(h,minute[0]))' in pickers
 assert "CategoryRegistry.all(a)" in pickers
