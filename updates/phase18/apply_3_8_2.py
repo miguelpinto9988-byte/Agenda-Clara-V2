@@ -58,3 +58,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase22/apply_photo_wi
 
 # Phase23: simplify task form by removing the confusing event-duration option.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase23/apply_remove_duration.py"), run_name="__main__")
+
+# Phase24: colors cover entire category/task/class cards; fonts and icon outlines gain weight.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase24/apply_bold_tinted_ui.py"), run_name="__main__")
