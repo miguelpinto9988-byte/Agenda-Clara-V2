@@ -19,10 +19,14 @@ for node in root.iter('node'):
             break
 else:raise SystemExit('Missing Calendar navigation tab')
 PY
+# The class schedule section can be below the visible part of the month.
+# Scroll until its real button is visible rather than assuming a fixed viewport.
 sleep 2
-adb shell uiautomator dump /sdcard/schedule_from_calendar.xml >/dev/null 2>&1
-adb exec-out cat /sdcard/schedule_from_calendar.xml >schedule_from_calendar.xml
-python3 - <<'PY'
+found_schedule=0
+for attempt in 1 2 3 4 5 6; do
+  adb shell uiautomator dump /sdcard/schedule_from_calendar.xml >/dev/null 2>&1
+  adb exec-out cat /sdcard/schedule_from_calendar.xml >schedule_from_calendar.xml
+  if python3 - <<'PY'
 import re,subprocess,xml.etree.ElementTree as ET
 root=ET.parse('schedule_from_calendar.xml').getroot()
 for node in root.iter('node'):
@@ -31,9 +35,18 @@ for node in root.iter('node'):
         b=list(map(int,re.findall(r'\d+',node.get('bounds',''))))
         if len(b)==4:
             subprocess.run(['adb','shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2)],check=True)
+            print("PASS: open class schedule from scrolled Calendar screen")
             break
-else:raise SystemExit('Missing class schedule entry in Calendar')
+else:raise SystemExit(1)
 PY
+  then found_schedule=1;break;fi
+  adb shell input swipe 530 1330 530 650 300
+  sleep 1
+done
+if [ "$found_schedule" -ne 1 ]; then
+  echo 'Missing class schedule entry in Calendar after scrolling' >&2
+  exit 1
+fi
 sleep 3
 adb shell uiautomator dump /sdcard/schedule_day_editor.xml >/dev/null 2>&1
 adb exec-out cat /sdcard/schedule_day_editor.xml >schedule_day_editor.xml
