@@ -26,7 +26,9 @@ assert "db.withdrawMissing(chatKey,ids,origins)" not in flow
 reminders=java("Reminders.java")
 assert "channel.getImportance()!=NotificationManager.IMPORTANCE_NONE" in reminders
 assert "public static void acknowledge" in reminders
-assert ".setSilent(true)" in reminders
+assert "ACTION_CHANNEL=\"task_actions_v1\"" in reminders
+assert "NotificationManager.IMPORTANCE_LOW" in reminders
+assert "new Notification.Builder(c,ACTION_CHANNEL)" in reminders
 receiver=java("ReminderReceiver.java")
 assert 'Reminders.acknowledge(c,t,"Tarea completada")' in receiver
 assert 'Reminders.acknowledge(c,t,"Aviso pospuesto "+minutes+" minutos")' in receiver
