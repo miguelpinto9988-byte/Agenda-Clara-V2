@@ -60,7 +60,7 @@ def apply():
         chip.setTextColor(accentInk(accent));
         GradientDrawable surface=tintedBackground(chip.getContext(),accent,17,active?25:13);
         if(active)surface.setStroke(dp(chip.getContext(),2),accentInk(accent));
-        chip.setBackground(new RippleDrawable(ColorStateList.valueOf(blend(0x00000000,accent,0.12f)),surface,null));
+        chip.setBackground(new RippleDrawable(ColorStateList.valueOf((accent&0x00ffffff)|0x18000000),surface,null));
         OutlineIcon icon=new OutlineIcon("folder",accentInk(accent));
         icon.setBounds(0,0,dp(chip.getContext(),18),dp(chip.getContext(),18));
         chip.setCompoundDrawables(icon,null,null,null);
