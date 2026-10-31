@@ -40,6 +40,7 @@ capture(){
     test -s "screenshots/$1.png"
 }
 find_and_tap "Crear una tarea"
+find_and_tap "Nueva tarea"
 find_and_tap "Elegir fecha"
 adb shell uiautomator dump /sdcard/ref_visual.xml >/dev/null 2>&1
 adb exec-out cat /sdcard/ref_visual.xml >ref_visual.xml
@@ -56,6 +57,7 @@ adb shell am force-stop "$PKG" || true
 adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
 sleep 4
 find_and_tap "Crear una tarea"
+find_and_tap "Nueva tarea"
 find_and_tap "Seleccionar categoría:"
 adb shell uiautomator dump /sdcard/ref_visual.xml >/dev/null 2>&1
 adb exec-out cat /sdcard/ref_visual.xml >ref_visual.xml
