@@ -25,10 +25,10 @@ assert 'UiDesign.text(t,bold)' in main and 'UiDesign.text(t,bold)' in schedule
 assert 'UiDesign.button(b,false)' in main and 'UiDesign.button(b,primary)' in schedule
 assert 'UiDesign.card(c)' in main and 'UiDesign.card(c)' in schedule
 assert 'UiDesign.input(e)' in main and 'UiDesign.input(e)' in schedule
-assert 'ImageView icon=ModernGlyph.view(this,iconTypes[n]' in main
-assert 'ModernGlyph.view(this,"folder",UiDesign.accentInk(entry.color),26)' in main
-assert 'ModernGlyph.view(this,"date",ModernGlyph.BLUE,24)' in main
-assert 'ModernGlyph.view(this,"bell",ModernGlyph.AMBER,24)' in main
+assert 'ImageView icon=PngIcons.view(this,iconTypes[n]' in main
+assert 'PngIcons.view(this,CategoryRegistry.icon(this,entry.name),26)' in main
+assert 'PngIcons.view(this,"date",ModernGlyph.BLUE,24)' in main
+assert 'PngIcons.view(this,"bell",ModernGlyph.AMBER,24)' in main
 assert 'String query="",selectedCategory="General";' in main
 assert 'String[] choices=new String[categories.length+1]' not in main
 assert 'String[] names={"Todas","Urgentes","Pendientes","Próximas","Hechas"}' not in main
