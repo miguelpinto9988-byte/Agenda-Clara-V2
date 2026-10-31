@@ -53,7 +53,7 @@ def tap(serial,name):
     xml=adb(serial,"exec-out","cat","/sdcard/agenda_perf.xml")
     for node in ET.fromstring(xml).iter("node"):
         label=node.get("content-desc","")
-        if label.startswith(name+",") and "pestaña" in label:
+        if label==name or (label.startswith(name+",") and "pestaña" in label):
             bounds=list(map(int,re.findall(r"\d+",node.get("bounds",""))))
             if len(bounds)==4:
                 adb(serial,"shell","input","tap",str((bounds[0]+bounds[2])//2),str((bounds[1]+bounds[3])//2))
@@ -76,6 +76,9 @@ def main():
     if is_emulator:
         for setting in ("animator_duration_scale","window_animation_scale","transition_animation_scale"):
             adb(args.serial,"shell","settings","put","global",setting,"1")
+    # Prior navigation QA may leave ScheduleActivity on top of the task.
+    # Start a fresh MainActivity for a comparable benchmark (emulator only).
+    if is_emulator: adb(args.serial,"shell","am","force-stop",PKG)
     adb(args.serial,"shell","am","start","-W","-n",PKG+"/.MainActivity")
     time.sleep(3)
     before=pss(adb(args.serial,"shell","dumpsys","meminfo",PKG))
