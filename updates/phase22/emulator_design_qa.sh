@@ -46,6 +46,7 @@ adb exec-out screencap -p > screenshots/05-categorias-flotante.png
 adb shell input keyevent KEYCODE_BACK
 sleep 2
 tap_node "Crear una tarea"
+tap_node "Nueva tarea"
 read_ui
 grep -q 'Nueva tarea' design_ui.xml
 grep -q 'Nombre de la tarea' design_ui.xml
