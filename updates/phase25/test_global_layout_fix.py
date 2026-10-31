@@ -7,7 +7,7 @@ m=(p/"MainActivity.java").read_text(encoding="utf-8")
 s=(p/"ScheduleActivity.java").read_text(encoding="utf-8")
 w=(p/"WindowLayout.java").read_text(encoding="utf-8")
 photo=(p/"PhotoConfigActivity.java").read_text(encoding="utf-8")
-assert 't.setTypeface(Typeface.create("sans-serif",Typeface.BOLD))' in u
+assert 't.setTypeface(SHARED_BOLD)' in u
 assert 'public static void polishTree(View root)' in u
 assert 'if(root instanceof TextView && !"new_task_button".equals(root.getTag()))' in u
 assert 'params.topMargin=minGap' in u
