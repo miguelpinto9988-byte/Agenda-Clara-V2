@@ -33,7 +33,7 @@ assert 'String query="",selectedCategory="General";' in main
 assert 'String[] choices=new String[categories.length+1]' not in main
 assert 'String[] names={"Todas","Urgentes","Pendientes","Próximas","Hechas"}' not in main
 assert 'if(date==null&&!selectedCategory.equalsIgnoreCase(TaskOrganization.category(t.category)))continue;' in main
-assert 't.repeatMinutes=intervals[repeat.getSelectedItemPosition()]' in main
+assert 't.repeatMinutes=repeatMinutes[0]' in main
 assert 'Reminders.schedule(this,t)' in main and 'Reminders.cancel(this,t.id)' in main
 assert 'android:windowAnimationStyle' in styles and 'AgendaDialogMotion' in styles
 assert 'scheduleDialog()' in schedule and 'WindowLayout.boundDialog(ScheduleActivity.this,dialog)' in schedule
