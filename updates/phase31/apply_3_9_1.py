@@ -50,8 +50,8 @@ def apply():
         if("new_task".equals(i.getAction())){openEditor(-1,null,null);return;}''',
         "safe widget create/open routing")
     main=one(main,
-        'Reminders.rebuild(this);TaskWidget.refresh(this);',
-        'Reminders.rebuild(this);TaskWidget.refresh(this);StickyNotesWidget.refresh(this);',
+        'new Thread(()->{CompletedTaskCleanup.run(this);Reminders.rebuild(this);TaskWidget.refresh(this);},"resume-reminders").start();',
+        'new Thread(()->{CompletedTaskCleanup.run(this);Reminders.rebuild(this);TaskWidget.refresh(this);StickyNotesWidget.refresh(this);},"resume-reminders").start();',
         "refresh both widgets after resuming")
     s["MainActivity.java"]=main
 
