@@ -17,7 +17,10 @@ assert nav.count('new UiDesign.OutlineIcon(')==1
 assert 'ModernGlyph.view(this,iconTypes[n]' not in nav
 assert 'item.setContentDescription(labels[n])' in nav
 assert 'item.setOnClickListener(v->{if(page!=index)' in nav
-assert '((ImageView)item.getChildAt(0)).setImageTintList(' in main
+assert 'int tabColor=page==n?GREEN:MUTED;' in main
+assert 'tabIcon.setImageTintList(null);' in main
+assert 'tabIcon.setImageDrawable(new UiDesign.OutlineIcon(' in main
+assert 'tabIcon.setTag(tabColor);' in main
 for label,name in (("Agenda","check"),("Calendario","calendar"),("Revisar","inbox"),("Conexiones","link")):
     assert f'case "{name}":' in ui
     assert f'case "{label}":return "{name}";' in ui
