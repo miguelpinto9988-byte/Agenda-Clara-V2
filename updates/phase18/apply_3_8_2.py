@@ -67,3 +67,7 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase25/apply_global_l
 
 # Phase26: reference-approved two/three-colour glyphs and native branded selectors.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase26/apply_reference_redesign.py"),run_name="__main__")
+
+# Phase27: generate original transparent PNG icons and wire native category/alert pickers.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase27/make_png_icons.py"),run_name="__main__")
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase27/apply_png_and_pickers.py"),run_name="__main__")
