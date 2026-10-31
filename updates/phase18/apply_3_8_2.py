@@ -70,3 +70,4 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase26/apply_referenc
 
 # Phase27: original transparent PNG artwork, custom symbols and recurrence controls.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase27/apply_png_visuals.py"),run_name="__main__")
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase27/improve_picker_shortcuts.py"),run_name="__main__")
