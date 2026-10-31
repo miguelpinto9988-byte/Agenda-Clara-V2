@@ -18,7 +18,7 @@ one('''        content.addView(selectedRow);
         LinearLayout extra=row(a);
         int[] quickOffsets={1,7,30};
         String[] names={"En 1 día","En 1 semana","En 30 días"};
-        for(int k=0;k<days.length;k++){
+        for(int k=0;k<quickOffsets.length;k++){
             final int offset=quickOffsets[k];
             Button b=chip(a,names[k],false);
             LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(0,dp(a,49),1);
