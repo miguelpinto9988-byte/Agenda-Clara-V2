@@ -43,6 +43,9 @@ exactly('e.setBackground(outline(0xffffffff,13));',
 exactly('col.addView(heading,new LinearLayout.LayoutParams(dp(95),dp(39)));',
     'col.addView(heading,new LinearLayout.LayoutParams(dp(95),dp(44)));',
     "weekly column headings")
+exactly('dayRow.addView(chip,new LinearLayout.LayoutParams(0,dp(46),1));',
+    'LinearLayout.LayoutParams dayChip=new LinearLayout.LayoutParams(0,dp(46),1);dayChip.setMargins(dp(2),0,dp(2),0);dayRow.addView(chip,dayChip);',
+    "weekly lesson day chip spacing")
 exactly('canvas.setBackground(outline(0xfffbfcff,6));',
     'canvas.setBackground(outline(0xfffbfcff,10));',
     "weekly timetable columns")
