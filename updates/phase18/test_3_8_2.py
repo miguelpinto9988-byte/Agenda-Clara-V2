@@ -47,3 +47,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase25/test_global_la
 
 # Validate stable iconography, category picker, date/time flows and unchanged +.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase26/test_reference_redesign.py"),run_name="__main__")
+
+# Verify original PNG assets, category icon persistence and UI compatibility.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase27/test_png_visuals.py"),run_name="__main__")
