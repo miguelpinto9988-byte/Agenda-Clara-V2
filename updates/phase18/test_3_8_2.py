@@ -38,3 +38,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase22/test_visual_sy
 
 # Ensure all unrelated calendar, reminder and task functionality survives phase23.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase23/test_remove_duration.py"), run_name="__main__")
+
+# Verify category color, typography weight, school sessions and unchanged plus button.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase24/test_bold_tinted_ui.py"), run_name="__main__")
