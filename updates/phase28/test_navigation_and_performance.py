@@ -18,8 +18,9 @@ assert 'ModernGlyph.view(this,iconTypes[n]' not in nav
 assert 'item.setContentDescription(labels[n])' in nav
 assert 'item.setOnClickListener(v->{if(page!=index)' in nav
 assert '((ImageView)item.getChildAt(0)).setImageTintList(' in main
-for name in ("check","calendar","inbox","link"):
-    assert f'case "{name}"' in ui and f'case "{name}":return' in ui
+for label,name in (("Agenda","check"),("Calendario","calendar"),("Revisar","inbox"),("Conexiones","link")):
+    assert f'case "{name}":' in ui
+    assert f'case "{label}":return "{name}";' in ui
 assert 'paint.setStrokeWidth(2.65f)' in ui
 # PNG in other areas remains intentionally unchanged.
 assert 'ApprovedPng.view(context,name,sizeDp)' in (src/"ModernGlyph.java").read_text()
