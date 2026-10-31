@@ -16,7 +16,7 @@ assert 'scheduleDialog().setTitle("Agregar día al curso")' in code
 assert 'timeChoice(slot,true,redraw[0])' in code and 'timeChoice(slot,false,redraw[0])' in code
 assert 'ScheduleDayClock.clock12(clock)' in code
 assert 'TimePickerDialog(this,(dialog,h,m)->' in code
-assert 'initial/60,initial%60,false).show()' in code
+assert '(initial%1440)/60,initial%60,false).show()' in code
 assert 'ScheduleDayClock.withMeridiem(prev,pm)' in code
 assert 'txt(pm?"PM":"AM"' in code
 assert 'slot.start=h*60+m' in code and 'slot.end=h*60+m' in code
