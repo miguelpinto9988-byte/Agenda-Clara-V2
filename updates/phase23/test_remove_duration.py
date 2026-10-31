@@ -18,7 +18,7 @@ for preserved in (
     'new LinearLayout.LayoutParams(dp(108),dp(108))',
     '"Hora límite · "',
     'Repetir el aviso',
-    't.repeatMinutes=intervals[repeat.getSelectedItemPosition()]',
+    't.repeatMinutes=repeatMinutes[0]',
     'Reminders.schedule(this,t)',
     'Reminders.cancel(this,t.id)',
     't.calendarEnabled=google.isChecked()&&schedule.isChecked()',
