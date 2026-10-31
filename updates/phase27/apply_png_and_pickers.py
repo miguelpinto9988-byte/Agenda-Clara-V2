@@ -76,6 +76,16 @@ def run():
         schedule=schedule.replace(old,new)
         design=design.replace(old,new)
         pick=pick.replace(old,new)
+    # Also route every existing shared OutlineIcon view to a permanent PNG;
+    # old screens not pictured in the reference must use the same icon system.
+    design=section(design,
+       '    public static ImageView icon(Activity a,String name,int color,int size){',
+       '    public static String statusIcon',
+       '''    public static ImageView icon(Activity a,String name,int color,int size){
+        return PngIcons.view(a,name,color,size);
+    }
+''',
+       "global icon facade")
     # Existing category manager and all task tiles inherit saved symbol.
     m=replace(m,
        'PngIcons.view(this,"folder",UiDesign.accentInk(entry.color),26)',
