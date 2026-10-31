@@ -41,6 +41,7 @@ def apply():
       'dateSection.addView(timeBtn);',
       '''ModernGlyph.button(dateBtn,"date",ModernGlyph.BLUE,19);
         ModernGlyph.button(timeBtn,"time",ModernGlyph.VIOLET,20);
+        timeBtn.setContentDescription("Elegir hora límite");
         dateSection.addView(timeBtn);''',
       "always visible picker icons")
     main=one(main,
