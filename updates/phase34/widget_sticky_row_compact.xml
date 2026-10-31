@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ android:id="@+id/sticky_widget_row" android:layout_width="match_parent" android:layout_height="106dp">
+ <ImageView android:id="@+id/sticky_widget_art" android:layout_width="match_parent"
+  android:layout_height="match_parent" android:scaleType="fitXY"
+  android:src="@drawable/sticky_yellow" android:contentDescription="@null"/>
+ <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+  android:orientation="vertical" android:paddingLeft="18dp" android:paddingRight="22dp"
+  android:paddingTop="19dp" android:paddingBottom="6dp">
+  <TextView android:id="@+id/sticky_widget_title" android:layout_width="match_parent"
+   android:layout_height="wrap_content" android:singleLine="true" android:ellipsize="end"
+   android:textSize="14sp" android:textStyle="bold" android:textColor="#15254B"/>
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+   android:gravity="center_vertical" android:orientation="horizontal" android:paddingTop="2dp">
+   <ImageView android:id="@+id/sticky_widget_calendar_icon"
+    android:layout_width="16dp" android:layout_height="16dp" android:layout_marginEnd="6dp"
+    android:src="@drawable/ic_ref_date" android:contentDescription="@null"/>
+   <TextView android:id="@+id/sticky_widget_date" android:layout_width="0dp"
+    android:layout_height="wrap_content" android:layout_weight="1" android:singleLine="true"
+    android:ellipsize="end" android:textSize="11sp" android:textStyle="bold"
+    android:textColor="#38516E" android:contentDescription="Fecha de la nota"/>
+  </LinearLayout>
+  <TextView android:id="@+id/sticky_widget_body" android:layout_width="match_parent"
+   android:layout_height="0dp" android:layout_weight="1" android:maxLines="1"
+   android:ellipsize="end" android:paddingTop="3dp"
+   android:textSize="11sp" android:textStyle="bold" android:textColor="#294161"/>
+ </LinearLayout>
+</FrameLayout>
