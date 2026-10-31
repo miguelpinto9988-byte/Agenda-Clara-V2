@@ -19,6 +19,12 @@ assert 'ContentIconSizing.apply(nav)' not in main
 assert 'showCreationMenu()' in main and 'CreationChoices.show(this,add,' in main
 assert '()->openEditor(-1,null,null)' in main and 'StickyNotesUi.showEditor(this,null)' in main
 assert 'PopupWindow menu' in menu and 'Nueva tarea' in menu and 'Nueva nota' in menu
+assert 'getWindowVisibleDisplayFrame(visible)' in menu
+assert 'int width=Math.min(dp(a,246),usableWidth)' in menu
+assert 'menu.showAsDropDown(anchor,0,dp(a,8),Gravity.END);' in menu
+assert '-dp(a,138)' not in menu and '-dp(a,4),Gravity.END' not in menu
+assert 'main.setSingleLine(true)' in menu and 'sub.setSingleLine(true)' in menu
+assert 'TextUtils.TruncateAt.END' in menu
 assert 'ValueAnimator.areAnimatorsEnabled()' in menu
 assert 'content_png_icon' in png and 'iconDp+4' in png
 assert 'rightMargin+=6*dp' in resize and 'apply(body);' in main

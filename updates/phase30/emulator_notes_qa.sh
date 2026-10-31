@@ -35,6 +35,28 @@ capture(){ adb exec-out screencap -p >"screenshots/$1.png";test -s "screenshots/
 tap 'Crear una tarea o nota' 1
 find_node 'Nueva tarea' 1 >/dev/null
 find_node 'Nueva nota' 1 >/dev/null
+# Compare the popup cards with the on-screen + anchor, using native UI bounds.
+# This catches the previous detached popup on the left of the screen.
+python3 - <<'PY'
+import re,xml.etree.ElementTree as ET
+root=ET.parse("sticky_qa.xml").getroot()
+def bounds(description):
+    for node in root.iter("node"):
+        if node.get("content-desc","")==description:
+            value=[int(n) for n in re.findall(r"\d+",node.get("bounds",""))]
+            if len(value)==4:return value
+    raise SystemExit("UI anchor not found: "+description)
+plus=bounds("Crear una tarea o nota")
+task=bounds("Nueva tarea")
+note=bounds("Nueva nota")
+plus_width=plus[2]-plus[0]
+if not (task[0]>=0 and note[0]>=0 and
+        abs(task[2]-plus[2])<=plus_width and
+        0<=task[1]-plus[3]<=plus_width and
+        note[1]>=task[3]):
+    raise SystemExit("The floating create menu is detached from the top + button")
+print("PASS: floating menu anchored directly below + and right-aligned")
+PY
 capture '17-menu-dos-opciones'
 tap 'Nueva nota' 1
 find_node 'Título de la nota' 1 >/dev/null
