@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sticky_widget_row" android:layout_width="match_parent"
+    android:layout_height="138dp" android:clipChildren="false">
+    <ImageView android:id="@+id/sticky_widget_art"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:scaleType="fitXY" android:src="@drawable/sticky_yellow"
+        android:contentDescription="@null"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical" android:paddingLeft="24dp"
+        android:paddingTop="30dp" android:paddingRight="30dp"
+        android:paddingBottom="15dp">
+        <TextView android:id="@+id/sticky_widget_title"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Mi nota" android:textSize="15sp" android:textStyle="bold"
+            android:textColor="#15254B" android:singleLine="true" android:ellipsize="end"/>
+        <TextView android:id="@+id/sticky_widget_body"
+            android:layout_width="match_parent" android:layout_height="0dp"
+            android:layout_weight="1" android:maxLines="2"
+            android:ellipsize="end" android:paddingTop="4dp"
+            android:textSize="12sp" android:textStyle="bold" android:textColor="#294161"/>
+        <TextView android:id="@+id/sticky_widget_date"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:singleLine="true" android:ellipsize="end" android:textSize="12sp"
+            android:textStyle="bold" android:textColor="#38516E"
+            android:contentDescription="Fecha de la nota"/>
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="12dp"
+    android:background="@drawable/widget_bg">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <TextView android:id="@+id/sticky_widget_header"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:gravity="center_vertical"
+            android:singleLine="true" android:ellipsize="end" android:text="Notas adhesivas"
+            android:textColor="#14254B" android:textStyle="bold" android:textSize="18sp"/>
+        <TextView android:id="@+id/sticky_widget_add"
+            android:layout_width="48dp" android:layout_height="44dp"
+            android:gravity="center" android:text="＋" android:textSize="30sp"
+            android:textStyle="bold" android:textColor="#3267F7"
+            android:contentDescription="Crear una nota adhesiva"/>
+    </LinearLayout>
+    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1">
+        <ListView android:id="@+id/sticky_widget_list"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:divider="@android:color/transparent" android:dividerHeight="5dp"
+            android:clipToPadding="false"/>
+        <TextView android:id="@+id/sticky_widget_empty"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:text="Sin notas. Pulsa ＋ para crear una."
+            android:padding="10dp" android:gravity="center"
+            android:textStyle="bold" android:textSize="13sp" android:textColor="#63748E"/>
+    </FrameLayout>
+</LinearLayout>
