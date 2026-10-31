@@ -15,16 +15,16 @@ assert "categoryPicker.setVisibility(View.GONE)" in main
 assert "ModernPickers.showCategory(this" in main
 assert 'if(button.getContentDescription()==null)button.setContentDescription(button.getText());' in glyph, "Never overwrite custom accessibility labels"
 assert "categoryDisplay.setText(newName" in main
-assert "LinearLayout palette=column();LinearLayout paletteRow=null;" in main and "colors.setVisibility(View.GONE)" in main
-assert "CategoryRegistry.COLORS.length" in main
-assert "colors.setSelection(index)" in main
-assert "CategoryRegistry.save(this,existing,desired,CategoryRegistry.COLORS[colors.getSelectedItemPosition()])" in main
+assert 'CategorySymbolChooser.show(this,existing,name->' in main
+assert 'CategoryRegistry.COLORS.length' in (src/'CategorySymbolChooser.java').read_text()
+assert 'color[0]=shade;refresh[0].run();' in (src/'CategorySymbolChooser.java').read_text()
+assert 'CategoryRegistry.save(a,existing,desired,color[0],icon[0])' in (src/'CategorySymbolChooser.java').read_text()
 assert 'ModernGlyph.button(dateBtn,"date"' in main
 assert 'ModernGlyph.button(timeBtn,"time"' in main
 assert 'new String[]{"whatsapp","google-calendar","widgets"}' in main
 assert "ModernGlyph.button(b,name,accent,20)" in ui
-assert 'ModernGlyph.view(this,"folder"' in main
-assert "new ModernGlyph(\"back\"" in schedule and "new ModernGlyph(\"help\"" in schedule
+assert 'ApprovedPng.view(this,entry.icon,26)' in main
+assert 'ApprovedPng.drawable(this,"back")' in schedule and 'ApprovedPng.drawable(this,"help")' in schedule
 for key in ("folder","date","clock","bell","repeat","notes","whatsapp","google-calendar","backup","widgets","settings","photo","manual","help","back"):
     assert f'case "{key}"' in glyph,key
 assert "FrameLayout dial=new FrameLayout(a)" in pickers
