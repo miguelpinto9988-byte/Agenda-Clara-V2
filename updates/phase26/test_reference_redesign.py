@@ -14,7 +14,7 @@ assert "new TimePickerDialog(this" not in main
 assert "categoryPicker.setVisibility(View.GONE)" in main
 assert "ModernPickers.showCategory(this" in main
 assert "categoryDisplay.setText(newName" in main
-assert "palette.setColumnCount(3)" in main and "colors.setVisibility(View.GONE)" in main
+assert "LinearLayout palette=column();LinearLayout paletteRow=null;" in main and "colors.setVisibility(View.GONE)" in main
 assert "CategoryRegistry.COLORS.length" in main
 assert "colors.setSelection(index)" in main
 assert "CategoryRegistry.save(this,existing,desired,CategoryRegistry.COLORS[colors.getSelectedItemPosition()])" in main
