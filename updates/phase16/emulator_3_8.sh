@@ -136,3 +136,5 @@ bash updates/phase30/emulator_notes_qa.sh
 
 # Widget de notas: proveedor Android y acceso desde el botón +.
 bash updates/phase31/emulator_widget_qa.sh
+# Ampliaciones de fuente Android y vista de notas sin recortes de encabezado.
+bash updates/phase34/emulator_sticky_font_qa.sh
