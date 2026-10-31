@@ -19,10 +19,12 @@ def apply():
     main_file=SRC/"MainActivity.java"
     class_file=SRC/"ScheduleActivity.java"
     window_file=SRC/"WindowLayout.java"
+    photo_file=SRC/"PhotoConfigActivity.java"
     ui=ui_file.read_text(encoding="utf-8")
     main=main_file.read_text(encoding="utf-8")
     classes=class_file.read_text(encoding="utf-8")
     window=window_file.read_text(encoding="utf-8")
+    photo=photo_file.read_text(encoding="utf-8")
     plus=next((line for line in main.splitlines() if 'setTag("new_task_button")' in line),None)
     if plus is None or "TopPlusButtonMotion.install(this)" not in main:
         raise RuntimeError("Approved top plus missing")
@@ -202,12 +204,18 @@ def apply():
        'int max=Math.max(dp(a,96),available(a,a.getWindow().getDecorView()).height()-dp(a,196));',
        "space for modal title/action bar")
 
+    photo=once(photo,
+       '        File f=new File(getFilesDir(),PhotoWidget.filename(id));',
+       '        body.post(()->UiDesign.polishTree(body));\\n        File f=new File(getFilesDir(),PhotoWidget.filename(id));'.replace('\\\\n','\\n'),
+       "all photo widget controls are bold and spaced")
+
     if next((line for line in main.splitlines() if 'setTag("new_task_button")' in line),None)!=plus:
         raise RuntimeError("Approved header + button changed")
     ui_file.write_text(ui,encoding="utf-8")
     main_file.write_text(main,encoding="utf-8")
     class_file.write_text(classes,encoding="utf-8")
     window_file.write_text(window,encoding="utf-8")
+    photo_file.write_text(photo,encoding="utf-8")
     print("PASS phase25: global bold, non-touching controls, safe scrolling dialogs, all page layout pass; + preserved")
 
 if __name__=="__main__":
