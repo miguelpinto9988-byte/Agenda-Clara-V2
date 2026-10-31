@@ -41,3 +41,6 @@ runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase23/test_remove_du
 
 # Verify category color, typography weight, school sessions and unchanged plus button.
 runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase24/test_bold_tinted_ui.py"), run_name="__main__")
+
+# Validate safe layouts and all-screen bold without altering user data.
+runpy.run_path(str(Path(__file__).resolve().parents[1] / "phase25/test_global_layout_fix.py"), run_name="__main__")
