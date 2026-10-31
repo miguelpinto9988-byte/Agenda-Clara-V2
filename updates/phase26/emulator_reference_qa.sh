@@ -53,7 +53,7 @@ grep -q 'Seleccionar hora' ref_visual.xml
 capture "10-selector-hora-moderno"
 adb shell input keyevent KEYCODE_BACK
 sleep 2
-find_and_tap "General"
+find_and_tap "Seleccionar categoría:"
 adb shell uiautomator dump /sdcard/ref_visual.xml >/dev/null 2>&1
 adb exec-out cat /sdcard/ref_visual.xml >ref_visual.xml
 grep -q 'Elegir categoría' ref_visual.xml
