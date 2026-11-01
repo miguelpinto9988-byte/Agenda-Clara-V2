@@ -20,16 +20,40 @@ for node in root.iter('node'):
 else:raise SystemExit('Calendar tab not found')
 PY
 sleep 2
-adb shell uiautomator dump /sdcard/agenda_calendar_icons.xml >/dev/null 2>&1
-adb exec-out cat /sdcard/agenda_calendar_icons.xml >agenda_calendar_icons.xml
+# The month grid is taller than one viewport. UIAutomator serializes only visible
+# nodes, so verify both controls while scrolling instead of requiring one snapshot.
 python3 - <<'PY'
+import subprocess
+import time
 import xml.etree.ElementTree as ET
-root=ET.parse('agenda_calendar_icons.xml').getroot()
-content=' '.join((n.get('text','')+' '+n.get('content-desc','')) for n in root.iter('node'))
-assert 'Ir a hoy' in content
-assert 'Horario de clases' in content
-assert '▣' not in content and '▦' not in content
-print('PASS: Calendar displays accessible labels without obsolete square glyphs')
+
+required = {"Ir a hoy", "Horario de clases"}
+found = set()
+for attempt in range(8):
+    subprocess.run(["adb", "shell", "uiautomator", "dump",
+                    "/sdcard/agenda_calendar_icons.xml"],
+                   check=True, stdout=subprocess.DEVNULL)
+    content = subprocess.check_output(
+        ["adb", "exec-out", "cat", "/sdcard/agenda_calendar_icons.xml"]
+    ).decode("utf-8", errors="replace")
+    root = ET.fromstring(content)
+    visible = " ".join(
+        (node.get("text", "") + " " + node.get("content-desc", ""))
+        for node in root.iter("node")
+    )
+    if "▣" in visible or "▦" in visible:
+        raise AssertionError("Legacy square glyph remains visible in Calendar")
+    found.update(label for label in required if label in visible)
+    if found == required:
+        print("PASS: Calendar accessible labels visible after scrolling; obsolete glyphs absent")
+        break
+    subprocess.run(["adb", "shell", "input", "swipe", "540", "1740",
+                    "540", "630", "340"], check=True)
+    time.sleep(2)
+else:
+    raise AssertionError(
+        "Calendar controls not found after scrolling: " + ", ".join(sorted(required - found))
+    )
 PY
 adb exec-out screencap -p >screenshots/25-calendario-dos-iconos-png.png
 test -s screenshots/25-calendario-dos-iconos-png.png
