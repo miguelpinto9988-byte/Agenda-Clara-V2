@@ -112,6 +112,7 @@ jobs:
           python3 updates/phase42/apply_whatsapp_hardening.py
           python3 updates/phase42/test_whatsapp_hardening.py
           python3 updates/phase43/apply_voice_task.py
+          python3 updates/phase43/fix_permission_dispatch.py
           python3 updates/phase43/generate_voice_png.py
           python3 updates/phase43/test_voice_task.py
           python3 updates/phase29/test_performance_qa.py
