@@ -1,8 +1,8 @@
 # Único flujo vigente de compilación, pruebas JVM y emulador Android.
-name: Agenda Clara 3.10.4 · Compilación y validación
+name: Agenda Clara 3.10.5 · Compilación y validación
 on:
   push:
-    branches: [main, feat/top-plus-png-motion-3-8-2, feat/remove-compose-daily-view-3-8-2, feat/full-ui-categories-responsive-3-8-2, feat/category-only-agenda-navigation-3-8-2, feat/reference-iconography-branded-pickers-3-8-2, feat/png-approved-icons-symbol-color-pickers-3-8-2, feat/restore-nav-icons-performance-cleanup-3-8-2, feat/sticky-notes-plus-menu-3-9-0, feat/sticky-notes-home-widget-3-9-1, fix/category-selected-png-icons-3-9-2, feat/polished-sticky-art-3-9-3, feat/sticky-responsive-accessibility-3-9-4, feat/whatsapp-context-understanding-3-9-5, feat/schedule-photo-course-reconciliation-3-9-6, feat/schedule-per-day-12h-3-9-7, feat/calendar-png-today-schedule-3-9-8, feat/calendar-clean-transparent-png-3-9-9, restore/whatsapp-two-stage-300ms-3-10-3, fix/whatsapp-session-retry-3-10-4]
+    branches: [main, feat/top-plus-png-motion-3-8-2, feat/remove-compose-daily-view-3-8-2, feat/full-ui-categories-responsive-3-8-2, feat/category-only-agenda-navigation-3-8-2, feat/reference-iconography-branded-pickers-3-8-2, feat/png-approved-icons-symbol-color-pickers-3-8-2, feat/restore-nav-icons-performance-cleanup-3-8-2, feat/sticky-notes-plus-menu-3-9-0, feat/sticky-notes-home-widget-3-9-1, fix/category-selected-png-icons-3-9-2, feat/polished-sticky-art-3-9-3, feat/sticky-responsive-accessibility-3-9-4, feat/whatsapp-context-understanding-3-9-5, feat/schedule-photo-course-reconciliation-3-9-6, feat/schedule-per-day-12h-3-9-7, feat/calendar-png-today-schedule-3-9-8, feat/calendar-clean-transparent-png-3-9-9, restore/whatsapp-two-stage-300ms-3-10-3, fix/whatsapp-session-retry-3-10-4, fix/whatsapp-final-hardening-3-10-5]
     paths:
       - 'updates/**'
       - 'Agenda-Clara-1.3.0-Fuentes-Sin-Clave.zip'
@@ -109,6 +109,8 @@ jobs:
           python3 updates/phase40/test_restore_3_10_3.py
           python3 updates/phase41/apply_whatsapp_connection_fix.py
           python3 updates/phase41/test_whatsapp_connection_fix.py
+          python3 updates/phase42/apply_whatsapp_hardening.py
+          python3 updates/phase42/test_whatsapp_hardening.py
           python3 updates/phase29/test_performance_qa.py
 
       - name: Recuperar clave de desarrollo privada
@@ -202,6 +204,7 @@ jobs:
           set -euo pipefail
           cd AgendaClara/whatsapp-native
           GOTOOLCHAIN=local GOPROXY=off go test -mod=vendor -buildvcs=false ./...
+          GOTOOLCHAIN=local GOPROXY=off go test -race -mod=vendor -buildvcs=false ./...
           cd ..
           ARM_BEFORE="$(sha256sum app/src/main/jniLibs/arm64-v8a/libagendawa.so | cut -d' ' -f1)"
           X86_BEFORE="$(sha256sum app/src/main/jniLibs/x86_64/libagendawa.so | cut -d' ' -f1)"
@@ -234,13 +237,13 @@ jobs:
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK"
           BADGING="$("$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK")"
           printf '%s\n' "$BADGING" | head -12
-          echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='45' versionName='3.10.4'"
-          echo "PASS: package pe.agendaclara.app, version 3.10.4 (45), signed Android APK"
+          echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='46' versionName='3.10.5'"
+          echo "PASS: package pe.agendaclara.app, version 3.10.5 (46), signed Android APK"
 
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.10.4-APK
+          name: Agenda-Clara-3.10.5-APK
           path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
@@ -251,13 +254,13 @@ jobs:
           set -euo pipefail
           rm -f AgendaClara/signing/development.jks
           rm -rf AgendaClara/.gradle AgendaClara/app/build AgendaClara/build
-          zip -q -r Agenda-Clara-3.10.4-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
-          if unzip -Z1 Agenda-Clara-3.10.4-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
-      - name: Publicar fuentes 3.10.4
+          zip -q -r Agenda-Clara-3.10.5-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
+          if unzip -Z1 Agenda-Clara-3.10.5-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
+      - name: Publicar fuentes 3.10.5
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.10.4-Fuentes-Verificadas
-          path: Agenda-Clara-3.10.4-Fuentes-Verificadas.zip
+          name: Agenda-Clara-3.10.5-Fuentes-Verificadas
+          path: Agenda-Clara-3.10.5-Fuentes-Verificadas.zip
           retention-days: 30
           if-no-files-found: error
 
@@ -271,7 +274,7 @@ jobs:
       - name: Recuperar APK compilada
         uses: actions/download-artifact@v4
         with:
-          name: Agenda-Clara-3.10.4-APK
+          name: Agenda-Clara-3.10.5-APK
           path: artifact-apk
       - name: Preparar aceleración para emulador
         run: |
@@ -290,6 +293,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.10.4-Emulator-Capturas
+          name: Agenda-Clara-3.10.5-Emulator-Capturas
           path: screenshots/
           if-no-files-found: ignore
