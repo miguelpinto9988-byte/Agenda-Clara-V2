@@ -73,7 +73,9 @@ for attempt in 1 2 3 4 5 6 7; do
 import xml.etree.ElementTree as ET
 root=ET.parse('schedule_day_editor.xml').getroot()
 values=' '.join((n.get('text','')+' '+n.get('content-desc','')) for n in root.iter('node'))
-assert 'Días y horarios' in values and 'AM' in values and 'PM' in values
+if not ('Días y horarios' in values and 'AM' in values and 'PM' in values):
+    # A hidden portion of the editor is not an assertion failure; keep scrolling.
+    raise SystemExit(1)
 PYCODE
   then found=1; break; fi
   adb shell input swipe 540 1410 540 540 330
