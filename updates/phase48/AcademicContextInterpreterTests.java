@@ -37,6 +37,8 @@ public final class AcademicContextInterpreterTests {
         ok(r.hadDate&&!r.validDate&&r.date==null,"ambiguous next week should request day");
         ok(r.hadTime&&!r.validTime&&r.time==null,"two o'clock must ask AM/PM");
         ok(!r.contextHint.isEmpty(),"question shown in review");
+        r=QuickTaskVoiceParser.parse("Comprar el regalo el próximo mes",TODAY);
+        ok(r.date.equals(TODAY.plusMonths(1))&&r.validDate,"next month means same day next month");
         r=QuickTaskVoiceParser.parse("Examen de social studies el próximo jueves",TODAY);
         ok(LocalTime.of(23,59).equals(r.time),"Voice tasks default to 23:59");
         r=QuickTaskVoiceParser.parse("título pagar la luz fecha 10 de octubre hora 4 de la tarde recordatorio cada tres horas",TODAY);
