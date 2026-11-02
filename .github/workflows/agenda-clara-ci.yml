@@ -123,6 +123,7 @@ jobs:
           python3 updates/phase47/apply_widget_floating_3_11_0.py
           python3 updates/phase47/restore_pre_ime_dialog_height.py
           python3 updates/phase47/restore_full_window_metrics.py
+          python3 updates/phase47/install_widget_debug_qa_route.py
           python3 updates/phase47/test_widget_floating_3_11_0.py
           python3 updates/phase29/test_performance_qa.py
 
