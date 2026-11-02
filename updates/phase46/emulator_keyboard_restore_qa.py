@@ -46,13 +46,21 @@ def exercise(action,label,filename):
     time.sleep(4)
     after,_=find_form(hierarchy(),label)
     (OUT/filename).write_bytes(adb('exec-out','screencap','-p',output=True))
-    if height(during)>=height(before)-40:
-        raise AssertionError(f'{label}: keyboard did not shrink dialog (before {before}, during {during})')
-    if height(after)<=height(during)+40:
-        raise AssertionError(f'{label}: dialog remained keyboard-sized (during {during}, after {after})')
+    resized = height(during)<height(before)-40
+    if resized:
+        # Tall dialogs must recover their usable content height after hiding the IME.
+        if height(after)<=height(during)+40:
+            raise AssertionError(f'{label}: dialog remained keyboard-sized (during {during}, after {after})')
+    else:
+        # Short dialogs can already fit above the keyboard at their natural height.
+        # Android moves them up, without shrinking their content, then re-centers them.
+        if during[1]>=before[1]-40:
+            raise AssertionError(f'{label}: dialog neither resized nor moved above keyboard: {before}/{during}')
+        if abs(after[1]-before[1])>65:
+            raise AssertionError(f'{label}: dialog did not return to original position: {before}/{after}')
     if height(after)<height(before)-65:
         raise AssertionError(f'{label}: original height not restored (before {before}, after {after})')
-    print(f'PASS {label}: dialog before/during/after {height(before)}/{height(during)}/{height(after)}')
+    print(f'PASS {label}: dialog before/during/after {height(before)}/{height(during)}/{height(after)}, mode={"resize" if resized else "recenter"}')
 
 adb('shell','settings','put','secure','show_ime_with_hard_keyboard','1')
 exercise('new_sticky_note','Crear nota','27-restauracion-teclado-nota.png')
