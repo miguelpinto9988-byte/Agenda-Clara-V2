@@ -22,10 +22,11 @@ def ensure(root,label):
     node=match(root,label)
     if node is None:raise AssertionError("Missing "+label)
     return node
-# run-as launches a non-exported Activity as its own debug app UID.
+# The exported host Activity routes to private WidgetTaskActivity only in debug builds.
+# Direct am start on android:exported=false is correctly blocked by Android 15.
 adb("shell","am","force-stop",P)
-adb("shell","run-as",P,"am","start","-W","-n",P+"/.WidgetTaskActivity",
-    "-a","pe.agendaclara.app.WIDGET_CREATE")
+adb("shell","am","start","-W","-n",P+"/.MainActivity",
+    "-a","pe.agendaclara.app.WIDGET_QA")
 time.sleep(4)
 root=dump()
 ensure(root,"Nueva tarea");ensure(root,"Tarea rápida por voz");normal=ensure(root,"Tarea normal")
