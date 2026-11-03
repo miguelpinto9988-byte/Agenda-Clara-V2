@@ -1,12 +1,12 @@
 name: Agenda Clara · Biblioteca PNG premium
 on:
   push:
-    branches: [feat/adaptive-iconography-premium-3-12-1]
+    branches: [feat/adaptive-iconography-premium-3-12-1, feat/icon-library-500-fullhd]
   workflow_dispatch:
 jobs:
   iconos-profesionales:
     runs-on: ubuntu-24.04
-    timeout-minutes: 18
+    timeout-minutes: 55
     steps:
       - name: Obtener la rama
         uses: actions/checkout@v4
@@ -29,9 +29,9 @@ jobs:
           from PIL import Image
           z=Path('generated-png')
           icons=sorted(z.glob('ic_adapt_*.png'))
-          assert len(icons)==328
+          assert len(icons)==500
           m=json.loads(Path('icon_pro_artifacts/MANIFEST.json').read_text(encoding='utf8'))
-          assert m['count']==328 and m['png_bytes']<=15000000
+          assert m['count']==500 and m['png_bytes']<=15000000
           for p in icons:
               im=Image.open(p)
               assert im.size==(256,256)
@@ -39,17 +39,21 @@ jobs:
               assert im.convert('RGBA').getpixel((0,0))[3]==0,p
           hashes={hashlib.sha256(p.read_bytes()).hexdigest() for p in icons}
           assert len(hashes)>=280, f'Too many duplicate assets: {len(hashes)}'
-          print('PASS: 328 PNG transparentes 256px; hashes distintos:',len(hashes),'tamaño:',m['png_bytes'])
+          print('PASS: 500 PNG transparentes 256px; hashes distintos:',len(hashes),'tamaño:',m['png_bytes'])
           PY
+      - name: Exportar 500 maestros Full HD con transparencia y reflejos
+        run: python updates/phase53/export_fullhd_500.py
       - name: Publicar biblioteca y muestras
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-328-Iconos-PNG-Alta-Calidad
+          name: Agenda-Clara-500-Iconos-PNG-Alta-Calidad
           path: |
-            icon_pro_artifacts/Agenda-Clara-328-Iconos-Pro.zip
+            icon_pro_artifacts/Agenda-Clara-500-Iconos-Pro.zip
             icon_pro_artifacts/MUESTRA-REAL-ICONOS.png
             icon_pro_artifacts/CATALOGO-*.png
             icon_pro_artifacts/MANIFEST.json
             icon_pro_artifacts/LICENSE-MIT.txt
+            icon_pro_artifacts/Agenda-Clara-500-Iconos-FullHD-2048.zip
+            icon_pro_artifacts/FULLHD-MANIFEST.json
           retention-days: 30
           if-no-files-found: error
