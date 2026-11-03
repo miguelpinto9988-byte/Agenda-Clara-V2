@@ -62,26 +62,44 @@ PY
 )"
 adb shell input tap "$TAP_X" "$TAP_Y"
 sleep 3
-# The redesigned calendar gives its month grid precedence over the class-schedule card.
-# Scroll until the original class-schedule button is visible; never tap blind.
+# 3.12.0: change to the top Plan de estudio panel and open Horario from there.
+adb shell uiautomator dump /sdcard/calendar_panels.xml >/dev/null
+adb shell cat /sdcard/calendar_panels.xml > calendar_panels.xml
+eval "$(python3 - <<'PY'
+import xml.etree.ElementTree as ET,re
+for node in ET.parse('calendar_panels.xml').getroot().iter('node'):
+ text=node.attrib.get('text','')
+ desc=node.attrib.get('content-desc','')
+ if 'Plan de estudio' in text or 'Plan de estudio' in desc:
+  b=list(map(int,re.findall(r'\d+',node.attrib.get('bounds',''))))
+  if len(b)==4:
+   print("PLAN_X="+str((b[0]+b[2])//2))
+   print("PLAN_Y="+str((b[1]+b[3])//2))
+   break
+else:raise SystemExit('No aparece la pestaña superior Plan de estudio')
+PY
+)"
+adb shell input tap "$PLAN_X" "$PLAN_Y"
+sleep 2
+# Scroll to the schedule management action on the new study-plan screen.
 for scroll in 1 2 3 4 5; do
-  adb shell uiautomator dump /sdcard/calendar_ui.xml >/dev/null
-  adb shell cat /sdcard/calendar_ui.xml > calendar_ui.xml
-  if grep -q 'Abrir mi horario' calendar_ui.xml; then break; fi
+  adb shell uiautomator dump /sdcard/study_plan.xml >/dev/null
+  adb shell cat /sdcard/study_plan.xml > study_plan.xml
+  if grep -q 'Crear / Editar horario' study_plan.xml; then break; fi
   adb shell input swipe 540 1740 540 660 300
   sleep 2
 done
 eval "$(python3 - <<'PY'
 import xml.etree.ElementTree as ET,re
-for item in ET.parse('calendar_ui.xml').getroot().iter("node"):
-  text=item.attrib.get('text','')
-  if 'Abrir mi horario' in text:
-    xy=list(map(int,re.findall(r'\d+',item.attrib.get('bounds',''))))
-    if len(xy)==4:
-      print("OPEN_X="+str((xy[0]+xy[2])//2))
-      print("OPEN_Y="+str((xy[1]+xy[3])//2))
-      break
-else:raise SystemExit('No aparece Abrir mi horario en Calendario')
+for item in ET.parse('study_plan.xml').getroot().iter("node"):
+ text=item.attrib.get('text','')+' '+item.attrib.get('content-desc','')
+ if 'Crear / Editar horario' in text:
+  b=list(map(int,re.findall(r'\d+',item.attrib.get('bounds',''))))
+  if len(b)==4:
+   print("OPEN_X="+str((b[0]+b[2])//2))
+   print("OPEN_Y="+str((b[1]+b[3])//2))
+   break
+else:raise SystemExit('No aparece Crear / Editar horario en Plan de estudio')
 PY
 )"
 adb shell input tap "$OPEN_X" "$OPEN_Y"
@@ -120,7 +138,7 @@ adb shell am start -W -n "$PKG/.MainActivity"
 sleep 3
 adb shell pidof "$PKG" >/dev/null
 for file in screenshots/*.png;do test -s "$file";done
-echo "PASS: 2.6.1 instalada; Calendario y Horario; opciones OCR/manual; cuadrícula semanal; reinicio."
+echo "PASS: 3.12.0 instalada; Mi guía, Calendario > Plan de estudio > Horario; opciones OCR/manual; cuadrícula semanal; reinicio."
 
 # Additional design review: category modal, new task, review, and connections.
 bash updates/phase22/emulator_design_qa.sh
