@@ -19,7 +19,23 @@ for node in root.iter('node'):
             break
 else:raise SystemExit('Missing Calendar navigation tab')
 PY
-# The class schedule section can be below the visible part of the month.
+# In 3.12.0 the schedule lives in the top Plan de estudio panel.
+sleep 2
+adb shell uiautomator dump /sdcard/schedule_from_calendar.xml >/dev/null 2>&1
+adb exec-out cat /sdcard/schedule_from_calendar.xml >schedule_from_calendar.xml
+python3 - <<'PYPLAN'
+import re,subprocess,xml.etree.ElementTree as ET
+for node in ET.parse('schedule_from_calendar.xml').getroot().iter('node'):
+    label=node.get('content-desc','')+' '+node.get('text','')
+    if 'Plan de estudio' in label:
+        b=list(map(int,re.findall(r'\d+',node.get('bounds',''))))
+        if len(b)==4:
+            subprocess.run(['adb','shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2)],check=True)
+            break
+else:raise SystemExit('Missing upper Plan de estudio panel')
+PYPLAN
+# The schedule card can be below the visible area.
+
 # Scroll until its real button is visible rather than assuming a fixed viewport.
 sleep 2
 found_schedule=0
@@ -31,11 +47,11 @@ import re,subprocess,xml.etree.ElementTree as ET
 root=ET.parse('schedule_from_calendar.xml').getroot()
 for node in root.iter('node'):
     label=(node.get('content-desc','')+' '+node.get('text',''))
-    if 'Abrir mi horario' in label:
+    if 'Crear / Editar horario' in label:
         b=list(map(int,re.findall(r'\d+',node.get('bounds',''))))
         if len(b)==4:
             subprocess.run(['adb','shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2)],check=True)
-            print("PASS: open class schedule from scrolled Calendar screen")
+            print("PASS: open class schedule from Plan de estudio")
             break
 else:raise SystemExit(1)
 PY
