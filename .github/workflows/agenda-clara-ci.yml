@@ -141,6 +141,8 @@ jobs:
           /tmp/agenda-icon-venv/bin/python updates/phase52/generate_adaptive_pro.py AgendaClara/app/src/main/res/drawable-nodpi icon_pro_artifacts
           /tmp/agenda-icon-venv/bin/python updates/phase52/integrate_premium_3_12_1.py
           /tmp/agenda-icon-venv/bin/python updates/phase53/build_500.py --mode mobile
+          /tmp/agenda-icon-venv/bin/pip install --disable-pip-version-check --quiet CairoSVG==2.8.2
+          /tmp/agenda-icon-venv/bin/python updates/phase54/install_panel_icons.py
           python3 updates/phase53/integrate_ui_icons.py
           /tmp/agenda-icon-venv/bin/python updates/phase54/render_panels.py
           /tmp/agenda-icon-venv/bin/python updates/phase53/test_500.py
