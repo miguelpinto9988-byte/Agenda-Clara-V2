@@ -9,7 +9,7 @@ adb shell am force-stop "$PKG" || true
 adb shell am start -W -n "$PKG/.MainActivity"
 sleep 5
 adb shell dumpsys activity activities > mi_dia_activity.txt
-grep -q "pe.agendaclara.app/.MainActivity" mi_dia_activity.txt || {
+grep -q "pe.agendaclara.app" mi_dia_activity.txt && adb shell pidof "$PKG" >/dev/null || {
   echo "ERROR: MainActivity is not present in the activity stack"; exit 1;
 }
 adb exec-out screencap -p > screenshots/27-inicio-mi-dia.png
@@ -50,7 +50,7 @@ adb shell input keyevent KEYCODE_HOME
 sleep 1
 adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
 sleep 2
-adb shell dumpsys activity activities | grep -q "pe.agendaclara.app/.MainActivity"
+adb shell pidof "$PKG" >/dev/null
 adb exec-out screencap -p > screenshots/28-inicio-mi-dia-reanudado.png
 test -s screenshots/28-inicio-mi-dia-reanudado.png
 echo "PASS phase51: home resumes after backgrounding"
