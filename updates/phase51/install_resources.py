@@ -39,15 +39,11 @@ def install(package):
         for name in OTHER[1:]:
             if b"package pe.agendaclara.app;" not in files[name]:
                 raise RuntimeError("Unexpected Java package: " + name)
-        for name, data in files.items():
-            target = ROOT / name
-            if target.exists() and target.read_bytes() != data:
-                raise RuntimeError("Refusing to overwrite existing file: " + name)
-        for name, data in files.items():
+        # Phase51 text sources are staged from GitHub, so the ZIP may carry\n        # older Java drafts. Keep the reviewed sources already in the tree.\n        for name in EXPECTED:\n            target = ROOT / name\n            if target.exists() and target.read_bytes() != files[name]:\n                raise RuntimeError("Refusing to overwrite existing PNG: " + name)\n        for name in EXPECTED:
             target = ROOT / name
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(data)
-    print("PASS: 30 PNG, 50 phrases, two Java classes installed; MainActivity not modified")
+    print("PASS: 30 PNG installed; ZIP text resources validated; staged Java/XML unchanged; MainActivity not modified")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
