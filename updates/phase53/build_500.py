@@ -7,7 +7,7 @@ from __future__ import annotations
 from concurrent.futures import ThreadPoolExecutor
 from collections import Counter
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageChops
+from PIL import Image, ImageDraw, ImageChops, ImageEnhance, ImageFilter
 import argparse, hashlib, io, json, urllib.parse, urllib.request, zipfile
 
 GROUPS = [
@@ -88,6 +88,19 @@ def draw_icon(primary,secondary,size,extra,key):
         d.ellipse((cx-rad,cy-rad,cx+rad,cy+rad),fill=(255,255,255,90+(seed[7]%100)))
         gloss.putalpha(ImageChops.multiply(gloss.getchannel('A'),canvas.getchannel('A')))
         canvas.alpha_composite(gloss)
+    # Rich, solid pigments and a deliberate navy silhouette like the approved
+    # bold 3D reference; no gradient background or opaque bounding tile.
+    alpha=canvas.getchannel('A')
+    saturated=ImageEnhance.Color(canvas.convert('RGB')).enhance(1.75)
+    saturated=ImageEnhance.Contrast(saturated).enhance(1.12)
+    vivid=saturated.convert('RGBA')
+    vivid.putalpha(alpha)
+    outline_width=max(3,int(size*.015))
+    if outline_width%2==0:outline_width+=1
+    rim=ImageChops.subtract(alpha.filter(ImageFilter.MaxFilter(outline_width)),alpha)
+    border=Image.new('RGBA',(size,size),(16,26,74,255))
+    border.putalpha(rim.point(lambda a:int(a*.87)))
+    canvas=Image.alpha_composite(border,vivid)
     assert canvas.getpixel((0,0))[3]==0
     return canvas
 
