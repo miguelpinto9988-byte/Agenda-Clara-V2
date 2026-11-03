@@ -80,6 +80,8 @@ public final class MiDiaDashboard {
         List<Task> all = Store.get(activity).all();
         TaskSummary.Result summary = TaskSummary.calculate(all, now,
                 Store.get(activity).completedSince(now - 7L * 86400000L));
+        final boolean noProgressData = summary.completed7days == 0 && summary.pending == 0;
+        final int displayedProgress = noProgressData ? 0 : summary.percentage;
         List<Task> dayTasks = new ArrayList<>();
         int studyPending = 0;
         for (Task task : all) {
@@ -111,7 +113,7 @@ public final class MiDiaDashboard {
         activity.gap(content, 11);
         addStatRow(activity, content,
                 stat(activity, "✎", String.valueOf(studyPending), "Estudio", "Actividades pendientes", 0xfffff5e5, "ic_midia_estudio"),
-                stat(activity, "◉", summary.percentage + "%", "Progreso", "Avance de 7 días", 0xffeaf8f0, "ic_midia_logros"));
+                stat(activity, "◉", noProgressData ? "—" : displayedProgress + "%", "Progreso", "Avance de 7 días", 0xffeaf8f0, "ic_midia_logros"));
         activity.gap(content, 23);
 
         LinearLayout heading = activity.row();
@@ -171,12 +173,12 @@ public final class MiDiaDashboard {
         activity.gap(progressCard, 11);
         ProgressBar progress = new ProgressBar(activity, null, android.R.attr.progressBarStyleHorizontal);
         progress.setMax(100);
-        progress.setProgress(summary.percentage);
+        progress.setProgress(displayedProgress);
         progress.setProgressTintList(ColorStateList.valueOf(0xff6554d8));
         progress.setProgressBackgroundTintList(ColorStateList.valueOf(0xffe5e9f2));
         progressCard.addView(progress, new LinearLayout.LayoutParams(-1, activity.dp(8)));
         activity.gap(progressCard, 7);
-        progressCard.addView(label(activity, summary.percentage + "% · completadas en 7 días respecto de pendientes actuales", 11, MUTED, false));
+        progressCard.addView(label(activity, (noProgressData ? "Aún no hay actividad para calcular el progreso" : displayedProgress + "% · completadas en 7 días respecto de pendientes actuales"), 11, MUTED, false));
 
         content.addView(activity.button(activity.dashboardAllTasksExpanded
                 ? "Ocultar lista completa de tareas" : "Todas mis tareas y categorías", () -> {
