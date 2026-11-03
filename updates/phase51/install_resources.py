@@ -30,7 +30,9 @@ def install(package):
             files[name] = archive.read(name)
         for name in EXPECTED:
             data = files[name]
-            if not data.startswith(b"\x89PNG\r\n\x1a\n") or struct.unpack(">II", data[16:24]) != (1920, 864):
+            if not data.startswith(b"\x89PNG\r
+\x1a
+") or struct.unpack(">II", data[16:24]) != (1920, 864):
                 raise RuntimeError("Unexpected PNG format/dimensions: " + name)
         root = ET.fromstring(files[OTHER[0]])
         phrases = root.find("string-array")
@@ -39,10 +41,16 @@ def install(package):
         for name in OTHER[1:]:
             if b"package pe.agendaclara.app;" not in files[name]:
                 raise RuntimeError("Unexpected Java package: " + name)
-        # Phase51 text sources are staged from GitHub, so the ZIP may carry\n        # older Java drafts. Keep the reviewed sources already in the tree.\n        for name in EXPECTED:\n            target = ROOT / name\n            if target.exists() and target.read_bytes() != files[name]:\n                raise RuntimeError("Refusing to overwrite existing PNG: " + name)\n        for name in EXPECTED:
+        # Phase51 text sources are staged from GitHub, so the ZIP may carry
+        # older Java drafts. Keep the reviewed sources already in the tree.
+        for name in EXPECTED:
+            target = ROOT / name
+            if target.exists() and target.read_bytes() != files[name]:
+                raise RuntimeError("Refusing to overwrite existing PNG: " + name)
+        for name in EXPECTED:
             target = ROOT / name
             target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_bytes(data)
+            target.write_bytes(files[name])
     print("PASS: 30 PNG installed; ZIP text resources validated; staged Java/XML unchanged; MainActivity not modified")
 
 if __name__ == "__main__":
