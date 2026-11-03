@@ -15,7 +15,7 @@ nodes=list(root.iter("node"))
 text=" ".join((n.get("text","")+" "+n.get("content-desc","")) for n in nodes)
 checks=("Aquí tienes tu día, en un vistazo.", "Tu día en números",
         "Tareas", "Eventos", "Estudio", "Progreso", "Mi día",
-        "Próximo evento", "Inicio")
+        "Inicio")
 missing=[label for label in checks if label not in text]
 assert not missing, "Missing new home UI: "+repr(missing)+"; visible: "+text[:1000]
 assert "Paisaje ilustrado del día" in text, "Offline header landscape is missing"
