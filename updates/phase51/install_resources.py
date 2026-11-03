@@ -30,9 +30,7 @@ def install(package):
             files[name] = archive.read(name)
         for name in EXPECTED:
             data = files[name]
-            if not data.startswith(b"\x89PNG\r
-\x1a
-") or struct.unpack(">II", data[16:24]) != (1920, 864):
+            if data[:8] != bytes((137, 80, 78, 71, 13, 10, 26, 10)) or struct.unpack(">II", data[16:24]) != (1920, 864):
                 raise RuntimeError("Unexpected PNG format/dimensions: " + name)
         root = ET.fromstring(files[OTHER[0]])
         phrases = root.find("string-array")
