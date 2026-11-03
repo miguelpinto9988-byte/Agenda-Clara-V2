@@ -6,8 +6,15 @@ PKG=pe.agendaclara.app
 adb shell am force-stop "$PKG" || true
 adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
 sleep 5
-adb shell uiautomator dump /sdcard/mi_dia_ui.xml >/dev/null 2>&1
-adb exec-out cat /sdcard/mi_dia_ui.xml > mi_dia_ui.xml
+for attempt in 1 2 3 4 5; do
+  if adb shell uiautomator dump /sdcard/mi_dia_ui.xml >mi_dia_dump.log 2>&1 &&
+     adb exec-out cat /sdcard/mi_dia_ui.xml >mi_dia_ui.xml; then
+    break
+  fi
+  cat mi_dia_dump.log || true
+  sleep 3
+done
+test -s mi_dia_ui.xml || { echo "ERROR: no accessible Mi día UI"; exit 1; }
 python3 - <<'PY'
 import xml.etree.ElementTree as ET
 root=ET.parse("mi_dia_ui.xml").getroot()
