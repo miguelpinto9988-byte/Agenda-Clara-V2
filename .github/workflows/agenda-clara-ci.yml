@@ -131,6 +131,7 @@ jobs:
           python3 updates/phase49/test_white_widgets_3_11_2.py
           python3 updates/phase50/apply_widgets_3_11_3.py
           python3 updates/phase50/test_widgets_3_11_3.py
+          python3 updates/phase51/stage_text_resources.py
           python3 updates/phase29/test_performance_qa.py
 
       - name: Recuperar clave de desarrollo privada
