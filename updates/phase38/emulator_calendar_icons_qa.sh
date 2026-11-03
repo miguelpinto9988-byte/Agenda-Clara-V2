@@ -27,7 +27,7 @@ import subprocess
 import time
 import xml.etree.ElementTree as ET
 
-required = {"Ir a hoy", "Horario de clases"}
+required = {"Ir a hoy", "Plan de estudio"}
 found = set()
 for attempt in range(8):
     subprocess.run(["adb", "shell", "uiautomator", "dump",
@@ -52,7 +52,7 @@ for attempt in range(8):
     time.sleep(2)
 else:
     raise AssertionError(
-        "Calendar controls not found after scrolling: " + ", ".join(sorted(required - found))
+        "Calendar/Study panel controls not found after scrolling: " + ", ".join(sorted(required - found))
     )
 PY
 adb exec-out screencap -p >screenshots/25-calendario-dos-iconos-png.png
