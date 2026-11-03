@@ -28,9 +28,17 @@ import android.widget.Button;
 public final class FeatureIconLibrary {
     private FeatureIconLibrary(){}
     private static final String[][] ACTIONS={
-        {"ui_class_schedule","horario de clases|crear editar horario|horario semanal|ver horario"},
+        {"ui_my_guide","mi dia|resumen de hoy|mi jornada|mi guia"},
+        {"ui_course_add","mis cursos|nuevo curso|agregar curso|anadir curso|crear curso"},
+        {"ui_course_edit","editar curso|modificar curso"},
+        {"ui_exam_schedule","calendario de examenes|proximos examenes|fechas de examen"},
+        {"ui_exam_results","resultados de examen|notas de examenes|calificaciones"},
+        {"ui_study_progress","progreso de estudio|avance diario|progreso del dia"},
+        {"ui_class_today","clases de hoy|mis clases hoy"},
+        {"ui_class_week","horario semanal|clases de la semana"},
+        {"ui_class_schedule","horario de clases|crear editar horario|ver horario|mis horarios|horarios"},
         {"ui_exam_add","anadir examen|agregar examen|nuevo examen"},
-        {"ui_exam_review","examene|evaluacion|revisar examen"},
+        {"ui_exam_review","examenes|mis examenes|evaluaciones|revisar examen"},
         {"ui_pdf_import","analizar silabo|importar pdf|documento pdf|importar silabo"},
         {"ui_new_task","nueva tarea|agregar tarea|crear tarea|anadir tarea"},
         {"ui_edit_task","editar tarea|modificar tarea"},
@@ -41,7 +49,7 @@ public final class FeatureIconLibrary {
         {"ui_task_search","buscar tareas"},
         {"ui_new_note","nueva nota|crear nota|anadir nota"},
         {"ui_notes_gallery","mis notas adhesivas|ver notas"},
-        {"ui_calendar_today","ir a hoy|hoy"},
+        {"ui_calendar_today","ir a hoy|ver calendario hoy"},
         {"ui_calendar_add","nuevo evento|anadir evento"},
         {"ui_calendar_schedule","calendario y actividades|ver calendario"},
         {"ui_calendar_sync","google calendar|sincronizar calendario"},
@@ -123,4 +131,4 @@ for old,new in changes.items():
     assert text.count(old)==1,(old,text.count(old))
     text=text.replace(old,new)
 home.write_text(text,encoding='utf8')
-print('PASS 500-icon UI binding: buttons in MainActivity/ScheduleActivity and 4 dashboard tiles, study/calendar/exams headings')
+print('PASS 500-icon UI binding: panels Mi dia, Examenes, Horarios, Cursos; actions and dashboard')
