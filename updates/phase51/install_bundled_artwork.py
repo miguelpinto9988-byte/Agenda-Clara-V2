@@ -47,6 +47,20 @@ def install():
             files[name] = data
     if len(set(hashlib.sha256(data).hexdigest() for data in files.values())) != 30:
         raise RuntimeError("Backgrounds must all be distinct")
+    # Restore the approved transparent 256px icons used by the four stat cards.
+    icons_zip = PARTS / "mi_dia_icons.zip"
+    icons_bytes = icons_zip.read_bytes()
+    if hashlib.sha256(icons_bytes).hexdigest() != "ced53cff801dea8914f2485828f20fff786fa5e6a0a7dfd473ad7a720b4751fe":
+        raise RuntimeError("Approved icon ZIP checksum mismatch")
+    with ZipFile(io.BytesIO(icons_bytes)) as icon_archive:
+        if icon_archive.testzip() is not None:
+            raise RuntimeError("Icon archive CRC verification failed")
+        for icon in ("ic_midia_tareas.png", "ic_midia_eventos.png",
+                     "ic_midia_estudio.png", "ic_midia_logros.png"):
+            data = icon_archive.read(icon)
+            if data[:8] != PNG_SIGNATURE or struct.unpack(">II", data[16:24]) != (256, 256):
+                raise RuntimeError("Unexpected approved icon dimensions: " + icon)
+            files[icon] = data
     for name, data in files.items():
         target = ROOT / Path(name).name
         if target.exists() and target.read_bytes() != data:
@@ -56,7 +70,7 @@ def install():
         target = ROOT / Path(name).name
         if not target.exists():
             target.write_bytes(data)
-    print("PASS phase51: 30 distinct approved 1920x864 PNGs installed offline; archive SHA-256:", digest)
+    print("PASS phase51: 30 distinct approved 1920x864 PNGs plus 4 transparent card icons installed offline; archive SHA-256:", digest)
 
 
 if __name__ == "__main__":
