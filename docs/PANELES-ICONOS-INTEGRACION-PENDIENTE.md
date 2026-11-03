@@ -1,26 +1,31 @@
-# Paneles: iconos Exámenes, Horarios, Cursos y Mi día
+# Iconografía de paneles — Agenda Clara (Exámenes, Horarios, Cursos y Mi día)
 
-Estado: integración de rutas y etiquetas iniciada en esta rama. La compilación de Android utiliza la biblioteca existente hasta que se suban los cuatro PNG nuevos; no afirmar que contiene las ilustraciones finales antes de sustituirlos.
+La rama construye **cuatro iconos nuevos** (PNG con transparencia) en lugar de reutilizar las imágenes antiguas de esos cuatro recursos. La generación y sustitución ocurren **después** del catálogo de 500 iconos, antes de la compilación de la APK.
 
-## Archivos esperados
-Los archivos deben almacenarse en el proyecto Android después de reconstruir las fuentes, en `AgendaClara/app/src/main/res/drawable-nodpi/`, con estos nombres exactos:
+## Recursos y secciones
 
-| Panel | Archivo | Motivo visual |
+| Panel | Recurso Android | PNG Full HD |
 | --- | --- | --- |
-| Exámenes | `ic_adapt_ui_exam_review.png` | Lista de examen y birrete morado |
-| Horarios | `ic_adapt_ui_class_schedule.png` | Calendario morado con reloj cian |
-| Cursos | `ic_adapt_ui_course_add.png` | Libros con birrete |
-| Mi día | `ic_adapt_ui_my_guide.png` | Lista diaria y calendario |
+| Exámenes | `ic_adapt_ui_exam_review.png` | `icon_library_500/panel_fhd_2048/ic_adapt_ui_exam_review.png` |
+| Horarios | `ic_adapt_ui_class_schedule.png` | `icon_library_500/panel_fhd_2048/ic_adapt_ui_class_schedule.png` |
+| Cursos | `ic_adapt_ui_course_add.png` | `icon_library_500/panel_fhd_2048/ic_adapt_ui_course_add.png` |
+| Mi día | `ic_adapt_ui_my_guide.png` | `icon_library_500/panel_fhd_2048/ic_adapt_ui_my_guide.png` |
 
-Los archivos generados por el usuario se encuentran en el paquete `Agenda-Clara-4-Iconos-Paneles-PNG.zip` entregado en la conversación. El repositorio aún no incluye sus bytes. Las imágenes no deben sustituirse por la lámina de 20 iconos con fondo degradado.
+- Generador reproducible: `updates/phase54/render_panels.py`.
+- Estilo buscado: formas 3D redondeadas, colores sólidos variados, bordes reforzados, reflejos blancos localizados; transparencia RGBA y sin fondo degradado.
+- Originales: **2048 × 2048** píxeles.
+- Versiones Android: **256 × 256** píxeles, optimizadas para controles pequeños.
+- El generador elimina los cuatro recursos antiguos antes de crear sus reemplazos.
+- Los demás 496 recursos continúan disponibles para las funciones que dependen de ellos.
 
-## Criterios de aceptación
-1. PNG con canal alfa y transparencia comprobada, sin halo/fondo continuo.
-2. La ruta del recurso y el identificador deben coincidir.
-3. Verificar su proporción, legibilidad a 24–48 dp y contraste en temas claro/oscuro.
-4. Sustituir los cuatro `ic_adapt_*.png` **después** de `updates/phase53/build_500.py --mode mobile`, porque ese generador sobrescribe los recursos.
-5. Repetir las pruebas `updates/phase53/test_500.py` y compilar la APK. No alterar datos de usuario ni la rama principal.
-6. Validar visualmente en el emulador las cuatro secciones.
+**Nota:** los cuatro PNG del generador son aproximaciones nuevas en geometría y color al estilo de referencia. No son las cuatro imágenes exactas generadas anteriormente en la conversación; esas imágenes no se han transferido como binarios a GitHub.
 
-## Mapeo de la interfaz
-`updates/phase53/integrate_ui_icons.py` resuelve títulos y acciones de Exámenes, Horarios, Cursos y Mi día. Es un cambio de enrutamiento, no una afirmación de que los PNG nuevos ya están empaquetados.
+## Puertas de calidad
+
+- Ejecutar `updates/phase53/test_500.py` después del reemplazo.
+- Verificar los cuatro PNG finales y su canal alfa, hashes distintos y resoluciones en CI.
+- Comprobar instalación y navegación de la APK en emulador Android 15.
+- Revisar visualmente los paneles en la APK antes del merge.
+- Conservar `main` sin cambios hasta completar la revisión.
+
+Los archivos resultantes se publican como artefacto de GitHub Actions `Agenda-Clara-Paneles-4-Iconos-FHD-2048`; el ensamblado Android incluye las versiones reducidas dentro de la APK.
