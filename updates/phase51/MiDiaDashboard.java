@@ -1,6 +1,7 @@
 package pe.agendaclara.app;
 
 import android.content.res.ColorStateList;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,11 +27,23 @@ public final class MiDiaDashboard {
     }
 
     private static LinearLayout stat(MainActivity activity, String emoji, String value,
-                                     String title, String detail, int tint) {
+                                     String title, String detail, int tint, String image) {
         LinearLayout tile = activity.column();
         tile.setPadding(activity.dp(14), activity.dp(13), activity.dp(12), activity.dp(13));
         tile.setBackground(activity.rounded(tint, 18));
-        tile.addView(label(activity, emoji + "  " + value, 24, INK, true));
+        LinearLayout headline = activity.row();
+        int imageId = activity.getResources().getIdentifier(image, "drawable", activity.getPackageName());
+        if (imageId != 0) {
+            ImageView icon = new ImageView(activity);
+            icon.setImageResource(imageId);
+            icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            icon.setContentDescription(title);
+            LinearLayout.LayoutParams iconSize = new LinearLayout.LayoutParams(activity.dp(40), activity.dp(40));
+            iconSize.rightMargin = activity.dp(5);
+            headline.addView(icon, iconSize);
+        }
+        headline.addView(label(activity, (imageId == 0 ? emoji + "  " : "") + value, 24, INK, true));
+        tile.addView(headline);
         activity.gap(tile, 7);
         tile.addView(label(activity, title, 14, INK, true));
         tile.addView(label(activity, detail, 11, MUTED, false));
@@ -92,13 +105,13 @@ public final class MiDiaDashboard {
         content.addView(label(activity, "Tu día en números", 18, INK, true));
         activity.gap(content, 11);
         addStatRow(activity, content,
-                stat(activity, "✓", String.valueOf(dayTasks.size()), "Tareas", "Para hoy y atrasadas", 0xffedf5ff),
+                stat(activity, "✓", String.valueOf(dayTasks.size()), "Tareas", "Para hoy y atrasadas", 0xffedf5ff, "ic_midia_tareas"),
                 stat(activity, "◷", calendarAllowed ? String.valueOf(eventsToday) : "—", "Eventos",
-                        calendarAllowed ? "Hoy en tus calendarios" : "Conecta calendario", 0xfff2edff));
+                        calendarAllowed ? "Hoy en tus calendarios" : "Conecta calendario", 0xfff2edff, "ic_midia_eventos"));
         activity.gap(content, 11);
         addStatRow(activity, content,
-                stat(activity, "✎", String.valueOf(studyPending), "Estudio", "Actividades pendientes", 0xfffff5e5),
-                stat(activity, "◉", summary.percentage + "%", "Progreso", "Avance de 7 días", 0xffeaf8f0));
+                stat(activity, "✎", String.valueOf(studyPending), "Estudio", "Actividades pendientes", 0xfffff5e5, "ic_midia_estudio"),
+                stat(activity, "◉", summary.percentage + "%", "Progreso", "Avance de 7 días", 0xffeaf8f0, "ic_midia_logros"));
         activity.gap(content, 23);
 
         LinearLayout heading = activity.row();
@@ -114,7 +127,7 @@ public final class MiDiaDashboard {
             int limit = Math.min(5, dayTasks.size());
             for (int i = 0; i < limit; i++) activity.taskCard(content, dayTasks.get(i));
             if (dayTasks.size() > limit) {
-                content.addView(activity.button("Ver todas las tareas de hoy (" + dayTasks.size() + ")", () -> {
+                content.addView(activity.button("Abrir lista completa de tareas (" + dayTasks.size() + " para hoy)", () -> {
                     activity.dashboardAllTasksExpanded = true;
                     activity.render();
                 }));
