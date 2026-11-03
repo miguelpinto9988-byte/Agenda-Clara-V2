@@ -31,6 +31,8 @@ read_ui(){
     adb shell uiautomator dump /sdcard/design_ui.xml >/dev/null 2>&1
     adb exec-out cat /sdcard/design_ui.xml >design_ui.xml
 }
+# Mi guía replaces the old Agenda page: open Tareas explicitly before testing category management.
+tap_node "Abrir Tareas"
 read_ui
 grep -q 'Mis categorías' design_ui.xml
 grep -q 'General' design_ui.xml
