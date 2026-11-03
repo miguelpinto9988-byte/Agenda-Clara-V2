@@ -2,7 +2,7 @@
 name: Agenda Clara 3.12.1 · Mi guía, exámenes e iconos profesionales
 on:
   push:
-    branches: [main, feat/top-plus-png-motion-3-8-2, feat/remove-compose-daily-view-3-8-2, feat/full-ui-categories-responsive-3-8-2, feat/category-only-agenda-navigation-3-8-2, feat/reference-iconography-branded-pickers-3-8-2, feat/png-approved-icons-symbol-color-pickers-3-8-2, feat/restore-nav-icons-performance-cleanup-3-8-2, feat/sticky-notes-plus-menu-3-9-0, feat/sticky-notes-home-widget-3-9-1, fix/category-selected-png-icons-3-9-2, feat/polished-sticky-art-3-9-3, feat/sticky-responsive-accessibility-3-9-4, feat/whatsapp-context-understanding-3-9-5, feat/schedule-photo-course-reconciliation-3-9-6, feat/schedule-per-day-12h-3-9-7, feat/calendar-png-today-schedule-3-9-8, feat/calendar-clean-transparent-png-3-9-9, restore/whatsapp-two-stage-300ms-3-10-3, fix/whatsapp-session-retry-3-10-4, fix/whatsapp-final-hardening-3-10-5, feat/voice-quick-task-general-catalog-3-10-6, feat/calendar-visual-task-note-3-10-7, feat/voice-natural-language-3-10-8, fix/calendar-remove-week-dialog-keyboard-3-10-9, feat/widget-floating-voice-manual-3-11-0, feat/academic-context-order-3-11-1, feat/white-widgets-preserve-icons-3-11-2, feat/widget-icons-waves-3-11-3, feat/home-study-exams-adaptive-icons-3-12-0, feat/adaptive-iconography-premium-3-12-1]
+    branches: [main, feat/top-plus-png-motion-3-8-2, feat/remove-compose-daily-view-3-8-2, feat/full-ui-categories-responsive-3-8-2, feat/category-only-agenda-navigation-3-8-2, feat/reference-iconography-branded-pickers-3-8-2, feat/png-approved-icons-symbol-color-pickers-3-8-2, feat/restore-nav-icons-performance-cleanup-3-8-2, feat/sticky-notes-plus-menu-3-9-0, feat/sticky-notes-home-widget-3-9-1, fix/category-selected-png-icons-3-9-2, feat/polished-sticky-art-3-9-3, feat/sticky-responsive-accessibility-3-9-4, feat/whatsapp-context-understanding-3-9-5, feat/schedule-photo-course-reconciliation-3-9-6, feat/schedule-per-day-12h-3-9-7, feat/calendar-png-today-schedule-3-9-8, feat/calendar-clean-transparent-png-3-9-9, restore/whatsapp-two-stage-300ms-3-10-3, fix/whatsapp-session-retry-3-10-4, fix/whatsapp-final-hardening-3-10-5, feat/voice-quick-task-general-catalog-3-10-6, feat/calendar-visual-task-note-3-10-7, feat/voice-natural-language-3-10-8, fix/calendar-remove-week-dialog-keyboard-3-10-9, feat/widget-floating-voice-manual-3-11-0, feat/academic-context-order-3-11-1, feat/white-widgets-preserve-icons-3-11-2, feat/widget-icons-waves-3-11-3, feat/home-study-exams-adaptive-icons-3-12-0, feat/adaptive-iconography-premium-3-12-1, feat/icon-library-500-fullhd-reflections]
     paths:
       - 'updates/**'
       - 'Agenda-Clara-1.3.0-Fuentes-Sin-Clave.zip'
@@ -140,6 +140,9 @@ jobs:
           python3 updates/phase51/test_release.py
           /tmp/agenda-icon-venv/bin/python updates/phase52/generate_adaptive_pro.py AgendaClara/app/src/main/res/drawable-nodpi icon_pro_artifacts
           /tmp/agenda-icon-venv/bin/python updates/phase52/integrate_premium_3_12_1.py
+          /tmp/agenda-icon-venv/bin/python updates/phase53/build_500.py --mode mobile
+          python3 updates/phase53/integrate_ui_icons.py
+          /tmp/agenda-icon-venv/bin/python updates/phase53/test_500.py
           python3 updates/phase29/test_performance_qa.py
 
       - name: Recuperar clave de desarrollo privada
