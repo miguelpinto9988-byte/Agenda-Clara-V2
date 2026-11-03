@@ -133,6 +133,18 @@ jobs:
           python3 updates/phase50/test_widgets_3_11_3.py
           python3 updates/phase51/test_installer.py
           python3 updates/phase51/stage_text_resources.py
+          python3 updates/phase51/apply_mi_dia.py
+          python3 - <<'PY'
+          from pathlib import Path
+          app = Path("AgendaClara/app/src/main")
+          main = (app / "java/pe/agendaclara/app/MainActivity.java").read_text()
+          dashboard = (app / "java/pe/agendaclara/app/MiDiaDashboard.java").read_text()
+          assert 'if(page==0)MiDiaDashboard.render(this);' in main
+          assert 'void tasksPage()' in main
+          assert 'CalendarBridge.selectedEvents(activity)' in dashboard
+          assert 'summary.completed7days' in dashboard
+          print("PASS phase51: home attached to the existing task and calendar data")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           import xml.etree.ElementTree as ET
