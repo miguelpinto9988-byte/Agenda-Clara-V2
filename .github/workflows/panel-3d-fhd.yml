@@ -1,0 +1,74 @@
+name: Agenda Clara · Paneles 3D Full HD · Exportación
+on:
+  push:
+    branches: [feat/panel-3d-fhd-icons-only]
+    paths:
+      - 'updates/phase54/export_4_panels_fhd.py'
+      - '.github/workflows/panel-3d-fhd.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generar-validar-exportar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preparar exportación PNG
+        run: python -m pip install --disable-pip-version-check Pillow==11.3.0 CairoSVG==2.8.2
+      - name: Generar PNG independientes para los paneles
+        run: python updates/phase54/export_4_panels_fhd.py
+      - name: Control estricto de dimensiones, transparencia y reemplazo
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import json, hashlib
+          base=Path('assets/iconografia/paneles')
+          manifest=json.loads((base/'manifest.json').read_text(encoding='utf-8'))
+          assert manifest['count']==4 and len(manifest['icons'])==4
+          assert len(list((base/'fullhd-2048').glob('*.png')))==4
+          assert len(list((base/'android-256').glob('*.png')))==4
+          keys=[r['key'] for r in manifest['icons']]
+          assert set(keys)=={'ui_exam_review','ui_class_schedule','ui_course_add','ui_my_guide'}
+          for size,subfolder in ((2048,'fullhd-2048'),(256,'android-256')):
+              hashes=set()
+              for entry in manifest['icons']:
+                  icon=base/subfolder/entry['filename']
+                  with Image.open(icon) as im:
+                      rgba=im.convert('RGBA')
+                      assert rgba.size==(size,size) and rgba.getpixel((0,0))[3]==0
+                      assert rgba.getchannel('A').getbbox() is not None
+                  digest=hashlib.sha256(icon.read_bytes()).hexdigest()
+                  assert digest==entry['assets'][str(size)]['sha256']
+                  hashes.add(digest)
+              assert len(hashes)==4
+          print('PASS: 8 PNG, 4 recursos individuales, transparencia, nombres, hashes y resoluciones')
+          PY
+      - name: Incorporar los PNG al repositorio en la rama de revisión
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/iconografia/paneles/
+          if git diff --cached --quiet; then
+            echo 'Ya existen los PNG finales sin cambios.'
+          else
+            git commit -m 'assets(icons): replace four legacy panel visuals with transparent FHD PNGs'
+            git push origin HEAD:feat/panel-3d-fhd-icons-only
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-4-Iconos-Paneles-FHD
+          path: assets/iconografia/paneles/
+          retention-days: 30
+          if-no-files-found: error
