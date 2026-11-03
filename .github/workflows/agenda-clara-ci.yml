@@ -133,6 +133,7 @@ jobs:
           python3 updates/phase50/test_widgets_3_11_3.py
           python3 updates/phase51/test_installer.py
           python3 updates/phase51/stage_text_resources.py
+          python3 updates/phase51/install_bundled_artwork.py
           python3 updates/phase51/apply_mi_dia.py
           python3 - <<'PY'
           from pathlib import Path
