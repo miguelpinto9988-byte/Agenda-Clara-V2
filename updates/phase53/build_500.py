@@ -109,6 +109,71 @@ def build(project,output,mode):
     candidate=sorted(set(base_sources.values()))
     repeats=Counter(base_sources.values())
     selected={}
+    # UI actions are anchored to the relevant object, not to an arbitrary group.
+    asset_named={asset.split('/')[1].lower():asset for asset in candidate}
+    mappings=[
+        ('voice_', 'Microphone', 'Musical notes|Speech balloon|Alarm clock|Spiral notepad'),
+        ('whatsapp_', 'Speech balloon', 'Handshake|Notebook|Globe with meridians|Bell'),
+        ('calendar_', 'Spiral calendar', 'Alarm clock|Stopwatch|Clipboard|Pencil|Bell'),
+        ('notify_', 'Bell', 'Alarm clock|Glowing star|Calendar|Megaphone'),
+        ('search_', 'Magnifying glass tilted left', 'File folder|Books|Calendar|Notebook'),
+        ('pdf_', 'Page facing up', 'Books|Clipboard|File folder'),
+        ('document_', 'Page facing up', 'Pencil|File folder|Books'),
+        ('file_', 'File folder', 'Page facing up|Pencil|Notebook'),
+        ('widget_', 'Desktop computer', 'Clipboard|Spiral notepad|Microphone|Calendar'),
+        ('backup_', 'Computer disk', 'File folder|Gear|Clipboard'),
+        ('privacy_', 'Balance scale', 'Handshake|Globe with meridians|File folder'),
+        ('theme_', 'Artist palette', 'Light bulb|Glowing star|Paintbrush'),
+        ('app_settings', 'Gear', 'Computer disk|File folder|Light bulb'),
+        ('high_contrast', 'Artist palette', 'Glowing star|Light bulb'),
+        ('text_size', 'Input latin letters', 'Books|Notebook'),
+        ('reduced_motion', 'Stopwatch', 'Gear|Calendar'),
+        ('language_settings', 'Input latin letters', 'Globe with meridians|Books'),
+        ('network_', 'Globe with meridians', 'Laptop|Electric plug|Gear'),
+        ('storage_', 'Computer disk', 'File folder|Laptop'),
+        ('data_', 'Computer disk', 'File folder|Clipboard|Balance scale'),
+        ('trash_', 'Minus', 'File folder|Clipboard|Memo'),
+        ('action_save', 'Computer disk', 'Glowing star|Clipboard'),
+        ('action_delete', 'Minus', 'File folder|Clipboard'),
+        ('action_edit', 'Pencil', 'Notebook|Memo|Clipboard'),
+        ('action_add', 'Glowing star', 'Clipboard|Notebook|Calendar'),
+        ('action_copy', 'Clipboard', 'Notebook|File folder'),
+        ('action_paste', 'Clipboard', 'File folder|Page facing up'),
+        ('action_retry', 'Gear', 'Stopwatch|Calendar'),
+        ('action_share', 'Handshake', 'Globe with meridians|Speech balloon'),
+        ('action_done', 'Trophy', 'Glowing star|Clipboard'),
+        ('action_cancel', 'Minus', 'Clipboard|Calendar'),
+        ('task_', 'Clipboard', 'Pencil|Alarm clock|Bell|Glowing star|File folder'),
+        ('notes_', 'Spiral notepad', 'Pencil|Open book|File folder'),
+        ('note_', 'Spiral notepad', 'Pencil|Open book|File folder'),
+        ('new_task', 'Clipboard', 'Pencil|Glowing star'),
+        ('new_note', 'Spiral notepad', 'Pencil|Glowing star'),
+        ('edit_task', 'Clipboard', 'Pencil|Notebook'),
+        ('edit_note', 'Spiral notepad', 'Pencil|Notebook'),
+        ('delete_task', 'Clipboard', 'Minus|File folder'),
+        ('delete_note', 'Spiral notepad', 'Minus|File folder'),
+        ('complete_task', 'Clipboard', 'Trophy|Glowing star'),
+        ('reopen_task', 'Clipboard', 'Alarm clock|Pencil'),
+        ('sticky_note', 'Spiral notepad', 'Pencil|Glowing star'),
+        ('class_', 'School', 'Calendar|Clock|Books|Bell'),
+        ('course_', 'Books', 'Pencil|School|Graduation cap'),
+        ('exam_', 'Memo', 'Graduation cap|Alarm clock|Pencil|Clipboard'),
+        ('study_', 'Open book', 'Stopwatch|Graduation cap|Light bulb|Bullseye'),
+        ('focus_', 'Bullseye', 'Stopwatch|Light bulb'),
+        ('pomodoro', 'Stopwatch', 'Open book|Bullseye'),
+        ('learning_', 'Books', 'Light bulb|Pencil'),
+        ('my_guide', 'Open book', 'Graduation cap|School'),
+        ('home', 'School', 'Books|Glowing star'),
+        ('dashboard', 'Bar chart', 'Calendar|Clipboard'),
+        ('quick_', 'Glowing star', 'Clipboard|Pencil|Books'),
+        ('main_menu', 'File folder', 'Glowing star|Books'),
+        ('bottom_navigation', 'Compass', 'Globe with meridians|Calendar'),
+        ('activity_', 'Calendar', 'Clipboard|Glowing star'),
+        ('welcome', 'Glowing star', 'Books|School'),
+        ('favorites', 'Glowing star', 'Books|Trophy'),
+        ('help_', 'Light bulb', 'Books|Speech balloon'),
+        ('support', 'Handshake', 'Speech balloon|Light bulb'),
+    ]
     for key in ordered:
         if key in base_sources:
             main=base_sources[key]
@@ -119,11 +184,19 @@ def build(project,output,mode):
                 selected[key]=(main,secondary)
             else:selected[key]=(main,None)
         else:
+            name=key[3:]
             main=anchors[by_key[key]]
-            i=int(hashlib.sha256(key.encode('utf8')).hexdigest()[:12],16)%len(candidate)
-            secondary=candidate[i]
-            if secondary==main:secondary=candidate[(i+1)%len(candidate)]
-            selected[key]=(main,secondary)
+            options=[]
+            for prefix,base,extras in mappings:
+                if name.startswith(prefix):
+                    main=asset_named.get(base.lower(),main)
+                    options=[asset_named[s.lower()] for s in extras.split('|') if s.lower() in asset_named]
+                    break
+            options=[p for p in options if p!=main]
+            if not options:
+                options=[p for p in candidate if p!=main]
+            i=int(hashlib.sha256(key.encode('utf8')).hexdigest()[:12],16)%len(options)
+            selected[key]=(main,options[i])
     wanted=sorted({name for pair in selected.values() for name in pair if name})
     with ThreadPoolExecutor(max_workers=12) as pool:drawings=dict(pool.map(retrieve,wanted))
     size=2048 if mode=='fullhd' else 256
