@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Agenda Clara: build 328 distinct local PNG illustrations from licensed Microsoft Fluent Emoji 3D artwork.
+"""Agenda Clara: build 500 distinct local PNG illustrations from licensed Microsoft Fluent Emoji 3D artwork.
 Source: https://github.com/microsoft/fluentui-emoji (MIT); license bundled. No runtime emoji or network requests.
 """
 from pathlib import Path
@@ -67,11 +67,26 @@ def get(url,parse=False):
     return json.loads(data) if parse else data
 def categories():
     tree=ast.parse(Path('updates/phase51/generate_icons.py').read_text(encoding='utf-8'))
+    base={}
     for node in tree.body:
         if isinstance(node,ast.Assign) and any(isinstance(x,ast.Name) and x.id=='DATA' for x in node.targets):
-            a=ast.literal_eval(node.value)
-            return {key:group for group,names in a.items() for key in names.split()}
-    raise RuntimeError('Missing category registry')
+            original=ast.literal_eval(node.value)
+            base={key:group for group,names in original.items() for key in names.split()}
+            break
+    if len(base)!=328:
+        raise RuntimeError('Expected 328 established academic keys, got '+str(len(base)))
+    catalog=json.loads(Path('updates/phase53/catalog_500.json').read_text(encoding='utf-8'))
+    families={'nav':'folder','tasks':'pencil','notes':'book','calendar':'clock',
+              'reminders':'bell','study':'grad','exams':'pencil','voice':'chat',
+              'widget':'laptop','files':'folder','settings':'gear','stats':'chart'}
+    for entry in catalog['icons']:
+        if entry['module']!='existing_academic':
+            if entry['key'] in base:raise RuntimeError('Duplicate catalog key '+entry['key'])
+            base[entry['key']]=families[entry['module']]
+    if len(base)!=500 or set(base)!={item['key'] for item in catalog['icons']}:
+        raise RuntimeError('Incomplete 500-icon category coverage')
+    return base
+
 def chosen(key,group,names):
     exact=EXACT.get(key,'').lower()
     if exact in names:return exact
@@ -114,7 +129,7 @@ def main():
     out=Path(sys.argv[2]) if len(sys.argv)>2 else Path('icon_pro_artifacts')
     out.mkdir(parents=True,exist_ok=True)
     keys=sorted(p.stem.replace('ic_adapt_','') for p in dest.glob('ic_adapt_*.png'))
-    if len(keys)!=328 or len(set(keys))!=328:raise RuntimeError('Expected 328 original resource names')
+    if len(keys)!=500 or len(set(keys))!=500:raise RuntimeError('Expected 500 original resource names')
     tree=get('https://api.github.com/repos/microsoft/fluentui-emoji/git/trees/main?recursive=1',True)
     if tree.get('truncated'):raise RuntimeError('Fluent Emoji tree truncated')
     sources={}
@@ -181,11 +196,11 @@ def main():
     first=['matematicas','quimica','fisica','biologia','historia','literatura','geografia','ingles','informatica','arte','musica','educacion','psicologia','economia','derecho','medicina','ingenieria','investigacion','deporte','tarea','examen','notas','horario','recordatorio','calendario','proyecto','practica','parcial','final','silabo','social_studies','botanica','programacion','piano','fotografia','odontologia','novela','ciencias_sociales']
     gallery(dest,[x for x in first if x in keys],out/'MUESTRA-REAL-ICONOS.png')
     for i in range(0,len(keys),64):gallery(dest,keys[i:i+64],out/f'CATALOGO-{i//64+1:02d}.png')
-    pack=out/'Agenda-Clara-328-Iconos-Pro.zip'
+    pack=out/'Agenda-Clara-500-Iconos-Pro.zip'
     with zipfile.ZipFile(pack,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
         for key in keys:z.write(dest/f'ic_adapt_{key}.png',f'res/drawable-nodpi/ic_adapt_{key}.png')
         for sample in out.glob('*.png'):z.write(sample,'muestras/'+sample.name)
         z.write(out/'LICENSE-MIT.txt','LICENSE-MIT.txt')
         z.write(out/'MANIFEST.json','MANIFEST.json')
-    print('PASS 328 PNG 256x256, real images',len(artwork),'source drawings',total,'bytes',flush=True)
+    print('PASS 500 PNG 256x256, real images',len(artwork),'source drawings',total,'bytes',flush=True)
 if __name__=='__main__':main()
