@@ -142,6 +142,7 @@ jobs:
           /tmp/agenda-icon-venv/bin/python updates/phase52/integrate_premium_3_12_1.py
           /tmp/agenda-icon-venv/bin/python updates/phase53/build_500.py --mode mobile
           python3 updates/phase53/integrate_ui_icons.py
+          /tmp/agenda-icon-venv/bin/python updates/phase54/render_panels.py
           /tmp/agenda-icon-venv/bin/python updates/phase53/test_500.py
           python3 updates/phase29/test_performance_qa.py
 
@@ -329,6 +330,16 @@ jobs:
           printf '%s\n' "$BADGING" | head -12
           echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='56' versionName='3.12.1'"
           echo "PASS: package pe.agendaclara.app, version 3.12.1 (56), signed Android APK"
+
+      - name: Publicar íconos FHD de paneles y auditoría
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-Paneles-4-Iconos-FHD-2048
+          path: |
+            icon_library_500/panel_fhd_2048/*.png
+            icon_library_500/PANEL-ICON-REPORT.json
+          retention-days: 30
+          if-no-files-found: error
 
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
