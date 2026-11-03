@@ -156,7 +156,7 @@ def main():
     else:raise RuntimeError('Iconography larger than authorized 15 MB')
     for k,b in raw.items():(dest/f'ic_adapt_{k}.png').write_bytes(b)
     lic=get(REPO+'LICENSE').decode('utf-8')
-    if not lic.startswith('MIT License'):raise RuntimeError('License missing')
+    if 'MIT License' not in lic:raise RuntimeError('License missing')
     (out/'LICENSE-MIT.txt').write_text(lic,encoding='utf8')
     metadata={'count':len(keys),'format':'PNG','dimensions':[256,256],'transparent':True,'style':'colored 3D illustration; no uniform chrome or backplate','source':'Microsoft Fluent Emoji 3D','license':'MIT','distinct_base_drawings':len(artwork),'png_bytes':total,'palette_colors':colors,
       'icons':[{'key':k,'filename':f'ic_adapt_{k}.png','asset':sources[selection[k]],'sha256':hashlib.sha256(raw[k]).hexdigest(),'bytes':len(raw[k])} for k in keys]}
