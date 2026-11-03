@@ -43,6 +43,35 @@ DATA = {
  'location': 'aula campus laboratorio_aula edificio lugar viaje excursion trabajo_de_campo_geografico biblioteca_universitaria',
  'general': 'general otros sin_categoria categoria_personalizada curso_desconocido tarea_general actividad_general',
 }
+
+# Phase 53: append 172 new functional icons and regenerate ALL 328 originals.
+# The catalog is authoritative; no icon is left in its previous visual version.
+EXTRA_MODULE_FAMILY = {
+    'nav': 'folder', 'tasks': 'pencil', 'notes': 'book',
+    'calendar': 'clock', 'reminders': 'bell', 'study': 'grad',
+    'exams': 'pencil', 'voice': 'chat', 'widget': 'laptop',
+    'files': 'folder', 'settings': 'gear', 'stats': 'chart'
+}
+catalog_file = Path(__file__).resolve().parents[1] / 'phase53/catalog_500.json'
+catalog_500 = json.loads(catalog_file.read_text(encoding='utf-8'))
+assert catalog_500['goal'] == 500 and len(catalog_500['icons']) == 500
+original_keys = [key for keys in DATA.values() for key in keys.split()]
+assert len(original_keys) == len(set(original_keys)) == 328
+additional_keys = []
+for entry in catalog_500['icons']:
+    module = entry['module']
+    if module == 'existing_academic':
+        continue
+    family = EXTRA_MODULE_FAMILY[module]
+    key = entry['key']
+    assert key not in original_keys and key not in additional_keys, key
+    DATA[family] += ' ' + key
+    additional_keys.append(key)
+all_keys_catalog = [key for keys in DATA.values() for key in keys.split()]
+assert len(additional_keys) == 172
+assert len(all_keys_catalog) == len(set(all_keys_catalog)) == 500
+assert set(all_keys_catalog) == {entry['key'] for entry in catalog_500['icons']}
+
 PALETTES=[((108,58,239),(207,104,252)),((0,182,242),(45,122,238)),((9,199,164),(36,235,223)),((248,113,39),(255,200,71)),((249,61,130),(255,142,200)),((74,173,58),(140,231,75)),((85,76,228),(131,174,255)),((234,89,180),(152,84,246))]
 # The family drawing, not arbitrary coloring of a single glyph, defines the semantic subject.
 
@@ -224,7 +253,7 @@ for family,keys in DATA.items():
         total+=path.stat().st_size;icon_count+=1;catalog[key]={'family':family,'file':identifier+'.png'}
         all_keys.append(key)
 assert total<=15*1024*1024,(total,'exceeds 15MB budget')
-assert icon_count>=300,icon_count
+assert icon_count == 500,icon_count
 meta=DEST.parent.parent/'assets/adaptive_icon_catalog.json';meta.parent.mkdir(parents=True,exist_ok=True)
 meta.write_text(json.dumps({'count':icon_count,'png_bytes':total,'budget_bytes':15*1024*1024,'style':'matte-multicolor-transparent','icons':catalog},ensure_ascii=False,sort_keys=True),encoding='utf-8')
 # An exhaustive key catalog provides a resource candidate for every entry, not just 30 aliases.
