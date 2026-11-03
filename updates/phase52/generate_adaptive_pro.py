@@ -148,6 +148,23 @@ def main():
             symbol=symbol.crop(symbol.getchannel('A').getbbox())
             symbol.thumbnail((64+(j%3)*10,64+(j%3)*10),Image.Resampling.LANCZOS)
             icons[key].alpha_composite(symbol,(256-symbol.width-4,256-symbol.height-4))
+    # Ensure every semantic key has its own PNG; enhance only truly repeated illustrations.
+    seen={}
+    for key in sorted(keys):
+        art_digest=hashlib.sha256(icons[key].tobytes()).hexdigest()
+        if art_digest in seen:
+            group=groups.get(key,'general')
+            variants=[v.lower() for v in GROUPS.get(group,GROUPS['general']).split('|')
+                      if v.lower() in artwork and v.lower()!=selection[key]]
+            if not variants:variants=[v for v in sorted(artwork) if v!=selection[key]]
+            extra=artwork[variants[int(hashlib.sha256(key.encode()).hexdigest()[-6:],16)%len(variants)]].copy()
+            box=extra.getchannel('A').getbbox()
+            extra=extra.crop(box)
+            side=65+(int(hashlib.sha256(key.encode()).hexdigest()[:2],16)%3)*8
+            extra.thumbnail((side,side),Image.Resampling.LANCZOS)
+            xx=4+(int(hashlib.sha256(key.encode()).hexdigest()[2:4],16)%11)
+            icons[key].alpha_composite(extra,(xx,256-extra.height-5))
+        seen[hashlib.sha256(icons[key].tobytes()).hexdigest()]=key
     for colors in (200,160,128,96):
         raw={k:encoded(v,colors) for k,v in icons.items()}
         total=sum(len(v) for v in raw.values())
