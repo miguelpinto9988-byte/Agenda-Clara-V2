@@ -132,6 +132,18 @@ jobs:
           python3 updates/phase50/apply_widgets_3_11_3.py
           python3 updates/phase50/test_widgets_3_11_3.py
           python3 updates/phase51/stage_text_resources.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          root = Path("AgendaClara/app/src/main")
+          quotes = ET.parse(root / "res/values/mi_dia_frases.xml").getroot().find("./string-array[@name='mi_dia_frases']")
+          assert quotes is not None and len(quotes.findall("item")) == 50
+          assert all((item.text or "").strip() for item in quotes.findall("item"))
+          for name in ("MiDiaDailyRotation.java", "MiDiaHeaderView.java"):
+              source = root / "java/pe/agendaclara/app" / name
+              assert source.is_file() and "package pe.agendaclara.app;" in source.read_text()
+          print("PASS phase51 staged Java and 50 quotes")
+          PY
           python3 updates/phase29/test_performance_qa.py
 
       - name: Recuperar clave de desarrollo privada
