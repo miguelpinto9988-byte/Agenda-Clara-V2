@@ -93,6 +93,8 @@ adb shell input swipe 510 1550 510 550 280
 sleep 1
 capture '20-vista-previa-nota'
 tap 'Guardar' 3
+# 3.12.0 puts dated notes in the dedicated Notas panel, not on the Mi guía dashboard.
+tap 'Abrir Notas' 3
 find_node 'Gas_agotado' 5 >/dev/null
 capture '21-nota-guardada'
 # The new note is NOT a task, it has no completion checkbox or deadline.
