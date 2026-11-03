@@ -1,0 +1,3527 @@
+{
+  "schema_version": 1,
+  "project": "Agenda Clara",
+  "goal": 500,
+  "source_branch": "feat/adaptive-iconography-premium-3-12-1",
+  "visual_spec": {
+    "style": "3D glossy detailed with crisp white localized specular highlights",
+    "palette": "varied solid colors, no neon gradients or gradient backplates",
+    "background": "transparent RGBA",
+    "master_resolution": [
+      2048,
+      2048
+    ],
+    "android_variant": [
+      256,
+      256
+    ],
+    "note": "Each of the original 328 keys must also be regenerated and visually reviewed; adding 172 keys alone is not completion."
+  },
+  "summary": {
+    "existing_to_redesign": 328,
+    "new_to_create": 172,
+    "total": 500
+  },
+  "icons": [
+    {
+      "index": 1,
+      "key": "matematicas",
+      "resource": "ic_adapt_matematicas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 2,
+      "key": "algebra",
+      "resource": "ic_adapt_algebra.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 3,
+      "key": "geometria",
+      "resource": "ic_adapt_geometria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 4,
+      "key": "calculo",
+      "resource": "ic_adapt_calculo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 5,
+      "key": "aritmetica",
+      "resource": "ic_adapt_aritmetica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 6,
+      "key": "estadistica",
+      "resource": "ic_adapt_estadistica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 7,
+      "key": "trigonometria",
+      "resource": "ic_adapt_trigonometria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 8,
+      "key": "probabilidad",
+      "resource": "ic_adapt_probabilidad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 9,
+      "key": "logica",
+      "resource": "ic_adapt_logica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 10,
+      "key": "matematicas_discretas",
+      "resource": "ic_adapt_matematicas_discretas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 11,
+      "key": "analisis_numerico",
+      "resource": "ic_adapt_analisis_numerico.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 12,
+      "key": "ecuaciones",
+      "resource": "ic_adapt_ecuaciones.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 13,
+      "key": "quimica",
+      "resource": "ic_adapt_quimica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 14,
+      "key": "bioquimica",
+      "resource": "ic_adapt_bioquimica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 15,
+      "key": "laboratorio",
+      "resource": "ic_adapt_laboratorio.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 16,
+      "key": "farmaceutica",
+      "resource": "ic_adapt_farmaceutica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 17,
+      "key": "ciencias_experimentales",
+      "resource": "ic_adapt_ciencias_experimentales.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 18,
+      "key": "quimica_organica",
+      "resource": "ic_adapt_quimica_organica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 19,
+      "key": "quimica_inorganica",
+      "resource": "ic_adapt_quimica_inorganica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 20,
+      "key": "materiales",
+      "resource": "ic_adapt_materiales.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 21,
+      "key": "biotecnologia",
+      "resource": "ic_adapt_biotecnologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 22,
+      "key": "toxologia",
+      "resource": "ic_adapt_toxologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 23,
+      "key": "fisica",
+      "resource": "ic_adapt_fisica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 24,
+      "key": "fisica_cuantica",
+      "resource": "ic_adapt_fisica_cuantica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 25,
+      "key": "mecanica",
+      "resource": "ic_adapt_mecanica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 26,
+      "key": "termodinamica",
+      "resource": "ic_adapt_termodinamica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 27,
+      "key": "electromagnetismo",
+      "resource": "ic_adapt_electromagnetismo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 28,
+      "key": "optica",
+      "resource": "ic_adapt_optica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 29,
+      "key": "electricidad",
+      "resource": "ic_adapt_electricidad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 30,
+      "key": "energia",
+      "resource": "ic_adapt_energia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 31,
+      "key": "astronomia",
+      "resource": "ic_adapt_astronomia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 32,
+      "key": "astrofisica",
+      "resource": "ic_adapt_astrofisica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 33,
+      "key": "biologia",
+      "resource": "ic_adapt_biologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 34,
+      "key": "botanica",
+      "resource": "ic_adapt_botanica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 35,
+      "key": "ecologia",
+      "resource": "ic_adapt_ecologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 36,
+      "key": "ambiente",
+      "resource": "ic_adapt_ambiente.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 37,
+      "key": "ciencias_naturales",
+      "resource": "ic_adapt_ciencias_naturales.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 38,
+      "key": "zoologia",
+      "resource": "ic_adapt_zoologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 39,
+      "key": "microbiologia",
+      "resource": "ic_adapt_microbiologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 40,
+      "key": "evolucion",
+      "resource": "ic_adapt_evolucion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 41,
+      "key": "agricultura",
+      "resource": "ic_adapt_agricultura.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 42,
+      "key": "genetica",
+      "resource": "ic_adapt_genetica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 43,
+      "key": "biodiversidad",
+      "resource": "ic_adapt_biodiversidad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 44,
+      "key": "literatura",
+      "resource": "ic_adapt_literatura.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 45,
+      "key": "lectura",
+      "resource": "ic_adapt_lectura.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 46,
+      "key": "escritura",
+      "resource": "ic_adapt_escritura.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 47,
+      "key": "comprension_lectora",
+      "resource": "ic_adapt_comprension_lectora.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 48,
+      "key": "poesia",
+      "resource": "ic_adapt_poesia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 49,
+      "key": "novela",
+      "resource": "ic_adapt_novela.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 50,
+      "key": "cuentos",
+      "resource": "ic_adapt_cuentos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 51,
+      "key": "lengua_castellana",
+      "resource": "ic_adapt_lengua_castellana.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 52,
+      "key": "comunicacion",
+      "resource": "ic_adapt_comunicacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 53,
+      "key": "textos_liricos",
+      "resource": "ic_adapt_textos_liricos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 54,
+      "key": "linguistica",
+      "resource": "ic_adapt_linguistica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 55,
+      "key": "historia",
+      "resource": "ic_adapt_historia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 56,
+      "key": "historia_universal",
+      "resource": "ic_adapt_historia_universal.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 57,
+      "key": "historia_del_peru",
+      "resource": "ic_adapt_historia_del_peru.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 58,
+      "key": "arqueologia",
+      "resource": "ic_adapt_arqueologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 59,
+      "key": "patrimonio",
+      "resource": "ic_adapt_patrimonio.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 60,
+      "key": "cronologia",
+      "resource": "ic_adapt_cronologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 61,
+      "key": "antropologia",
+      "resource": "ic_adapt_antropologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 62,
+      "key": "historia_moderna",
+      "resource": "ic_adapt_historia_moderna.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 63,
+      "key": "cultura",
+      "resource": "ic_adapt_cultura.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 64,
+      "key": "civilizaciones",
+      "resource": "ic_adapt_civilizaciones.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 65,
+      "key": "geografia",
+      "resource": "ic_adapt_geografia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 66,
+      "key": "cartografia",
+      "resource": "ic_adapt_cartografia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 67,
+      "key": "geologia",
+      "resource": "ic_adapt_geologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 68,
+      "key": "ciencias_sociales",
+      "resource": "ic_adapt_ciencias_sociales.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 69,
+      "key": "social_studies",
+      "resource": "ic_adapt_social_studies.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 70,
+      "key": "paises",
+      "resource": "ic_adapt_paises.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 71,
+      "key": "territorios",
+      "resource": "ic_adapt_territorios.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 72,
+      "key": "clima",
+      "resource": "ic_adapt_clima.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 73,
+      "key": "mundo",
+      "resource": "ic_adapt_mundo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 74,
+      "key": "geografia_fisica",
+      "resource": "ic_adapt_geografia_fisica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 75,
+      "key": "turismo",
+      "resource": "ic_adapt_turismo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 76,
+      "key": "ingles",
+      "resource": "ic_adapt_ingles.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 77,
+      "key": "frances",
+      "resource": "ic_adapt_frances.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 78,
+      "key": "aleman",
+      "resource": "ic_adapt_aleman.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 79,
+      "key": "portugues",
+      "resource": "ic_adapt_portugues.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 80,
+      "key": "italiano",
+      "resource": "ic_adapt_italiano.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 81,
+      "key": "idiomas",
+      "resource": "ic_adapt_idiomas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 82,
+      "key": "traduccion",
+      "resource": "ic_adapt_traduccion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 83,
+      "key": "idiomas_extranjeros",
+      "resource": "ic_adapt_idiomas_extranjeros.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 84,
+      "key": "oralidad",
+      "resource": "ic_adapt_oralidad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 85,
+      "key": "debate",
+      "resource": "ic_adapt_debate.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 86,
+      "key": "oratoria",
+      "resource": "ic_adapt_oratoria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 87,
+      "key": "informatica",
+      "resource": "ic_adapt_informatica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 88,
+      "key": "computacion",
+      "resource": "ic_adapt_computacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 89,
+      "key": "programacion",
+      "resource": "ic_adapt_programacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 90,
+      "key": "software",
+      "resource": "ic_adapt_software.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 91,
+      "key": "hardware",
+      "resource": "ic_adapt_hardware.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 92,
+      "key": "sistemas",
+      "resource": "ic_adapt_sistemas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 93,
+      "key": "bases_de_datos",
+      "resource": "ic_adapt_bases_de_datos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 94,
+      "key": "redes",
+      "resource": "ic_adapt_redes.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 95,
+      "key": "ciberseguridad",
+      "resource": "ic_adapt_ciberseguridad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 96,
+      "key": "desarrollo_web",
+      "resource": "ic_adapt_desarrollo_web.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 97,
+      "key": "algoritmos",
+      "resource": "ic_adapt_algoritmos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 98,
+      "key": "arte",
+      "resource": "ic_adapt_arte.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 99,
+      "key": "pintura",
+      "resource": "ic_adapt_pintura.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 100,
+      "key": "dibujo",
+      "resource": "ic_adapt_dibujo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 101,
+      "key": "fotografia",
+      "resource": "ic_adapt_fotografia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 102,
+      "key": "diseno",
+      "resource": "ic_adapt_diseno.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 103,
+      "key": "artes_visuales",
+      "resource": "ic_adapt_artes_visuales.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 104,
+      "key": "teatro",
+      "resource": "ic_adapt_teatro.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 105,
+      "key": "cine",
+      "resource": "ic_adapt_cine.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 106,
+      "key": "escultura",
+      "resource": "ic_adapt_escultura.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 107,
+      "key": "creatividad",
+      "resource": "ic_adapt_creatividad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 108,
+      "key": "diseno_grafico",
+      "resource": "ic_adapt_diseno_grafico.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 109,
+      "key": "arquitectura",
+      "resource": "ic_adapt_arquitectura.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 110,
+      "key": "musica",
+      "resource": "ic_adapt_musica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 111,
+      "key": "coro",
+      "resource": "ic_adapt_coro.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 112,
+      "key": "piano",
+      "resource": "ic_adapt_piano.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 113,
+      "key": "guitarra",
+      "resource": "ic_adapt_guitarra.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 114,
+      "key": "musica_instrumental",
+      "resource": "ic_adapt_musica_instrumental.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 115,
+      "key": "armonia",
+      "resource": "ic_adapt_armonia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 116,
+      "key": "composicion",
+      "resource": "ic_adapt_composicion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 117,
+      "key": "danza",
+      "resource": "ic_adapt_danza.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 118,
+      "key": "folclore",
+      "resource": "ic_adapt_folclore.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 119,
+      "key": "sonido",
+      "resource": "ic_adapt_sonido.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 120,
+      "key": "educacion_musical",
+      "resource": "ic_adapt_educacion_musical.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 121,
+      "key": "psicologia",
+      "resource": "ic_adapt_psicologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 122,
+      "key": "neurociencia",
+      "resource": "ic_adapt_neurociencia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 123,
+      "key": "neuroeducacion",
+      "resource": "ic_adapt_neuroeducacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 124,
+      "key": "memoria",
+      "resource": "ic_adapt_memoria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 125,
+      "key": "aprendizaje",
+      "resource": "ic_adapt_aprendizaje.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 126,
+      "key": "cognicion",
+      "resource": "ic_adapt_cognicion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 127,
+      "key": "filosofia",
+      "resource": "ic_adapt_filosofia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 128,
+      "key": "etica",
+      "resource": "ic_adapt_etica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 129,
+      "key": "pensamiento",
+      "resource": "ic_adapt_pensamiento.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 130,
+      "key": "psicologia_social",
+      "resource": "ic_adapt_psicologia_social.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 131,
+      "key": "salud_mental",
+      "resource": "ic_adapt_salud_mental.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 132,
+      "key": "derecho",
+      "resource": "ic_adapt_derecho.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 133,
+      "key": "civica",
+      "resource": "ic_adapt_civica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 134,
+      "key": "ciudadania",
+      "resource": "ic_adapt_ciudadania.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 135,
+      "key": "politicas",
+      "resource": "ic_adapt_politicas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 136,
+      "key": "ciudadania_global",
+      "resource": "ic_adapt_ciudadania_global.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 137,
+      "key": "legislacion",
+      "resource": "ic_adapt_legislacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 138,
+      "key": "relaciones_internacionales",
+      "resource": "ic_adapt_relaciones_internacionales.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 139,
+      "key": "justicia",
+      "resource": "ic_adapt_justicia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 140,
+      "key": "democracia",
+      "resource": "ic_adapt_democracia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 141,
+      "key": "normas",
+      "resource": "ic_adapt_normas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 142,
+      "key": "economia",
+      "resource": "ic_adapt_economia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 143,
+      "key": "contabilidad",
+      "resource": "ic_adapt_contabilidad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 144,
+      "key": "finanzas",
+      "resource": "ic_adapt_finanzas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 145,
+      "key": "emprendimiento",
+      "resource": "ic_adapt_emprendimiento.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 146,
+      "key": "administracion",
+      "resource": "ic_adapt_administracion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 147,
+      "key": "marketing",
+      "resource": "ic_adapt_marketing.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 148,
+      "key": "gestion",
+      "resource": "ic_adapt_gestion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 149,
+      "key": "comercio",
+      "resource": "ic_adapt_comercio.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 150,
+      "key": "negocios",
+      "resource": "ic_adapt_negocios.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 151,
+      "key": "inversiones",
+      "resource": "ic_adapt_inversiones.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 152,
+      "key": "recursos_humanos",
+      "resource": "ic_adapt_recursos_humanos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 153,
+      "key": "medicina",
+      "resource": "ic_adapt_medicina.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 154,
+      "key": "enfermeria",
+      "resource": "ic_adapt_enfermeria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 155,
+      "key": "salud",
+      "resource": "ic_adapt_salud.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 156,
+      "key": "anatomia",
+      "resource": "ic_adapt_anatomia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 157,
+      "key": "fisiologia",
+      "resource": "ic_adapt_fisiologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 158,
+      "key": "nutricion",
+      "resource": "ic_adapt_nutricion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 159,
+      "key": "epidemiologia",
+      "resource": "ic_adapt_epidemiologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 160,
+      "key": "primeros_auxilios",
+      "resource": "ic_adapt_primeros_auxilios.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 161,
+      "key": "bienestar",
+      "resource": "ic_adapt_bienestar.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 162,
+      "key": "terapia",
+      "resource": "ic_adapt_terapia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 163,
+      "key": "odontologia",
+      "resource": "ic_adapt_odontologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 164,
+      "key": "educacion",
+      "resource": "ic_adapt_educacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 165,
+      "key": "pedagogia",
+      "resource": "ic_adapt_pedagogia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 166,
+      "key": "didactica",
+      "resource": "ic_adapt_didactica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 167,
+      "key": "tutoria_educativa",
+      "resource": "ic_adapt_tutoria_educativa.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 168,
+      "key": "evaluacion_curricular",
+      "resource": "ic_adapt_evaluacion_curricular.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 169,
+      "key": "practica_docente",
+      "resource": "ic_adapt_practica_docente.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 170,
+      "key": "estrategias_educativas",
+      "resource": "ic_adapt_estrategias_educativas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 171,
+      "key": "docencia",
+      "resource": "ic_adapt_docencia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 172,
+      "key": "formacion",
+      "resource": "ic_adapt_formacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 173,
+      "key": "orientacion",
+      "resource": "ic_adapt_orientacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 174,
+      "key": "ingenieria",
+      "resource": "ic_adapt_ingenieria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 175,
+      "key": "ingenieria_mecanica",
+      "resource": "ic_adapt_ingenieria_mecanica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 176,
+      "key": "automatizacion",
+      "resource": "ic_adapt_automatizacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 177,
+      "key": "mecatronica",
+      "resource": "ic_adapt_mecatronica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 178,
+      "key": "robotica",
+      "resource": "ic_adapt_robotica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 179,
+      "key": "procesos",
+      "resource": "ic_adapt_procesos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 180,
+      "key": "industriales",
+      "resource": "ic_adapt_industriales.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 181,
+      "key": "fabricacion",
+      "resource": "ic_adapt_fabricacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 182,
+      "key": "tecnologia",
+      "resource": "ic_adapt_tecnologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 183,
+      "key": "control",
+      "resource": "ic_adapt_control.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 184,
+      "key": "investigacion",
+      "resource": "ic_adapt_investigacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 185,
+      "key": "tesis",
+      "resource": "ic_adapt_tesis.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 186,
+      "key": "metodologia",
+      "resource": "ic_adapt_metodologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 187,
+      "key": "investigacion_educativa",
+      "resource": "ic_adapt_investigacion_educativa.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 188,
+      "key": "trabajo_de_campo",
+      "resource": "ic_adapt_trabajo_de_campo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 189,
+      "key": "experimentos",
+      "resource": "ic_adapt_experimentos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 190,
+      "key": "analisis_de_datos",
+      "resource": "ic_adapt_analisis_de_datos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 191,
+      "key": "proyecto_cientifico",
+      "resource": "ic_adapt_proyecto_cientifico.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 192,
+      "key": "encuestas",
+      "resource": "ic_adapt_encuestas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 193,
+      "key": "laboratorio_cientifico",
+      "resource": "ic_adapt_laboratorio_cientifico.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 194,
+      "key": "deporte",
+      "resource": "ic_adapt_deporte.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 195,
+      "key": "futbol",
+      "resource": "ic_adapt_futbol.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 196,
+      "key": "baloncesto",
+      "resource": "ic_adapt_baloncesto.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 197,
+      "key": "voleibol",
+      "resource": "ic_adapt_voleibol.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 198,
+      "key": "atletismo",
+      "resource": "ic_adapt_atletismo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 199,
+      "key": "natacion",
+      "resource": "ic_adapt_natacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 200,
+      "key": "educacion_fisica",
+      "resource": "ic_adapt_educacion_fisica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 201,
+      "key": "gimnasia",
+      "resource": "ic_adapt_gimnasia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 202,
+      "key": "entrenamiento",
+      "resource": "ic_adapt_entrenamiento.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 203,
+      "key": "competicion",
+      "resource": "ic_adapt_competicion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 204,
+      "key": "recreacion",
+      "resource": "ic_adapt_recreacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 205,
+      "key": "horario",
+      "resource": "ic_adapt_horario.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 206,
+      "key": "calendario",
+      "resource": "ic_adapt_calendario.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 207,
+      "key": "tiempo",
+      "resource": "ic_adapt_tiempo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 208,
+      "key": "cronograma",
+      "resource": "ic_adapt_cronograma.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 209,
+      "key": "planificacion",
+      "resource": "ic_adapt_planificacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 210,
+      "key": "agenda",
+      "resource": "ic_adapt_agenda.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 211,
+      "key": "turnos",
+      "resource": "ic_adapt_turnos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 212,
+      "key": "rutina",
+      "resource": "ic_adapt_rutina.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 213,
+      "key": "sesiones",
+      "resource": "ic_adapt_sesiones.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 214,
+      "key": "puntualidad",
+      "resource": "ic_adapt_puntualidad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 215,
+      "key": "fecha_limite",
+      "resource": "ic_adapt_fecha_limite.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 216,
+      "key": "tarea",
+      "resource": "ic_adapt_tarea.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 217,
+      "key": "examen",
+      "resource": "ic_adapt_examen.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 218,
+      "key": "evaluacion",
+      "resource": "ic_adapt_evaluacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 219,
+      "key": "parcial",
+      "resource": "ic_adapt_parcial.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 220,
+      "key": "final",
+      "resource": "ic_adapt_final.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 221,
+      "key": "practica",
+      "resource": "ic_adapt_practica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 222,
+      "key": "trabajo",
+      "resource": "ic_adapt_trabajo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 223,
+      "key": "informe",
+      "resource": "ic_adapt_informe.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 224,
+      "key": "ensayo",
+      "resource": "ic_adapt_ensayo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 225,
+      "key": "actividad",
+      "resource": "ic_adapt_actividad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 226,
+      "key": "notas",
+      "resource": "ic_adapt_notas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 227,
+      "key": "apuntes",
+      "resource": "ic_adapt_apuntes.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 228,
+      "key": "resumen",
+      "resource": "ic_adapt_resumen.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 229,
+      "key": "presentacion",
+      "resource": "ic_adapt_presentacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 230,
+      "key": "exposicion",
+      "resource": "ic_adapt_exposicion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 231,
+      "key": "proyecto",
+      "resource": "ic_adapt_proyecto.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 232,
+      "key": "prioridad",
+      "resource": "ic_adapt_prioridad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 233,
+      "key": "objetivo",
+      "resource": "ic_adapt_objetivo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 234,
+      "key": "logro",
+      "resource": "ic_adapt_logro.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 235,
+      "key": "meta",
+      "resource": "ic_adapt_meta.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 236,
+      "key": "recordatorio",
+      "resource": "ic_adapt_recordatorio.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 237,
+      "key": "alarma",
+      "resource": "ic_adapt_alarma.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 238,
+      "key": "evento",
+      "resource": "ic_adapt_evento.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 239,
+      "key": "reunion",
+      "resource": "ic_adapt_reunion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 240,
+      "key": "tutorias",
+      "resource": "ic_adapt_tutorias.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 241,
+      "key": "seminario",
+      "resource": "ic_adapt_seminario.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 242,
+      "key": "taller",
+      "resource": "ic_adapt_taller.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 243,
+      "key": "lecturas",
+      "resource": "ic_adapt_lecturas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 244,
+      "key": "actividad_especial",
+      "resource": "ic_adapt_actividad_especial.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 245,
+      "key": "construccion",
+      "resource": "ic_adapt_construccion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 246,
+      "key": "diseno_industrial",
+      "resource": "ic_adapt_diseno_industrial.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 247,
+      "key": "dibujo_tecnico",
+      "resource": "ic_adapt_dibujo_tecnico.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 248,
+      "key": "mecanica_aplicada",
+      "resource": "ic_adapt_mecanica_aplicada.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 249,
+      "key": "taller_mecanico",
+      "resource": "ic_adapt_taller_mecanico.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 250,
+      "key": "instalaciones",
+      "resource": "ic_adapt_instalaciones.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 251,
+      "key": "logistica",
+      "resource": "ic_adapt_logistica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 252,
+      "key": "manufactura",
+      "resource": "ic_adapt_manufactura.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 253,
+      "key": "electronica",
+      "resource": "ic_adapt_electronica.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 254,
+      "key": "fotografia_profesional",
+      "resource": "ic_adapt_fotografia_profesional.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 255,
+      "key": "video",
+      "resource": "ic_adapt_video.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 256,
+      "key": "imagenes",
+      "resource": "ic_adapt_imagenes.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 257,
+      "key": "multimedia",
+      "resource": "ic_adapt_multimedia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 258,
+      "key": "audiovisual",
+      "resource": "ic_adapt_audiovisual.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 259,
+      "key": "produccion_digital",
+      "resource": "ic_adapt_produccion_digital.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 260,
+      "key": "edicion_video",
+      "resource": "ic_adapt_edicion_video.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 261,
+      "key": "cine_documental",
+      "resource": "ic_adapt_cine_documental.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 262,
+      "key": "comunicacion_digital",
+      "resource": "ic_adapt_comunicacion_digital.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 263,
+      "key": "jardineria",
+      "resource": "ic_adapt_jardineria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 264,
+      "key": "agricultura_urbana",
+      "resource": "ic_adapt_agricultura_urbana.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 265,
+      "key": "suelos",
+      "resource": "ic_adapt_suelos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 266,
+      "key": "forestal",
+      "resource": "ic_adapt_forestal.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 267,
+      "key": "desarrollo_sostenible",
+      "resource": "ic_adapt_desarrollo_sostenible.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 268,
+      "key": "energias_renovables",
+      "resource": "ic_adapt_energias_renovables.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 269,
+      "key": "huertos",
+      "resource": "ic_adapt_huertos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 270,
+      "key": "medioambiente",
+      "resource": "ic_adapt_medioambiente.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 271,
+      "key": "gastronomia",
+      "resource": "ic_adapt_gastronomia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 272,
+      "key": "cocina",
+      "resource": "ic_adapt_cocina.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 273,
+      "key": "reposteria",
+      "resource": "ic_adapt_reposteria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 274,
+      "key": "alimentos",
+      "resource": "ic_adapt_alimentos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 275,
+      "key": "alimentacion",
+      "resource": "ic_adapt_alimentacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 276,
+      "key": "seguridad_alimentaria",
+      "resource": "ic_adapt_seguridad_alimentaria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 277,
+      "key": "industria_alimentaria",
+      "resource": "ic_adapt_industria_alimentaria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 278,
+      "key": "hoteleria",
+      "resource": "ic_adapt_hoteleria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 279,
+      "key": "sociologia",
+      "resource": "ic_adapt_sociologia.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 280,
+      "key": "sociedad",
+      "resource": "ic_adapt_sociedad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 281,
+      "key": "trabajo_en_equipo",
+      "resource": "ic_adapt_trabajo_en_equipo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 282,
+      "key": "liderazgo",
+      "resource": "ic_adapt_liderazgo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 283,
+      "key": "emprendimiento_social",
+      "resource": "ic_adapt_emprendimiento_social.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 284,
+      "key": "comunidad",
+      "resource": "ic_adapt_comunidad.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 285,
+      "key": "grupos",
+      "resource": "ic_adapt_grupos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 286,
+      "key": "colaboracion",
+      "resource": "ic_adapt_colaboracion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 287,
+      "key": "recursos_sociales",
+      "resource": "ic_adapt_recursos_sociales.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 288,
+      "key": "ideas",
+      "resource": "ic_adapt_ideas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 289,
+      "key": "innovacion",
+      "resource": "ic_adapt_innovacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 290,
+      "key": "proyecto_creativo",
+      "resource": "ic_adapt_proyecto_creativo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 291,
+      "key": "resolucion_de_problemas",
+      "resource": "ic_adapt_resolucion_de_problemas.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 292,
+      "key": "pensamiento_critico",
+      "resource": "ic_adapt_pensamiento_critico.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 293,
+      "key": "tecnologia_educativa",
+      "resource": "ic_adapt_tecnologia_educativa.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 294,
+      "key": "creatividad_digital",
+      "resource": "ic_adapt_creatividad_digital.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 295,
+      "key": "documento",
+      "resource": "ic_adapt_documento.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 296,
+      "key": "documentos",
+      "resource": "ic_adapt_documentos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 297,
+      "key": "pdf",
+      "resource": "ic_adapt_pdf.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 298,
+      "key": "archivos",
+      "resource": "ic_adapt_archivos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 299,
+      "key": "carpeta",
+      "resource": "ic_adapt_carpeta.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 300,
+      "key": "carpeta_de_clase",
+      "resource": "ic_adapt_carpeta_de_clase.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 301,
+      "key": "syllabus",
+      "resource": "ic_adapt_syllabus.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 302,
+      "key": "silabo",
+      "resource": "ic_adapt_silabo.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 303,
+      "key": "biblioteca",
+      "resource": "ic_adapt_biblioteca.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 304,
+      "key": "repositorio",
+      "resource": "ic_adapt_repositorio.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 305,
+      "key": "recursos",
+      "resource": "ic_adapt_recursos.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 306,
+      "key": "notificacion",
+      "resource": "ic_adapt_notificacion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 307,
+      "key": "aviso",
+      "resource": "ic_adapt_aviso.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 308,
+      "key": "alarma_recordatorio",
+      "resource": "ic_adapt_alarma_recordatorio.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 309,
+      "key": "vencimiento",
+      "resource": "ic_adapt_vencimiento.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 310,
+      "key": "actividad_pendiente",
+      "resource": "ic_adapt_actividad_pendiente.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 311,
+      "key": "seguimiento",
+      "resource": "ic_adapt_seguimiento.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 312,
+      "key": "aviso_importante",
+      "resource": "ic_adapt_aviso_importante.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 313,
+      "key": "aula",
+      "resource": "ic_adapt_aula.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 314,
+      "key": "campus",
+      "resource": "ic_adapt_campus.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 315,
+      "key": "laboratorio_aula",
+      "resource": "ic_adapt_laboratorio_aula.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 316,
+      "key": "edificio",
+      "resource": "ic_adapt_edificio.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 317,
+      "key": "lugar",
+      "resource": "ic_adapt_lugar.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 318,
+      "key": "viaje",
+      "resource": "ic_adapt_viaje.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 319,
+      "key": "excursion",
+      "resource": "ic_adapt_excursion.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 320,
+      "key": "trabajo_de_campo_geografico",
+      "resource": "ic_adapt_trabajo_de_campo_geografico.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 321,
+      "key": "biblioteca_universitaria",
+      "resource": "ic_adapt_biblioteca_universitaria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 322,
+      "key": "general",
+      "resource": "ic_adapt_general.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 323,
+      "key": "otros",
+      "resource": "ic_adapt_otros.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 324,
+      "key": "sin_categoria",
+      "resource": "ic_adapt_sin_categoria.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 325,
+      "key": "categoria_personalizada",
+      "resource": "ic_adapt_categoria_personalizada.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 326,
+      "key": "curso_desconocido",
+      "resource": "ic_adapt_curso_desconocido.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 327,
+      "key": "tarea_general",
+      "resource": "ic_adapt_tarea_general.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 328,
+      "key": "actividad_general",
+      "resource": "ic_adapt_actividad_general.png",
+      "module": "existing_academic",
+      "redesign_required": true
+    },
+    {
+      "index": 329,
+      "key": "nav_inicio",
+      "resource": "ic_adapt_nav_inicio.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 330,
+      "key": "nav_panel",
+      "resource": "ic_adapt_nav_panel.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 331,
+      "key": "nav_menu",
+      "resource": "ic_adapt_nav_menu.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 332,
+      "key": "nav_buscar",
+      "resource": "ic_adapt_nav_buscar.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 333,
+      "key": "nav_busqueda_global",
+      "resource": "ic_adapt_nav_busqueda_global.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 334,
+      "key": "nav_favoritos",
+      "resource": "ic_adapt_nav_favoritos.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 335,
+      "key": "nav_recientes",
+      "resource": "ic_adapt_nav_recientes.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 336,
+      "key": "nav_volver",
+      "resource": "ic_adapt_nav_volver.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 337,
+      "key": "nav_siguiente",
+      "resource": "ic_adapt_nav_siguiente.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 338,
+      "key": "nav_atras",
+      "resource": "ic_adapt_nav_atras.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 339,
+      "key": "nav_compartir",
+      "resource": "ic_adapt_nav_compartir.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 340,
+      "key": "nav_ayuda",
+      "resource": "ic_adapt_nav_ayuda.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 341,
+      "key": "nav_inicio_rapido",
+      "resource": "ic_adapt_nav_inicio_rapido.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 342,
+      "key": "nav_accesibilidad",
+      "resource": "ic_adapt_nav_accesibilidad.png",
+      "module": "nav",
+      "redesign_required": true
+    },
+    {
+      "index": 343,
+      "key": "tarea_crear",
+      "resource": "ic_adapt_tarea_crear.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 344,
+      "key": "tarea_editar",
+      "resource": "ic_adapt_tarea_editar.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 345,
+      "key": "tarea_eliminar",
+      "resource": "ic_adapt_tarea_eliminar.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 346,
+      "key": "tarea_completar",
+      "resource": "ic_adapt_tarea_completar.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 347,
+      "key": "tarea_pendiente",
+      "resource": "ic_adapt_tarea_pendiente.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 348,
+      "key": "tarea_vencida",
+      "resource": "ic_adapt_tarea_vencida.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 349,
+      "key": "tarea_repetir",
+      "resource": "ic_adapt_tarea_repetir.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 350,
+      "key": "tarea_posponer",
+      "resource": "ic_adapt_tarea_posponer.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 351,
+      "key": "tarea_prioritaria",
+      "resource": "ic_adapt_tarea_prioritaria.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 352,
+      "key": "tarea_subtareas",
+      "resource": "ic_adapt_tarea_subtareas.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 353,
+      "key": "tarea_adjuntar",
+      "resource": "ic_adapt_tarea_adjuntar.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 354,
+      "key": "tarea_filtrar",
+      "resource": "ic_adapt_tarea_filtrar.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 355,
+      "key": "tarea_ordenar",
+      "resource": "ic_adapt_tarea_ordenar.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 356,
+      "key": "tarea_duplicar",
+      "resource": "ic_adapt_tarea_duplicar.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 357,
+      "key": "tarea_archivar",
+      "resource": "ic_adapt_tarea_archivar.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 358,
+      "key": "tarea_recuperar",
+      "resource": "ic_adapt_tarea_recuperar.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 359,
+      "key": "tarea_por_curso",
+      "resource": "ic_adapt_tarea_por_curso.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 360,
+      "key": "tarea_por_fecha",
+      "resource": "ic_adapt_tarea_por_fecha.png",
+      "module": "tasks",
+      "redesign_required": true
+    },
+    {
+      "index": 361,
+      "key": "nota_crear",
+      "resource": "ic_adapt_nota_crear.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 362,
+      "key": "nota_editar",
+      "resource": "ic_adapt_nota_editar.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 363,
+      "key": "nota_eliminar",
+      "resource": "ic_adapt_nota_eliminar.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 364,
+      "key": "nota_fijar",
+      "resource": "ic_adapt_nota_fijar.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 365,
+      "key": "nota_desfijar",
+      "resource": "ic_adapt_nota_desfijar.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 366,
+      "key": "nota_adhesiva",
+      "resource": "ic_adapt_nota_adhesiva.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 367,
+      "key": "nota_color",
+      "resource": "ic_adapt_nota_color.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 368,
+      "key": "nota_recordatorio",
+      "resource": "ic_adapt_nota_recordatorio.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 369,
+      "key": "nota_adjuntar",
+      "resource": "ic_adapt_nota_adjuntar.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 370,
+      "key": "nota_voz",
+      "resource": "ic_adapt_nota_voz.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 371,
+      "key": "nota_bloquear",
+      "resource": "ic_adapt_nota_bloquear.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 372,
+      "key": "nota_compartir",
+      "resource": "ic_adapt_nota_compartir.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 373,
+      "key": "nota_buscar",
+      "resource": "ic_adapt_nota_buscar.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 374,
+      "key": "nota_archivar",
+      "resource": "ic_adapt_nota_archivar.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 375,
+      "key": "nota_restaurar",
+      "resource": "ic_adapt_nota_restaurar.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 376,
+      "key": "nota_widget",
+      "resource": "ic_adapt_nota_widget.png",
+      "module": "notes",
+      "redesign_required": true
+    },
+    {
+      "index": 377,
+      "key": "cal_dia",
+      "resource": "ic_adapt_cal_dia.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 378,
+      "key": "cal_semana",
+      "resource": "ic_adapt_cal_semana.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 379,
+      "key": "cal_mes",
+      "resource": "ic_adapt_cal_mes.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 380,
+      "key": "cal_anio",
+      "resource": "ic_adapt_cal_anio.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 381,
+      "key": "cal_ir_hoy",
+      "resource": "ic_adapt_cal_ir_hoy.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 382,
+      "key": "cal_evento_crear",
+      "resource": "ic_adapt_cal_evento_crear.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 383,
+      "key": "cal_evento_editar",
+      "resource": "ic_adapt_cal_evento_editar.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 384,
+      "key": "cal_evento_eliminar",
+      "resource": "ic_adapt_cal_evento_eliminar.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 385,
+      "key": "cal_horario_clases",
+      "resource": "ic_adapt_cal_horario_clases.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 386,
+      "key": "cal_sesion",
+      "resource": "ic_adapt_cal_sesion.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 387,
+      "key": "cal_conflicto",
+      "resource": "ic_adapt_cal_conflicto.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 388,
+      "key": "cal_reprogramar",
+      "resource": "ic_adapt_cal_reprogramar.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 389,
+      "key": "cal_sincronizar",
+      "resource": "ic_adapt_cal_sincronizar.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 390,
+      "key": "cal_importar",
+      "resource": "ic_adapt_cal_importar.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 391,
+      "key": "cal_exportar",
+      "resource": "ic_adapt_cal_exportar.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 392,
+      "key": "cal_dia_libre",
+      "resource": "ic_adapt_cal_dia_libre.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 393,
+      "key": "cal_dias_habiles",
+      "resource": "ic_adapt_cal_dias_habiles.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 394,
+      "key": "cal_vista_lista",
+      "resource": "ic_adapt_cal_vista_lista.png",
+      "module": "calendar",
+      "redesign_required": true
+    },
+    {
+      "index": 395,
+      "key": "aviso_crear",
+      "resource": "ic_adapt_aviso_crear.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 396,
+      "key": "aviso_editar",
+      "resource": "ic_adapt_aviso_editar.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 397,
+      "key": "aviso_eliminar",
+      "resource": "ic_adapt_aviso_eliminar.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 398,
+      "key": "aviso_activar",
+      "resource": "ic_adapt_aviso_activar.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 399,
+      "key": "aviso_silenciar",
+      "resource": "ic_adapt_aviso_silenciar.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 400,
+      "key": "aviso_posponer",
+      "resource": "ic_adapt_aviso_posponer.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 401,
+      "key": "aviso_recurrente",
+      "resource": "ic_adapt_aviso_recurrente.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 402,
+      "key": "aviso_urgente",
+      "resource": "ic_adapt_aviso_urgente.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 403,
+      "key": "aviso_proximo",
+      "resource": "ic_adapt_aviso_proximo.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 404,
+      "key": "aviso_vencido",
+      "resource": "ic_adapt_aviso_vencido.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 405,
+      "key": "aviso_prueba",
+      "resource": "ic_adapt_aviso_prueba.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 406,
+      "key": "aviso_canal",
+      "resource": "ic_adapt_aviso_canal.png",
+      "module": "reminders",
+      "redesign_required": true
+    },
+    {
+      "index": 407,
+      "key": "estudio_iniciar",
+      "resource": "ic_adapt_estudio_iniciar.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 408,
+      "key": "estudio_pausar",
+      "resource": "ic_adapt_estudio_pausar.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 409,
+      "key": "estudio_finalizar",
+      "resource": "ic_adapt_estudio_finalizar.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 410,
+      "key": "estudio_temporizador",
+      "resource": "ic_adapt_estudio_temporizador.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 411,
+      "key": "estudio_pomodoro",
+      "resource": "ic_adapt_estudio_pomodoro.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 412,
+      "key": "estudio_descanso",
+      "resource": "ic_adapt_estudio_descanso.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 413,
+      "key": "estudio_sesion",
+      "resource": "ic_adapt_estudio_sesion.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 414,
+      "key": "estudio_plan",
+      "resource": "ic_adapt_estudio_plan.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 415,
+      "key": "estudio_objetivo",
+      "resource": "ic_adapt_estudio_objetivo.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 416,
+      "key": "estudio_progreso",
+      "resource": "ic_adapt_estudio_progreso.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 417,
+      "key": "estudio_historial",
+      "resource": "ic_adapt_estudio_historial.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 418,
+      "key": "estudio_estadisticas",
+      "resource": "ic_adapt_estudio_estadisticas.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 419,
+      "key": "estudio_fichas",
+      "resource": "ic_adapt_estudio_fichas.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 420,
+      "key": "estudio_resumen",
+      "resource": "ic_adapt_estudio_resumen.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 421,
+      "key": "estudio_repaso",
+      "resource": "ic_adapt_estudio_repaso.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 422,
+      "key": "estudio_concentracion",
+      "resource": "ic_adapt_estudio_concentracion.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 423,
+      "key": "estudio_material",
+      "resource": "ic_adapt_estudio_material.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 424,
+      "key": "estudio_bibliografia",
+      "resource": "ic_adapt_estudio_bibliografia.png",
+      "module": "study",
+      "redesign_required": true
+    },
+    {
+      "index": 425,
+      "key": "examen_crear",
+      "resource": "ic_adapt_examen_crear.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 426,
+      "key": "examen_editar",
+      "resource": "ic_adapt_examen_editar.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 427,
+      "key": "examen_eliminar",
+      "resource": "ic_adapt_examen_eliminar.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 428,
+      "key": "examen_programar",
+      "resource": "ic_adapt_examen_programar.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 429,
+      "key": "examen_inscripcion",
+      "resource": "ic_adapt_examen_inscripcion.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 430,
+      "key": "examen_temario",
+      "resource": "ic_adapt_examen_temario.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 431,
+      "key": "examen_preguntas",
+      "resource": "ic_adapt_examen_preguntas.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 432,
+      "key": "examen_simulacro",
+      "resource": "ic_adapt_examen_simulacro.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 433,
+      "key": "examen_cronometro",
+      "resource": "ic_adapt_examen_cronometro.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 434,
+      "key": "examen_resultados",
+      "resource": "ic_adapt_examen_resultados.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 435,
+      "key": "examen_calificacion",
+      "resource": "ic_adapt_examen_calificacion.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 436,
+      "key": "examen_revision",
+      "resource": "ic_adapt_examen_revision.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 437,
+      "key": "examen_repeticion",
+      "resource": "ic_adapt_examen_repeticion.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 438,
+      "key": "examen_pendiente",
+      "resource": "ic_adapt_examen_pendiente.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 439,
+      "key": "examen_aprobado",
+      "resource": "ic_adapt_examen_aprobado.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 440,
+      "key": "examen_reprobado",
+      "resource": "ic_adapt_examen_reprobado.png",
+      "module": "exams",
+      "redesign_required": true
+    },
+    {
+      "index": 441,
+      "key": "voz_activar",
+      "resource": "ic_adapt_voz_activar.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 442,
+      "key": "voz_desactivar",
+      "resource": "ic_adapt_voz_desactivar.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 443,
+      "key": "voz_grabar",
+      "resource": "ic_adapt_voz_grabar.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 444,
+      "key": "voz_pausar",
+      "resource": "ic_adapt_voz_pausar.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 445,
+      "key": "voz_reproducir",
+      "resource": "ic_adapt_voz_reproducir.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 446,
+      "key": "voz_transcribir",
+      "resource": "ic_adapt_voz_transcribir.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 447,
+      "key": "voz_corregir",
+      "resource": "ic_adapt_voz_corregir.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 448,
+      "key": "voz_idioma",
+      "resource": "ic_adapt_voz_idioma.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 449,
+      "key": "voz_tarea_rapida",
+      "resource": "ic_adapt_voz_tarea_rapida.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 450,
+      "key": "voz_escuchar",
+      "resource": "ic_adapt_voz_escuchar.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 451,
+      "key": "voz_permiso",
+      "resource": "ic_adapt_voz_permiso.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 452,
+      "key": "voz_cancelar",
+      "resource": "ic_adapt_voz_cancelar.png",
+      "module": "voice",
+      "redesign_required": true
+    },
+    {
+      "index": 453,
+      "key": "widget_agenda",
+      "resource": "ic_adapt_widget_agenda.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 454,
+      "key": "widget_calendario",
+      "resource": "ic_adapt_widget_calendario.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 455,
+      "key": "widget_tareas",
+      "resource": "ic_adapt_widget_tareas.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 456,
+      "key": "widget_notas",
+      "resource": "ic_adapt_widget_notas.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 457,
+      "key": "widget_examenes",
+      "resource": "ic_adapt_widget_examenes.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 458,
+      "key": "widget_recordatorios",
+      "resource": "ic_adapt_widget_recordatorios.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 459,
+      "key": "widget_horario",
+      "resource": "ic_adapt_widget_horario.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 460,
+      "key": "widget_estudio",
+      "resource": "ic_adapt_widget_estudio.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 461,
+      "key": "widget_agregar",
+      "resource": "ic_adapt_widget_agregar.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 462,
+      "key": "widget_configurar",
+      "resource": "ic_adapt_widget_configurar.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 463,
+      "key": "widget_redimensionar",
+      "resource": "ic_adapt_widget_redimensionar.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 464,
+      "key": "widget_actualizar",
+      "resource": "ic_adapt_widget_actualizar.png",
+      "module": "widget",
+      "redesign_required": true
+    },
+    {
+      "index": 465,
+      "key": "archivo_importar",
+      "resource": "ic_adapt_archivo_importar.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 466,
+      "key": "archivo_exportar",
+      "resource": "ic_adapt_archivo_exportar.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 467,
+      "key": "archivo_pdf",
+      "resource": "ic_adapt_archivo_pdf.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 468,
+      "key": "archivo_imagen",
+      "resource": "ic_adapt_archivo_imagen.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 469,
+      "key": "archivo_documento",
+      "resource": "ic_adapt_archivo_documento.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 470,
+      "key": "archivo_ocr",
+      "resource": "ic_adapt_archivo_ocr.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 471,
+      "key": "archivo_escanear",
+      "resource": "ic_adapt_archivo_escanear.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 472,
+      "key": "archivo_adjuntar",
+      "resource": "ic_adapt_archivo_adjuntar.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 473,
+      "key": "archivo_descargar",
+      "resource": "ic_adapt_archivo_descargar.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 474,
+      "key": "archivo_subir",
+      "resource": "ic_adapt_archivo_subir.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 475,
+      "key": "archivo_compartir",
+      "resource": "ic_adapt_archivo_compartir.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 476,
+      "key": "archivo_eliminar",
+      "resource": "ic_adapt_archivo_eliminar.png",
+      "module": "files",
+      "redesign_required": true
+    },
+    {
+      "index": 477,
+      "key": "ajuste_apariencia",
+      "resource": "ic_adapt_ajuste_apariencia.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 478,
+      "key": "ajuste_tema_oscuro",
+      "resource": "ic_adapt_ajuste_tema_oscuro.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 479,
+      "key": "ajuste_tema_claro",
+      "resource": "ic_adapt_ajuste_tema_claro.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 480,
+      "key": "ajuste_idioma",
+      "resource": "ic_adapt_ajuste_idioma.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 481,
+      "key": "ajuste_notificaciones",
+      "resource": "ic_adapt_ajuste_notificaciones.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 482,
+      "key": "ajuste_privacidad",
+      "resource": "ic_adapt_ajuste_privacidad.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 483,
+      "key": "ajuste_seguridad",
+      "resource": "ic_adapt_ajuste_seguridad.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 484,
+      "key": "ajuste_respaldo",
+      "resource": "ic_adapt_ajuste_respaldo.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 485,
+      "key": "ajuste_restaurar",
+      "resource": "ic_adapt_ajuste_restaurar.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 486,
+      "key": "ajuste_sincronizacion",
+      "resource": "ic_adapt_ajuste_sincronizacion.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 487,
+      "key": "ajuste_accesibilidad",
+      "resource": "ic_adapt_ajuste_accesibilidad.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 488,
+      "key": "ajuste_permisos",
+      "resource": "ic_adapt_ajuste_permisos.png",
+      "module": "settings",
+      "redesign_required": true
+    },
+    {
+      "index": 489,
+      "key": "metrica_actividad",
+      "resource": "ic_adapt_metrica_actividad.png",
+      "module": "stats",
+      "redesign_required": true
+    },
+    {
+      "index": 490,
+      "key": "metrica_rendimiento",
+      "resource": "ic_adapt_metrica_rendimiento.png",
+      "module": "stats",
+      "redesign_required": true
+    },
+    {
+      "index": 491,
+      "key": "metrica_asistencia",
+      "resource": "ic_adapt_metrica_asistencia.png",
+      "module": "stats",
+      "redesign_required": true
+    },
+    {
+      "index": 492,
+      "key": "metrica_completadas",
+      "resource": "ic_adapt_metrica_completadas.png",
+      "module": "stats",
+      "redesign_required": true
+    },
+    {
+      "index": 493,
+      "key": "metrica_pendientes",
+      "resource": "ic_adapt_metrica_pendientes.png",
+      "module": "stats",
+      "redesign_required": true
+    },
+    {
+      "index": 494,
+      "key": "metrica_retrasos",
+      "resource": "ic_adapt_metrica_retrasos.png",
+      "module": "stats",
+      "redesign_required": true
+    },
+    {
+      "index": 495,
+      "key": "metrica_tiempo",
+      "resource": "ic_adapt_metrica_tiempo.png",
+      "module": "stats",
+      "redesign_required": true
+    },
+    {
+      "index": 496,
+      "key": "metrica_semana",
+      "resource": "ic_adapt_metrica_semana.png",
+      "module": "stats",
+      "redesign_required": true
+    },
+    {
+      "index": 497,
+      "key": "metrica_mes",
+      "resource": "ic_adapt_metrica_mes.png",
+      "module": "stats",
+      "redesign_required": true
+    },
+    {
+      "index": 498,
+      "key": "metrica_comparacion",
+      "resource": "ic_adapt_metrica_comparacion.png",
+      "module": "stats",
+      "redesign_required": true
+    },
+    {
+      "index": 499,
+      "key": "metrica_tendencia",
+      "resource": "ic_adapt_metrica_tendencia.png",
+      "module": "stats",
+      "redesign_required": true
+    },
+    {
+      "index": 500,
+      "key": "metrica_informe",
+      "resource": "ic_adapt_metrica_informe.png",
+      "module": "stats",
+      "redesign_required": true
+    }
+  ]
+}
