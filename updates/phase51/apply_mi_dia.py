@@ -47,6 +47,13 @@ def run():
                            'page=0;dashboardAllTasksExpanded=true;selectedCategory="Notas";render();', "notes deep link")
         main = replace_one(main, 'page=0;selectedCategory=note.category;render();',
                            'page=0;dashboardAllTasksExpanded=true;selectedCategory=note.category;render();', "notes widget deep link")
+    if 'root.getChildAt(0).setVisibility(page==0?View.GONE:View.VISIBLE);' not in main:
+        main = replace_one(main,
+                           '        taskProgressCache=page<2?Store.get(this).subtaskProgressAll():Collections.emptyMap();',
+                           '        // The landscape is the home header; original toolbar on other tabs.\n'
+                           '        root.getChildAt(0).setVisibility(page==0?View.GONE:View.VISIBLE);\n'
+                           '        taskProgressCache=page<2?Store.get(this).subtaskProgressAll():Collections.emptyMap();',
+                           "home header visibility")
     if 'case "Inicio":' not in ui:
         ui = replace_one(ui, 'case "Agenda":return "check";',
                          'case "Inicio":case "Agenda":return "check";', "home nav icon")
