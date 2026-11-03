@@ -1,0 +1,85 @@
+{
+  "count": 4,
+  "style": "3D high-gloss, local specular highlights, saturated solid colors",
+  "background": "transparent RGBA",
+  "master_resolution": [
+    2048,
+    2048
+  ],
+  "android_resolution": [
+    256,
+    256
+  ],
+  "replaces": [
+    "ic_adapt_ui_exam_review.png",
+    "ic_adapt_ui_class_schedule.png",
+    "ic_adapt_ui_course_add.png",
+    "ic_adapt_ui_my_guide.png"
+  ],
+  "icons": [
+    {
+      "key": "ui_exam_review",
+      "filename": "ic_adapt_ui_exam_review.png",
+      "assets": {
+        "2048": {
+          "path": "assets/iconografia/paneles/fullhd-2048/ic_adapt_ui_exam_review.png",
+          "sha256": "bb8a3b23ef874a026f113fffa8352a21649c4612aa5a7559ded956301cc22eda",
+          "bytes": 135982
+        },
+        "256": {
+          "path": "assets/iconografia/paneles/android-256/ic_adapt_ui_exam_review.png",
+          "sha256": "dec8dbe742a37e9b66239967e9239ec1efd84be8349dd29b28d1df88c9841e5a",
+          "bytes": 13729
+        }
+      }
+    },
+    {
+      "key": "ui_class_schedule",
+      "filename": "ic_adapt_ui_class_schedule.png",
+      "assets": {
+        "2048": {
+          "path": "assets/iconografia/paneles/fullhd-2048/ic_adapt_ui_class_schedule.png",
+          "sha256": "cc3e8bc7d9014d683aa87408a620fe72dc93a48f527978d91c64e81df2dc47e0",
+          "bytes": 140690
+        },
+        "256": {
+          "path": "assets/iconografia/paneles/android-256/ic_adapt_ui_class_schedule.png",
+          "sha256": "122b52a3097813dc0b6fb0b4c6c0635ddfb1c5837e613c092d5ef7cefb4480b6",
+          "bytes": 14417
+        }
+      }
+    },
+    {
+      "key": "ui_course_add",
+      "filename": "ic_adapt_ui_course_add.png",
+      "assets": {
+        "2048": {
+          "path": "assets/iconografia/paneles/fullhd-2048/ic_adapt_ui_course_add.png",
+          "sha256": "b215073ca0a040c51a0c39f7ba669c7a19abaea5a53431200b8912e07a5c90bf",
+          "bytes": 132788
+        },
+        "256": {
+          "path": "assets/iconografia/paneles/android-256/ic_adapt_ui_course_add.png",
+          "sha256": "3aabe7ffebe9cbe3b0d2a7fb387375977e5cc9c11301a1be8fa0c0d295918a9f",
+          "bytes": 13132
+        }
+      }
+    },
+    {
+      "key": "ui_my_guide",
+      "filename": "ic_adapt_ui_my_guide.png",
+      "assets": {
+        "2048": {
+          "path": "assets/iconografia/paneles/fullhd-2048/ic_adapt_ui_my_guide.png",
+          "sha256": "7460cdd8bee7ef2534e14ec5c324e4a9d4efc084c842c96aef60c05f543e5b8a",
+          "bytes": 122175
+        },
+        "256": {
+          "path": "assets/iconografia/paneles/android-256/ic_adapt_ui_my_guide.png",
+          "sha256": "f6aa9f8f54166e90e9dbc4d0a382e2109837d1c7238b2f6d8646921bd31b0206",
+          "bytes": 12527
+        }
+      }
+    }
+  ]
+}
