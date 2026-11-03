@@ -81,6 +81,7 @@ adb shell am force-stop "$PKG" || true
 adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
 sleep 3
 find_and_tap "Calendario, abrir pestaña"
-find_and_tap "Abrir mi horario"
+find_and_tap "Plan de estudio"
+find_and_tap "Crear / Editar horario"
 capture "15-horario-iconografia"
 echo "PASS phase26 emulator: native date, 12h time, category/color selectors, connections icons and schedule back/help"
