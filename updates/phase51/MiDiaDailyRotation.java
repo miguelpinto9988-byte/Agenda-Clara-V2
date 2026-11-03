@@ -11,11 +11,11 @@ public final class MiDiaDailyRotation {
     private static final LocalDate EPOCH = LocalDate.of(2026, 1, 1);
 
     public static int backgroundIndex(LocalDate day) {
-        return Math.floorMod(ChronoUnit.DAYS.between(EPOCH, day), 30);
+        return (int) Math.floorMod(ChronoUnit.DAYS.between(EPOCH, day), 30);
     }
 
     public static int quoteIndex(LocalDate day) {
-        return Math.floorMod(ChronoUnit.DAYS.between(EPOCH, day) * 7, 50);
+        return (int) Math.floorMod(ChronoUnit.DAYS.between(EPOCH, day) * 7, 50);
     }
 
     public static int backgroundResource(Context context, LocalDate day) {
