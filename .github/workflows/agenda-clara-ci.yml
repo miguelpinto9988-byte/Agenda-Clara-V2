@@ -133,7 +133,9 @@ jobs:
           python3 updates/phase50/test_widgets_3_11_3.py
           python3 updates/phase51/apply_3_12_0.py
           python3 updates/phase51/finish_integration.py
-          python3 updates/phase51/generate_icons.py
+          python3 -m venv /tmp/agenda-icon-venv
+          /tmp/agenda-icon-venv/bin/pip install --disable-pip-version-check --quiet Pillow==11.3.0
+          /tmp/agenda-icon-venv/bin/python updates/phase51/generate_icons.py
           python3 updates/phase51/install_tesseract_model.py
           python3 updates/phase51/test_release.py
           python3 updates/phase29/test_performance_qa.py
