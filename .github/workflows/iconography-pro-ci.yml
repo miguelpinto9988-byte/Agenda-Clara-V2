@@ -1,0 +1,55 @@
+name: Agenda Clara · Biblioteca PNG premium
+on:
+  push:
+    branches: [feat/adaptive-iconography-premium-3-12-1]
+  workflow_dispatch:
+jobs:
+  iconos-profesionales:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - name: Obtener la rama
+        uses: actions/checkout@v4
+      - name: Python y Pillow
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Instalar PIL
+        run: python -m pip install --disable-pip-version-check Pillow
+      - name: Generar iconografía y muestras reales
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p generated-png
+          python updates/phase51/generate_icons.py generated-png
+          python updates/phase52/generate_adaptive_pro.py generated-png icon_pro_artifacts
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          from PIL import Image
+          z=Path('generated-png')
+          icons=sorted(z.glob('ic_adapt_*.png'))
+          assert len(icons)==328
+          m=json.loads(Path('icon_pro_artifacts/MANIFEST.json').read_text(encoding='utf8'))
+          assert m['count']==328 and m['png_bytes']<=15000000
+          for p in icons:
+              im=Image.open(p)
+              assert im.size==(256,256)
+              assert im.info.get('transparency') is not None or im.mode=='RGBA',p
+              assert im.convert('RGBA').getpixel((0,0))[3]==0,p
+          hashes={hashlib.sha256(p.read_bytes()).hexdigest() for p in icons}
+          assert len(hashes)>=280, f'Too many duplicate assets: {len(hashes)}'
+          print('PASS: 328 PNG transparentes 256px; hashes distintos:',len(hashes),'tamaño:',m['png_bytes'])
+          PY
+      - name: Publicar biblioteca y muestras
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-328-Iconos-PNG-Alta-Calidad
+          path: |
+            icon_pro_artifacts/Agenda-Clara-328-Iconos-Pro.zip
+            icon_pro_artifacts/MUESTRA-REAL-ICONOS.png
+            icon_pro_artifacts/CATALOGO-*.png
+            icon_pro_artifacts/MANIFEST.json
+            icon_pro_artifacts/LICENSE-MIT.txt
+          retention-days: 30
+          if-no-files-found: error
