@@ -44,8 +44,12 @@ def crop_fit(image,size,ratio):
     if not bbox:raise ValueError('Empty source illustration')
     output=image.crop(bbox)
     limit=int(size*ratio)
-    output.thumbnail((limit,limit),Image.Resampling.LANCZOS)
-    return output
+    # Pillow.thumbnail() never enlarges small source assets. Scale explicitly to
+    # occupy the icon canvas at both 256 and 2048 pixels.
+    width,height=output.size
+    scale=min(limit/width,limit/height)
+    target=(max(1,round(width*scale)),max(1,round(height*scale)))
+    return output.resize(target,Image.Resampling.LANCZOS)
 
 def flat_colors(image):
     palette=image.quantize(colors=64,method=Image.Quantize.FASTOCTREE,dither=Image.Dither.NONE)
