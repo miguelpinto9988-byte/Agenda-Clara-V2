@@ -45,10 +45,10 @@ read_ui(){
 read_ui
 # Phase 4 replaced the old agenda landing with Inicio — Mi día.
 # Open the *original* task/category panel before running legacy regressions.
-if grep -q 'Tu día en números' design_ui.xml; then
+if grep -Eq 'Progreso del día|Mi día|Tareas, abrir pestaña' design_ui.xml; then
     echo "PASS legacy QA: Mi día home detected; open preserved task categories"
     MI_DIA=1
-    tap_node "Todas mis tareas y categorías"
+    tap_node "Tareas, abrir pestaña"
     for attempt in $(seq 1 8); do
         read_ui
         if grep -q 'Mis categorías' design_ui.xml; then break; fi
@@ -72,11 +72,7 @@ grep -q 'General' design_ui.xml
 adb exec-out screencap -p > screenshots/05-categorias-flotante.png
 adb shell input keyevent KEYCODE_BACK
 sleep 2
-if [ "$MI_DIA" -eq 1 ]; then
-    tap_node "＋ Nueva"
-else
-    tap_node "Crear una tarea"
-fi
+tap_node "＋ Nueva"
 tap_node "Nueva tarea"
 read_ui
 grep -q 'Nueva tarea' design_ui.xml
@@ -84,11 +80,13 @@ grep -q 'Nombre de la tarea' design_ui.xml
 adb exec-out screencap -p > screenshots/06-editor-flotante.png
 adb shell input keyevent KEYCODE_BACK
 sleep 2
-tap_node "Revisar, abrir pestaña"
+tap_node "Más, abrir pestaña"
+tap_node "Propuestas y notificaciones"
 read_ui
 grep -q 'Revisión' design_ui.xml
 adb exec-out screencap -p > screenshots/07-revision.png
-tap_node "Conexiones, abrir pestaña"
+tap_node "Más, abrir pestaña"
+tap_node "WhatsApp y grupos"
 read_ui
 grep -q 'Conexiones' design_ui.xml
 adb exec-out screencap -p > screenshots/08-conexiones.png
