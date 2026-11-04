@@ -81,6 +81,7 @@ public final class ScheduleBackup {
 
         AcademicSchedules.migrateLegacy(context);
         Map<String,String> identity=new HashMap<>();
+        Map<String,List<String>> importedCourses=new HashMap<>();
         ArrayList<String[]> missing=new ArrayList<>();
         if(schema==2){
             JSONArray profiles=root.getJSONArray("profiles");
@@ -91,6 +92,16 @@ public final class ScheduleBackup {
             for(int i=0;i<profiles.length();i++){
                 JSONObject p=profiles.getJSONObject(i);
                 String sourceId=p.getString("id"),name=p.getString("name");
+                JSONArray courseNames=p.optJSONArray("courses");
+                if(courseNames!=null&&courseNames.length()>300)
+                    throw new IOException("Demasiados cursos en un horario");
+                ArrayList<String> courseList=new ArrayList<>();
+                if(courseNames!=null)for(int j=0;j<courseNames.length();j++){
+                    String course=courseNames.optString(j,"").trim();
+                    if(course.length()>120)throw new IOException("Nombre de curso inválido");
+                    courseList.add(course);
+                }
+                importedCourses.put(sourceId,AcademicSchedules.uniqueCourses(courseList));
                 if(sourceId.isEmpty()||!seen.add(sourceId)||name.trim().length()<2
                         ||name.length()>90)
                     throw new IOException("Perfil inválido o repetido");
@@ -122,6 +133,15 @@ public final class ScheduleBackup {
                 AcademicSchedules.Profile created=AcademicSchedules.create(context,item[1],
                         new ArrayList<String>());
                 identity.put(item[0],created.id);
+            }
+        }
+        if(schema==2)for(Map.Entry<String,String> link:identity.entrySet()){
+            AcademicSchedules.Profile current=AcademicSchedules.find(context,link.getValue());
+            if(current!=null){
+                ArrayList<String> courses=new ArrayList<>(current.courses);
+                List<String> imported=importedCourses.get(link.getKey());
+                if(imported!=null)courses.addAll(imported);
+                AcademicSchedules.setCourses(context,current.id,AcademicSchedules.uniqueCourses(courses));
             }
         }
         LinkedHashMap<String,List<ScheduleEntry>> grouped=new LinkedHashMap<>();
