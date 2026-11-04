@@ -5,10 +5,14 @@ from pathlib import Path
 JAVA=Path("AgendaClara/app/src/main/java/pe/agendaclara/app")
 
 def exact(source, old, new, label):
-    if new in source:return source
+    # Test the OLD anchor first: the replacement may be a substring of it.
     n=source.count(old)
-    if n!=1:raise RuntimeError(f"{label}: se esperaba un anclaje, encontrados {n}")
-    return source.replace(old,new,1)
+    if old==new:
+        if n!=1:raise RuntimeError(f"{label}: anclaje inesperado: {n}")
+        return source
+    if n==1:return source.replace(old,new,1)
+    if n==0 and new in source:return source
+    raise RuntimeError(f"{label}: se esperaba un anclaje, encontrados {n}")
 
 def transform_schedule(source):
     source=exact(source,
