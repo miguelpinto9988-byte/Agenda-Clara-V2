@@ -8,9 +8,10 @@ adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
 sleep 4
 tap_node(){
     local label="$1" coords
-    adb shell uiautomator dump /sdcard/design_ui.xml >/dev/null 2>&1
-    adb exec-out cat /sdcard/design_ui.xml >design_ui.xml
-    coords="$(python3 - "$label" <<'PY'
+    for attempt in $(seq 1 18); do
+      adb shell uiautomator dump /sdcard/design_ui.xml >/dev/null 2>&1 || true
+      adb exec-out cat /sdcard/design_ui.xml >design_ui.xml || true
+      coords="$(python3 - "$label" <<'PY'
 import sys,xml.etree.ElementTree as ET,re
 label=sys.argv[1].lower()
 for n in ET.parse("design_ui.xml").getroot().iter("node"):
@@ -23,6 +24,16 @@ else:
     raise SystemExit("Missing visible Android control: "+label)
 PY
 )"
+      if [ -n "$coords" ]; then break; fi
+      # Dashboard contains the preserved task controls below the first viewport.
+      if [ "$attempt" -le 9 ]; then
+        adb shell input swipe 540 1620 540 560 300
+      else
+        adb shell input swipe 540 560 540 1620 300
+      fi
+      sleep 1
+    done
+    test -n "$coords" || { echo "Could not locate Android control: $label"; exit 1; }
     read -r x y <<<"$coords"
     adb shell input tap "$x" "$y"
     sleep 2
@@ -32,9 +43,25 @@ read_ui(){
     adb exec-out cat /sdcard/design_ui.xml >design_ui.xml
 }
 read_ui
+# Phase 4 replaced the old agenda landing with Inicio — Mi día.
+# Open the *original* task/category panel before running legacy regressions.
+if grep -q 'Tu día en números' design_ui.xml; then
+    echo "PASS legacy QA: Mi día home detected; open preserved task categories"
+    MI_DIA=1
+    tap_node "Todas mis tareas y categorías"
+    for attempt in $(seq 1 8); do
+        read_ui
+        if grep -q 'Mis categorías' design_ui.xml; then break; fi
+        adb shell input swipe 540 1620 540 560 300
+        sleep 1
+    done
+else
+    MI_DIA=0
+fi
+read_ui
 grep -q 'Mis categorías' design_ui.xml
 grep -q 'General' design_ui.xml
-grep -q 'Crear una tarea' design_ui.xml
+if [ "$MI_DIA" -eq 0 ]; then grep -q 'Crear una tarea' design_ui.xml; fi
 if grep -E 'text="(Todas|Urgentes|Pendientes|Próximas|Hechas)"' design_ui.xml;then
     echo "Redundant status filters appeared again" >&2;exit 1
 fi
@@ -45,7 +72,11 @@ grep -q 'General' design_ui.xml
 adb exec-out screencap -p > screenshots/05-categorias-flotante.png
 adb shell input keyevent KEYCODE_BACK
 sleep 2
-tap_node "Crear una tarea"
+if [ "$MI_DIA" -eq 1 ]; then
+    tap_node "＋ Nueva"
+else
+    tap_node "Crear una tarea"
+fi
 tap_node "Nueva tarea"
 read_ui
 grep -q 'Nueva tarea' design_ui.xml
