@@ -32,7 +32,7 @@ for value in ("MiDiaQuickActions.add(activity, body);",
 assert dash.index("MiDiaQuickActions.add(activity, body);") < dash.index(
     "addProgress(activity, body, metrics);") < dash.index("addQuote(activity, body, today);")
 assert "boolean twoRows = widthDp < 400 || fontScale > 1.28f;" in dash
-assert "greeting.setTextSize(widthDp < 330 ? 19 : widthDp < 400 ? 21 : 23)" in head
+assert "greeting.setTextSize(widthDp < 360f ? 21f : 23f)" in head
 assert "Math.round(width * 864f / 1920f)" in head
 assert "landscape.setScaleType(ImageView.ScaleType.CENTER_CROP)" in head
 assert "dateSubtitle.setEllipsize(TextUtils.TruncateAt.END)" in head
