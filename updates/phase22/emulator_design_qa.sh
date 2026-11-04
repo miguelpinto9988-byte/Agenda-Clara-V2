@@ -21,9 +21,9 @@ for n in ET.parse("design_ui.xml").getroot().iter("node"):
         if len(bounds)==4 and bounds[2]>bounds[0] and bounds[3]>bounds[1]:
             print((bounds[0]+bounds[2])//2,(bounds[1]+bounds[3])//2);break
 else:
-    raise SystemExit("Missing visible Android control: "+label)
+    raise SystemExit(1)
 PY
-)"
+)" || coords=""
       if [ -n "$coords" ]; then break; fi
       # Dashboard contains the preserved task controls below the first viewport.
       if [ "$attempt" -le 9 ]; then
