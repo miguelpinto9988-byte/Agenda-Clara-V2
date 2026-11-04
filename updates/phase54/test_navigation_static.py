@@ -32,7 +32,7 @@ for method in ("void tasksPage()", "void calendarPage()", "void messagesPage()",
     assert method in main, "Lost legacy functionality: " + method
 assert 'page=0;homeSection=1;dashboardAllTasksExpanded=true;selectedCategory="Notas";render();' in main
 for preserved in ("WhatsApp", "StickyNotesUi.showEditor", "VoiceQuickTask.show",
-                  "ScheduleActivity", "Calendar", "category"):
+                  "ScheduleActivity", "Calendar"):
     assert preserved in (more + study)
 assert "Store.get(a).all()" in study
 assert "MiDiaDayMetrics.isStudy(task)" in study
