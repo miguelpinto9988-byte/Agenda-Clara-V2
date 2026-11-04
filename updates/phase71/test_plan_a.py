@@ -42,6 +42,19 @@ assert "WHERE schedule_id=?" in db
 assert "old.day==s.day&&old.start==s.start" in db
 assert "assignUnassigned" in db and "deleteProfile" in db
 assert "ScheduleCourseColors.same" in db
+categories=source("CategoryRegistry.java")
+assert "AcademicSchedules.ownsCategory(c,previous)" in categories
+assert "AcademicSchedules.ownsCategory(c,name)" in categories
+assert "saveManaged" in categories and "deleteManaged" in categories
+dashboard=source("MiDiaDashboard.java")
+assert "ScheduleDatabase.get(activity).all(AcademicSchedules.activeId(activity))" in dashboard
+backup=source("ScheduleBackup.java")
+assert '"schema",2' in backup
+assert "schema!=1&&schema!=2" in backup
+assert 'put("scheduleId",s.scheduleId)' in backup
+assert "AcademicSchedules.syncFromSessions" in backup
+assert "importedCourses" in backup
+assert "AcademicSchedules.activeId(this).isEmpty()" in main
 activity=source("ScheduleActivity.java")
 for token in ('profileId', 'AcademicSchedules.migrateLegacy(this)',
               'ScheduleDatabase.get(this).all(profileId)',
