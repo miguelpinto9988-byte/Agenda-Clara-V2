@@ -103,6 +103,11 @@ public final class AcademicSchedules {
         if(id!=null)for(Profile p:all(c))if(p.id.equals(id))return p;
         return null;
     }
+    public static synchronized boolean ownsCategory(Context c,String name){
+        if(name==null||name.isEmpty())return false;
+        for(Profile p:all(c))if(key(p.category).equals(key(name)))return true;
+        return false;
+    }
     public static synchronized String activeId(Context c){
         String chosen=prefs(c).getString(SELECTED,"");
         if(find(c,chosen)!=null)return chosen;
@@ -141,7 +146,7 @@ public final class AcademicSchedules {
         String category=selected.category;
         if(!key(selected.name).equals(key(title))){
             String desired=categoryProposal(c,title,selected.category);
-            if(!CategoryRegistry.save(c,selected.category,desired,
+            if(!CategoryRegistry.saveManaged(c,selected.category,desired,
                     CategoryRegistry.color(c,selected.category),CategoryRegistry.icon(c,selected.category)))
                 throw new IllegalStateException("No se pudo cambiar la categoría");
             category=desired;
@@ -204,7 +209,7 @@ public final class AcademicSchedules {
         List<Profile> profiles=all(c);
         for(int i=profiles.size()-1;i>=0;i--)if(profiles.get(i).id.equals(id))profiles.remove(i);
         save(c,profiles);
-        CategoryRegistry.delete(c,target.category); // Reassign dependent tasks/notes to General.
+        CategoryRegistry.deleteManaged(c,target.category); // Reassign tasks/notes to General after explicit confirmation.
         String next=profiles.isEmpty()?"":profiles.get(0).id;
         prefs(c).edit().putString(SELECTED,next).apply();
     }
