@@ -288,10 +288,13 @@ public final class MiDiaHeaderView extends LinearLayout {
     protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
         super.onSizeChanged(width, height, oldWidth, oldHeight);
         if (width <= 0) return;
-        // Source backgrounds are 1920 x 864 (~2.22:1). Preserve that ratio
-        // for tablets, yet keep enough height for greetings on narrow phones.
-        int visualHeight = Math.max(dp(205),
+        // Phones as narrow as 280dp need a taller cover to hold the greeting
+        // and leave the date floating below. Tablets retain a panoramic ratio.
+        float widthDp = width / getResources().getDisplayMetrics().density;
+        int minimum = widthDp < 360 ? 224 : widthDp < 480 ? 215 : 205;
+        int visualHeight = Math.max(dp(minimum),
                 Math.min(dp(450), Math.round(width * 864f / 1920f)));
+        greeting.setTextSize(widthDp < 330 ? 19 : widthDp < 400 ? 21 : 23);
         LayoutParams stackParams = (LayoutParams) imageStack.getLayoutParams();
         if (stackParams.height != visualHeight + dp(40)) {
             stackParams.height = visualHeight + dp(40);
