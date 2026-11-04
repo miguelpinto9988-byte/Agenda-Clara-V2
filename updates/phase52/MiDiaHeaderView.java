@@ -39,6 +39,7 @@ public final class MiDiaHeaderView extends LinearLayout {
     private final TextView dateTitle;
     private final TextView dateSubtitle;
     private final TextView quote;
+    private final LinearLayout floatingDate;
     private LocalDate renderedDate;
 
     private int dp(float n) {
@@ -112,6 +113,21 @@ public final class MiDiaHeaderView extends LinearLayout {
         setOrientation(VERTICAL);
         setBackgroundColor(Color.TRANSPARENT);
         setTag("mi_dia_phase5_header");
+        // Android 15 edge-to-edge uses light status-bar icons by default in
+        // some themes; keep the clock readable against the very light home.
+        if (context instanceof MainActivity) {
+            MainActivity host = (MainActivity) context;
+            if (android.os.Build.VERSION.SDK_INT >= 30) {
+                android.view.WindowInsetsController controller = host.getWindow().getInsetsController();
+                if (controller != null) controller.setSystemBarsAppearance(
+                        android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                        android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+            } else {
+                View decor = host.getWindow().getDecorView();
+                decor.setSystemUiVisibility(decor.getSystemUiVisibility()
+                        | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
 
         // Brand + real inbox shortcut + connection/settings shortcut.
         LinearLayout top = new LinearLayout(context);
@@ -216,7 +232,7 @@ public final class MiDiaHeaderView extends LinearLayout {
         TextView intro = text(context, "Aquí tienes tu día, en un vistazo.", 13, MUTED, false);
         welcome.addView(intro);
 
-        LinearLayout floatingDate = new LinearLayout(context);
+        floatingDate = new LinearLayout(context);
         floatingDate.setOrientation(HORIZONTAL);
         floatingDate.setGravity(Gravity.CENTER_VERTICAL);
         floatingDate.setPadding(dp(13), dp(9), dp(13), dp(9));
@@ -268,6 +284,7 @@ public final class MiDiaHeaderView extends LinearLayout {
         String opening = hour < 12 ? "¡Buenos días" : hour < 19 ? "¡Buenas tardes" : "¡Buenas noches";
         String name = Prefs.get(getContext()).getString(NAME_KEY, "").trim();
         greeting.setText(opening + (name.isEmpty() ? "" : ", " + name) + "! 👋");
+        greeting.setContentDescription(greeting.getText() + ". Toca para personalizar el nombre.");
         if (!today.equals(renderedDate)) {
             renderedDate = today;
             int background = MiDiaDailyRotation.backgroundResource(getContext(), today);
@@ -276,6 +293,7 @@ public final class MiDiaHeaderView extends LinearLayout {
                     "EEE d 'de' MMMM", ES)));
             dateSubtitle.setText("Semana " + today.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)
                     + " · Día " + today.getDayOfYear() + " del año");
+            floatingDate.setContentDescription(dateTitle.getText() + ". " + dateSubtitle.getText());
             quote.setText("★  " + MiDiaDailyRotation.quote(getContext(), today));
         }
     }
