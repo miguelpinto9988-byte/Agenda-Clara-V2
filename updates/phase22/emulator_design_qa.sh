@@ -85,6 +85,9 @@ tap_node "Propuestas y notificaciones"
 read_ui
 grep -q 'Revisión' design_ui.xml
 adb exec-out screencap -p > screenshots/07-revision.png
+# Volver a Inicio: Más está seleccionado tras abrir Revisión, de modo que
+# su etiqueta de accesibilidad ya no contiene «abrir pestaña».
+if [ "$MI_DIA" -eq 1 ]; then tap_node "Inicio, abrir pestaña"; fi
 tap_node "Más, abrir pestaña"
 tap_node "WhatsApp y grupos"
 read_ui
