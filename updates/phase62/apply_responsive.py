@@ -40,7 +40,7 @@ def run():
         "        boolean twoRows = widthDp < 360 || fontScale > 1.28f;",
         "        boolean twoRows = widthDp < 400 || fontScale > 1.28f;",
         "small phone stat layout")
-    if "greeting.setTextSize(widthDp < 330 ? 19 : widthDp < 400 ? 21 : 23)" not in header:
+    if "greeting.setTextSize(widthDp < 360f ? 21f : 23f)" not in header:
         raise RuntimeError("Phase9 small-phone fix is missing")
     if "MiDiaQuickActions.add(activity, body);" not in dashboard:
         raise RuntimeError("Phase12 quick actions missing")
