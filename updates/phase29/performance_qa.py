@@ -85,9 +85,10 @@ def main():
     adb(args.serial,"shell","dumpsys","gfxinfo",PKG,"reset")
     if is_emulator:
         for _ in range(3):
-            for tab in ("Calendario","Revisar","Conexiones","Agenda"): tap(args.serial,tab)
+            # Current app uses five bottom tabs; Revisión/Conexiones live under Más.
+            for tab in ("Tareas","Estudio","Calendario","Más","Inicio"): tap(args.serial,tab)
     else:
-        print("En el teléfono recorre las cuatro pestañas tres veces, revisa colores, botón + y transiciones.")
+        print("En el teléfono recorre las cinco pestañas tres veces, revisa colores, botón + y transiciones.")
         print("Evita utilizar tareas o mensajes personales durante la prueba.")
         input("Pulsa Enter al finalizar las comprobaciones: ")
     sample=frames(adb(args.serial,"shell","dumpsys","gfxinfo",PKG,"framestats"))
