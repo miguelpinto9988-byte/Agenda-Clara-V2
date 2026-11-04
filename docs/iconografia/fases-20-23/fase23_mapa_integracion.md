@@ -13,9 +13,9 @@ Prioridades: **P0=11**, **P1=11**, **P2=6**. Las piezas marcadas «revisar reuti
 | ic_state_no_link.png | Curso sin tareas vinculadas | Cuaderno abierto con clip vacío | P0 | crear |
 | ic_state_empty_today.png | Nada para hoy | Calendario limpio y destello suave | P0 | crear |
 | ic_state_all_done.png | No hay tareas pendientes | Lista completada y estrella | P0 | crear |
-| ic_quick_task.png | Botón Tarea rápida | Casilla 3D con lápiz | P0 | revisar_reutilizacion |
-| ic_quick_note.png | Botón Nota rápida | Nota adhesiva 3D y lápiz | P0 | revisar_reutilizacion |
-| ic_quick_reminder.png | Botón Recordatorio | Campana 3D y reloj | P0 | revisar_reutilizacion |
+| ic_quick_task.png | Tarea rápida (voz) | Micrófono 3D multicolor | P0 | revisar_reutilizacion |
+| ic_quick_new_task.png | Nueva tarea | Disquete azul o lista 3D multicolor | P0 | revisar_reutilizacion |
+| ic_quick_new_note.png | Nueva nota | Nota amarilla 3D con chincheta | P0 | revisar_reutilizacion |
 | ic_action_link_course.png | Vincular tarea al curso | Cadena suave entre libro y lista | P0 | crear |
 | ic_state_empty_schedule.png | Horario sin cursos | Libro académico y calendario sin marcas | P1 | crear |
 | ic_activity_completed.png | Tarea ya completada | Sello de verificación 3D | P1 | revisar_reutilizacion |
@@ -38,7 +38,7 @@ Prioridades: **P0=11**, **P1=11**, **P2=6**. Las piezas marcadas «revisar reuti
 ## Orden de integración **futuro** (no implementado)
 
 1. En Inicio, colocar un PNG semántico de asignatura en MiDiaClassCard. En MiDiaActivitiesUi, añadir iconos de cabecera (Curso / Hoy / Pendientes) y una ilustración contextual solo para los estados vacíos; no retirar las casillas que permiten marcar tareas.
-2. Cambiar los símbolos decorativos de MiDiaQuickActions por PNG 3D, respetando los tres clics actuales, formularios, permisos y etiquetas accesibles. Mantener las tres acciones en una fila cuando quepan y en columna en teléfonos realmente estrechos.
+2. En MiDiaQuickActions, mantener los accesos **Tarea rápida (voz), Nueva tarea (editor completo), Nueva nota (nota adhesiva con fecha)** ya preparados con los PNG existentes. En una fase posterior, sustituir únicamente el arte por los PNG 3D multicolor propuestos, respetando clics, micrófono, formularios y etiquetas accesibles. Conservar el diseño de tres tarjetas verticales legibles también en teléfonos estrechos; la creación de recordatorios permanece disponible por las funciones originales de tareas.
 3. Reutilizar el mismo icono de materia en MiDiaStudyPage y ScheduleActivity para que una asignatura se reconozca en Inicio, Estudio y Horario. Conservar los colores de los cursos elegidos por el usuario.
 4. Ampliar solo si aporta información: tipos de actividad (Examen, Lectura, Práctica, Exposición, Trabajo grupal), y estados especiales (Atrasadas, Clase virtual). No deducir automáticamente el tipo a partir de cualquier palabra del título.
 5. Revisar Calendar y More antes de añadir arte nuevo: ya existen iconos aprobados específicos, y la barra inferior debe mantenerse uniforme y comprensible.
@@ -47,7 +47,7 @@ Prioridades: **P0=11**, **P1=11**, **P2=6**. Las piezas marcadas «revisar reuti
 
 - MiDiaClassCard.java — icono genérico de graduación reemplazable por icono de asignatura.
 - MiDiaActivitiesUi.java — tres paneles, estados vacíos, enlace curso-tarea; checkbox nativo intocable.
-- MiDiaQuickActions.java — tres acciones que hoy usan UiDesign.OutlineIcon.
+- MiDiaQuickActions.java — tres accesos directos con PNG existentes (micrófono, nueva tarea y nueva nota); en fase 26 cambiar solo el arte.
 - MiDiaStudyPage.java y ScheduleActivity.java — icono consistente entre Estudio y la lista de cursos.
 - MiDiaMorePage.java y pantalla Calendario — sustituciones solo si no hay PNG ya apropiado.
 - ApprovedPng.java, CategoryRegistry.java y ScheduleCourseColors.java — revisar compatibilidad, **no alterar equivalencias ni migrar datos por un icono**.
