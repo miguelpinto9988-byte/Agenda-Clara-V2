@@ -1,8 +1,8 @@
 # Único flujo vigente de compilación, pruebas JVM y emulador Android.
-name: Agenda Clara 3.13.0 · Compilación y validación
+name: Agenda Clara 3.13.1 · Compilación y validación
 on:
   push:
-    branches: [main, feat/mi-dia-class-schedule-home-v2-no-build, feat/mi-dia-phases-6-8-no-build, feat/top-plus-png-motion-3-8-2, feat/remove-compose-daily-view-3-8-2, feat/full-ui-categories-responsive-3-8-2, feat/category-only-agenda-navigation-3-8-2, feat/reference-iconography-branded-pickers-3-8-2, feat/png-approved-icons-symbol-color-pickers-3-8-2, feat/restore-nav-icons-performance-cleanup-3-8-2, feat/sticky-notes-plus-menu-3-9-0, feat/sticky-notes-home-widget-3-9-1, fix/category-selected-png-icons-3-9-2, feat/polished-sticky-art-3-9-3, feat/sticky-responsive-accessibility-3-9-4, feat/whatsapp-context-understanding-3-9-5, feat/schedule-photo-course-reconciliation-3-9-6, feat/schedule-per-day-12h-3-9-7, feat/calendar-png-today-schedule-3-9-8, feat/calendar-clean-transparent-png-3-9-9, restore/whatsapp-two-stage-300ms-3-10-3, fix/whatsapp-session-retry-3-10-4, fix/whatsapp-final-hardening-3-10-5, feat/voice-quick-task-general-catalog-3-10-6, feat/calendar-visual-task-note-3-10-7, feat/voice-natural-language-3-10-8, fix/calendar-remove-week-dialog-keyboard-3-10-9, feat/widget-floating-voice-manual-3-11-0, feat/academic-context-order-3-11-1, feat/white-widgets-preserve-icons-3-11-2, feat/widget-icons-waves-3-11-3]
+    branches: [main, feat/mi-dia-header-15-19-validated-apk, feat/mi-dia-class-schedule-home-v2-no-build, feat/mi-dia-phases-6-8-no-build, feat/top-plus-png-motion-3-8-2, feat/remove-compose-daily-view-3-8-2, feat/full-ui-categories-responsive-3-8-2, feat/category-only-agenda-navigation-3-8-2, feat/reference-iconography-branded-pickers-3-8-2, feat/png-approved-icons-symbol-color-pickers-3-8-2, feat/restore-nav-icons-performance-cleanup-3-8-2, feat/sticky-notes-plus-menu-3-9-0, feat/sticky-notes-home-widget-3-9-1, fix/category-selected-png-icons-3-9-2, feat/polished-sticky-art-3-9-3, feat/sticky-responsive-accessibility-3-9-4, feat/whatsapp-context-understanding-3-9-5, feat/schedule-photo-course-reconciliation-3-9-6, feat/schedule-per-day-12h-3-9-7, feat/calendar-png-today-schedule-3-9-8, feat/calendar-clean-transparent-png-3-9-9, restore/whatsapp-two-stage-300ms-3-10-3, fix/whatsapp-session-retry-3-10-4, fix/whatsapp-final-hardening-3-10-5, feat/voice-quick-task-general-catalog-3-10-6, feat/calendar-visual-task-note-3-10-7, feat/voice-natural-language-3-10-8, fix/calendar-remove-week-dialog-keyboard-3-10-9, feat/widget-floating-voice-manual-3-11-0, feat/academic-context-order-3-11-1, feat/white-widgets-preserve-icons-3-11-2, feat/widget-icons-waves-3-11-3]
     paths:
       - 'updates/**'
       - 'Agenda-Clara-1.3.0-Fuentes-Sin-Clave.zip'
@@ -165,6 +165,9 @@ jobs:
           python3 -m pip install --quiet 'Pillow==11.3.0'
           python3 updates/phase65/normalize_backgrounds.py
           python3 updates/phase66/test_header_assets_static.py
+          python3 updates/phase67/test_phase18_regressions.py
+          python3 updates/phase68/version_3_13_1.py
+          python3 updates/phase68/test_phase19_release.py
           python3 - <<'PY'
           from pathlib import Path
           app = Path("AgendaClara/app/src/main")
@@ -372,13 +375,13 @@ jobs:
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK"
           BADGING="$("$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK")"
           printf '%s\n' "$BADGING" | head -12
-          echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='56' versionName='3.13.0'"
-          echo "PASS: package pe.agendaclara.app, version 3.13.0 (56), signed Android APK"
+          echo "$BADGING" | grep -q "name='pe.agendaclara.app' versionCode='57' versionName='3.13.1'"
+          echo "PASS: package pe.agendaclara.app, version 3.13.1 (57), signed Android APK"
 
       - name: Publicar APK instalable
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.13.0-APK
+          name: Agenda-Clara-3.13.1-APK
           path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
@@ -389,13 +392,13 @@ jobs:
           set -euo pipefail
           rm -f AgendaClara/signing/development.jks
           rm -rf AgendaClara/.gradle AgendaClara/app/build AgendaClara/build
-          zip -q -r Agenda-Clara-3.13.0-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
-          if unzip -Z1 Agenda-Clara-3.13.0-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
-      - name: Publicar fuentes 3.13.0
+          zip -q -r Agenda-Clara-3.13.1-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
+          if unzip -Z1 Agenda-Clara-3.13.1-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
+      - name: Publicar fuentes 3.13.1
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.13.0-Fuentes-Verificadas
-          path: Agenda-Clara-3.13.0-Fuentes-Verificadas.zip
+          name: Agenda-Clara-3.13.1-Fuentes-Verificadas
+          path: Agenda-Clara-3.13.1-Fuentes-Verificadas.zip
           retention-days: 30
           if-no-files-found: error
 
@@ -409,7 +412,7 @@ jobs:
       - name: Recuperar APK compilada
         uses: actions/download-artifact@v4
         with:
-          name: Agenda-Clara-3.13.0-APK
+          name: Agenda-Clara-3.13.1-APK
           path: artifact-apk
       - name: Preparar aceleración para emulador
         run: |
@@ -423,18 +426,18 @@ jobs:
           profile: pixel_6
           avd-name: agenda-clara-ui
           disable-animations: true
-          script: bash updates/phase62/emulator_responsive_qa.sh && bash updates/phase16/emulator_3_8.sh && bash updates/phase51/emulator_mi_dia_qa.sh && bash updates/phase44/emulator_calendar_visual_qa.sh && python3 updates/phase46/emulator_keyboard_restore_qa.py && python3 updates/phase47/emulator_widget_floating_qa.py
+          script: bash updates/phase67/emulator_header_qa.sh && bash updates/phase62/emulator_responsive_qa.sh && bash updates/phase16/emulator_3_8.sh && bash updates/phase51/emulator_mi_dia_qa.sh && bash updates/phase44/emulator_calendar_visual_qa.sh && python3 updates/phase46/emulator_keyboard_restore_qa.py && python3 updates/phase47/emulator_widget_floating_qa.py
       - name: Publicar capturas sintéticas del emulador
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.13.0-Emulator-Capturas
+          name: Agenda-Clara-3.13.1-Emulator-Capturas
           path: screenshots/
           if-no-files-found: ignore
 
-  publicar-apk-fase14:
-    needs: construir-y-validar
-    if: github.ref == 'refs/heads/feat/mi-dia-class-schedule-home-v2-no-build' && github.event_name != 'pull_request'
+  publicar-apk-fase19:
+    needs: [construir-y-validar, prueba-android-emulador]
+    if: github.ref == 'refs/heads/feat/mi-dia-header-15-19-validated-apk' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -442,7 +445,7 @@ jobs:
       - name: Recuperar APK firmada y verificada
         uses: actions/download-artifact@v4
         with:
-          name: Agenda-Clara-3.13.0-APK
+          name: Agenda-Clara-3.13.1-APK
           path: artifact-apk
       - name: Publicar archivo APK descargable en GitHub Releases
         env:
@@ -452,18 +455,18 @@ jobs:
           set -euo pipefail
           test -s artifact-apk/app-debug.apk
           mkdir -p dist
-          cp artifact-apk/app-debug.apk dist/Agenda-Clara-3.13.0-Mi-Dia.apk
-          sha256sum dist/Agenda-Clara-3.13.0-Mi-Dia.apk
-          TAG='v3.13.0-mi-dia-preview'
+          cp artifact-apk/app-debug.apk dist/Agenda-Clara-3.13.1-Mi-Dia.apk
+          sha256sum dist/Agenda-Clara-3.13.1-Mi-Dia.apk
+          TAG='v3.13.1-encabezado-sin-numeros'
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            gh release upload "$TAG" dist/Agenda-Clara-3.13.0-Mi-Dia.apk \
+            gh release upload "$TAG" dist/Agenda-Clara-3.13.1-Mi-Dia.apk \
               --clobber --repo "$GITHUB_REPOSITORY"
           else
-            gh release create "$TAG" dist/Agenda-Clara-3.13.0-Mi-Dia.apk \
+            gh release create "$TAG" dist/Agenda-Clara-3.13.1-Mi-Dia.apk \
               --repo "$GITHUB_REPOSITORY" \
               --target "$GITHUB_SHA" \
-              --title 'Agenda Clara 3.13.0 · Mi día (fases 9–14)' \
-              --notes 'APK de revisión de fases 9 a 14: panorama adaptable en teléfonos pequeños y tabletas, clases desde el horario real, actividades del curso y del día, pendientes, acciones rápidas y frase motivadora original. Revisar pruebas de emulador y realizar copia de seguridad antes de instalar.' \
+              --title 'Agenda Clara 3.13.1 · Encabezado limpio (fases 15–19)' \
+              --notes 'APK 3.13.1: eliminadas las insignias numéricas de los 30 paisajes, fundidos superior/inferior del encabezado; 50 frases motivadoras conservadas. Build y pruebas Android superadas antes de esta publicación. Se recomienda guardar copia de seguridad de los datos antes de actualizar.' \
               --prerelease
           fi
           gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url,assets
