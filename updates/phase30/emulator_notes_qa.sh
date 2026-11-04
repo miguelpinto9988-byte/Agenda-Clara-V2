@@ -65,15 +65,24 @@ def bounds(description):
     raise SystemExit("UI anchor not found: "+description)
 plus=list(map(int,open("sticky_plus_bounds.txt",encoding="utf-8").read().split()))
 if len(plus)!=4:raise SystemExit("Invalid stored + bounds")
+voice=bounds("Tarea rápida")
 task=bounds("Nueva tarea")
 note=bounds("Nueva nota")
 plus_width=plus[2]-plus[0]
-if not (task[0]>=0 and note[0]>=0 and
-        abs(task[2]-plus[2])<=plus_width and
-        0<=task[1]-plus[3]<=plus_width and
-        note[1]>=task[3]):
-    raise SystemExit("The floating create menu is detached from the top + button")
-print("PASS: floating menu anchored directly below + and right-aligned")
+# The three-choice popup starts with Tarea rápida. Checking the SECOND row
+# against the + incorrectly fails even when the menu is properly anchored.
+# Validate the first row's location and that every subsequent row is stacked
+# directly below the preceding choice.
+position_ok = (voice[0]>=0 and task[0]>=0 and note[0]>=0
+    and abs(voice[2]-plus[2])<=plus_width
+    and abs(task[2]-voice[2])<=plus_width
+    and abs(note[2]-voice[2])<=plus_width
+    and 0<=voice[1]-plus[3]<=plus_width
+    and task[1]>=voice[3] and note[1]>=task[3])
+if not position_ok:
+    raise SystemExit("Detached create menu: plus=%s, voice=%s, task=%s, note=%s" %
+        (plus,voice,task,note))
+print("PASS: floating menu first choice anchored below +; all three rows aligned")
 PY
 capture '17-menu-dos-opciones'
 tap 'Nueva nota' 1
