@@ -279,6 +279,7 @@ public final class MiDiaHeaderView extends LinearLayout {
         LayoutParams quoteParams = new LayoutParams(-1, -2);
         quoteParams.topMargin = dp(8);
         addView(quote, quoteParams);
+        quote.setVisibility(View.GONE); // Existing daily phrase stays at the bottom of Mi día.
 
         refresh();
     }
