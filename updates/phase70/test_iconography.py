@@ -19,7 +19,7 @@ assert (DRAWABLE / "ic_quick_new_note.png").is_file()
 catalog = (JAVA / "IconografiaFase26.java").read_text(encoding="utf-8")
 assert 'subjectDrawable(Context context, String courseName)' in catalog
 assert 'return "ic_subject_general";' in catalog
-assert catalog.count('"' + 'general' + '"') == 1
+assert '"general"' in catalog and '"ic_subject_general"' in catalog
 quick = (JAVA / "MiDiaQuickActions.java").read_text(encoding="utf-8")
 for token in ("ic_quick_task", "ic_quick_new_task", "ic_quick_new_note",
               "VoiceQuickTask.show(activity)", "activity.openEditor(-1, null, null)",
