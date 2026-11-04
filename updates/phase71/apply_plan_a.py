@@ -10,7 +10,8 @@ ROOT=Path("AgendaClara/app/src/main/java/pe/agendaclara/app")
 HERE=Path(__file__).resolve().parent
 GRADLE=Path("AgendaClara/app/build.gradle")
 STAGED=("AcademicSchedules.java","CalendarStudyPanel.java","CalendarStudyTabs.java",
-        "ScheduleTitleParser.java","ScheduleEntry.java","ScheduleDatabase.java")
+        "ScheduleTitleParser.java","ScheduleEntry.java","ScheduleDatabase.java",
+        "ScheduleBackup.java")
 
 def run():
     main_file=ROOT/"MainActivity.java"
@@ -30,6 +31,10 @@ def run():
                 old=original.read_text(encoding="utf-8")
                 if 'super(c,"class_schedule.db",null,1)' not in old:
                     raise RuntimeError("ScheduleDatabase cambiado; migración no aplicada")
+            elif name=="ScheduleBackup.java":
+                old=original.read_text(encoding="utf-8")
+                if "class ScheduleBackup" not in old or '"schema",1' not in old:
+                    raise RuntimeError("ScheduleBackup cambiado; migración no aplicada")
             else:
                 raise RuntimeError("Archivo inesperado: "+name)
     main=transform_main(main_file.read_text(encoding="utf-8"))
