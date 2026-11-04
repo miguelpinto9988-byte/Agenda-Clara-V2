@@ -16,7 +16,7 @@ assert "new LinearLayout.LayoutParams(0,dp(67),1)" in main
 assert "homeSection=Math.max(0,Math.min(2," in main
 assert 'out.putInt("mi_dia_home_section",homeSection)' in main
 assert "page=Math.max(0,Math.min(4" in main
-assert "if(homeSection==1)tasksPage()" in main
+assert "if(homeSection==1){" in main and "tasksPage();" in main
 assert "MiDiaStudyPage.render(this)" in main
 assert "MiDiaMorePage.render(this)" in main
 assert "else if(page==1)calendarPage()" in main
