@@ -178,8 +178,59 @@ def transform_main(source):
         CreationChoices.show(this,add,()->openEditor(-1,null,null),
             ()->StickyNotesUi.showEditor(this,null),()->VoiceQuickTask.show(this));'''
     source=exact(source,old,new,"fallback create actions")
+    # Calendar imports must select a profile, rather than creating unscoped classes.
+    marker='    void showCalendarSchedulePreview(CalendarBridge.CalendarInfo calendar,List<CalendarScheduleImport.Group> groups){'
+    guard='''        if(AcademicSchedules.activeId(this).isEmpty()){
+            dialogBuilder().setTitle("Primero crea un horario")
+                .setMessage("Para importar clases del calendario, crea un horario en Plan de estudio.")
+                .setNegativeButton("Cancelar",null)
+                .setPositiveButton("Abrir Plan de estudio",(d,w)->{
+                    getSharedPreferences("agenda_clara_calendar_study",MODE_PRIVATE)
+                        .edit().putInt("panel",1).apply();
+                    page=1;render();
+                }).show();
+            return;
+        }
+'''
+    if guard not in source:
+        if source.count(marker)!=1:raise RuntimeError("No se encontró importación del calendario")
+        source=source.replace(marker,marker+"\n"+guard,1)
+    source=exact(source,
+        "int existing=0;List<ScheduleEntry> saved=ScheduleDatabase.get(this).all();",
+        "int existing=0;List<ScheduleEntry> saved=ScheduleDatabase.get(this).all(AcademicSchedules.activeId(this));",
+        "calendario: clases ya existentes")
     # Never add another calendar panel to the existing five-item bottom nav.
     assert 'MiDiaNavigation.TAB_LABELS' in source
+    return source
+
+def transform_dashboard(source):
+    before="ScheduleDatabase.get(activity).all()"
+    after="ScheduleDatabase.get(activity).all(AcademicSchedules.activeId(activity))"
+    if before in source:return source.replace(before,after)
+    if after not in source:raise RuntimeError("No se encontró próxima clase en Inicio")
+    return source
+
+def transform_categories(source):
+    old='''    public static synchronized boolean save(Context c,String previous,String desired,int color,String icon){
+        String name=normalize(desired);'''
+    new='''    public static synchronized boolean save(Context c,String previous,String desired,int color,String icon){
+        if(AcademicSchedules.ownsCategory(c,previous))return false;
+        return saveManaged(c,previous,desired,color,icon);
+    }
+    /** Only the schedule management screen may rename a linked category. */
+    public static synchronized boolean saveManaged(Context c,String previous,String desired,int color,String icon){
+        String name=normalize(desired);'''
+    source=exact(source,old,new,"categoría académica protegida")
+    old='''    public static synchronized boolean delete(Context c,String name){
+        List<Entry> entries=all(c);'''
+    new='''    public static synchronized boolean delete(Context c,String name){
+        if(AcademicSchedules.ownsCategory(c,name))return false;
+        return deleteManaged(c,name);
+    }
+    /** Called only after explicit profile deletion confirmation. */
+    public static synchronized boolean deleteManaged(Context c,String name){
+        List<Entry> entries=all(c);'''
+    source=exact(source,old,new,"eliminación de categoría protegida")
     return source
 
 if __name__=="__main__":
