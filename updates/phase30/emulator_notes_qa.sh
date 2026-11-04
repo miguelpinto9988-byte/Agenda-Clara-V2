@@ -34,6 +34,8 @@ tap(){ local xy;xy="$(find_node "$1" "${2:-5}")";read -r x y <<<"$xy";adb shell 
 capture(){ adb exec-out screencap -p >"screenshots/$1.png";test -s "screenshots/$1.png";}
 # The + belongs to the Activity window. Capture its bounds before
 # opening the PopupWindow, because UIAutomator then sees the popup window only.
+# New Inicio intentionally hides the legacy toolbar; test the visible task-tab +.
+tap 'Tareas, abrir pestaña' 1
 find_node 'Crear una tarea o nota' 1 >/dev/null
 python3 - <<'PY' >sticky_plus_bounds.txt
 import re,xml.etree.ElementTree as ET
