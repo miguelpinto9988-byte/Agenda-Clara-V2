@@ -191,7 +191,7 @@ public final class MiDiaDashboard {
             empty.addView(text(a, "Tu día está libre de tareas pendientes.", 13, MUTED, false));
             TextView add = text(a, "＋  Crear una tarea", 13, BLUE, true);
             add.setPadding(0, a.dp(8), 0, a.dp(3));
-            add.setOnClickListener(v -> a.showCreationMenu());
+            add.setOnClickListener(v -> a.openEditor(-1, null, null));
             empty.addView(add);
             parent.addView(empty);
             return;
