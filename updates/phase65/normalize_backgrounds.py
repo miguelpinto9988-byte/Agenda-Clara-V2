@@ -77,14 +77,23 @@ def transform(original, alpha):
     if image.size != (WIDTH, HEIGHT) or image.mode not in ("P", "RGB"):
         raise RuntimeError("Unsupported artwork dimensions or PNG color mode")
     before = image.convert("RGB")
-    image_out = before.copy()
     clean_corner = before.crop((PATCH_W, 0, 2 * PATCH_W, PATCH_H))
     clean_corner = clean_corner.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
-    image_out.paste(clean_corner, (0, 0), alpha)
-    # Keep the existing compact 256-colour PNG palette where one is supplied.
-    # Using the original palette avoids an APK growth from RGB re-encoding.
+    corner_rgb = before.crop((0, 0, PATCH_W, PATCH_H))
+    corner_rgb.paste(clean_corner, (0, 0), alpha)
     if image.mode == "P":
-        image_out = image_out.quantize(palette=image, dither=Image.Dither.NONE)
+        # Quantize only the affected corner: outside pixels keep the EXACT
+        # original indexed palette bytes, with no unintended recoloring.
+        corner_indexed = corner_rgb.quantize(palette=image, dither=Image.Dither.NONE)
+        exact_mirror = image.crop((PATCH_W, 0, 2 * PATCH_W, PATCH_H))
+        exact_mirror = exact_mirror.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        opaque_mask = alpha.point(lambda value: 255 if value == 255 else 0)
+        corner_indexed.paste(exact_mirror, (0, 0), opaque_mask)
+        image_out = image.copy()
+        image_out.paste(corner_indexed, (0, 0))
+    else:
+        image_out = image.copy()
+        image_out.paste(corner_rgb, (0, 0))
     data = BytesIO()
     image_out.save(data, format="PNG", optimize=True)
     clean_bytes = data.getvalue()
@@ -95,7 +104,7 @@ def transform(original, alpha):
         if before.getpixel(xy) != result.getpixel(xy):
             raise RuntimeError("Original scenery changed outside number patch")
     # The number badge is within this fully-opaque region.
-    if result.getpixel((110, 25)) != before.getpixel((2 * PATCH_W - 110, 25)):
+    if result.getpixel((110, 25)) != before.getpixel((2 * PATCH_W - 1 - 110, 25)):
         raise RuntimeError("Image corner could not be sanitized")
     return clean_bytes
 
