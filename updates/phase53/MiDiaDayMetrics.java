@@ -42,7 +42,13 @@ public final class MiDiaDayMetrics {
                 || category.contains("univers") || category.contains("coleg")
                 || category.contains("institut") || category.contains("curso")
                 || category.contains("examen") || category.contains("clase")
-                || category.contains("asignatura")) return true;
+                || category.contains("asignatura")
+                || category.contains("matematic") || category.contains("fisica")
+                || category.contains("quimica") || category.contains("biologia")
+                || category.contains("historia") || category.contains("ciencia")
+                || category.contains("idioma") || category.contains("ingles")
+                || category.contains("tesis") || category.contains("seminario")
+                || category.contains("investigacion")) return true;
         String title = normalize(task.title);
         return title.startsWith("examen ") || title.startsWith("estudiar ")
                 || title.startsWith("clase ") || title.startsWith("curso ")
