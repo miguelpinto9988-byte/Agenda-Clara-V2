@@ -25,6 +25,7 @@ NEW = '''        body.removeAllViews();
                 taskHeading.addView(text("Mis tareas",22,INK,true),
                         new LinearLayout.LayoutParams(0,-2,1));
                 Button newTask=button("＋ Nueva",()->showCreationMenu());
+                newTask.setTag("home_create_button");
                 newTask.setContentDescription("Crear una tarea o nota");
                 taskHeading.addView(newTask);
                 body.addView(taskHeading);gap(body,13);
@@ -46,10 +47,20 @@ def install():
         if content.count(OLD) != 1:
             raise RuntimeError('Wrong version or conflicting MainActivity; not modifying')
         content = content.replace(OLD, NEW, 1)
+    # Always anchor the original floating creation choices to a visible button
+    # because the old toolbar is hidden on the new Tareas tab.
+    old_menu = '        View add=root==null?null:root.findViewWithTag("new_task_button");'
+    new_menu = ('        View add=root==null?null:root.findViewWithTag("home_create_button");\n'
+                '        if(add==null||!add.isShown())add=root==null?null:root.findViewWithTag("new_task_button");')
+    if new_menu not in content:
+        if content.count(old_menu) != 1:
+            raise RuntimeError('Creation menu anchor changed; refusing unsafe migration')
+        content = content.replace(old_menu, new_menu, 1)
     # Fail closed: do not leave a partial render.
     for required in ('MiDiaNavigation.selectedTab(this)', 'MiDiaStudyPage.render(this)',
                      'MiDiaMorePage.render(this)', 'body.setPadding(isHome?',
-                     'newTask.setContentDescription("Crear una tarea o nota")'):
+                     'newTask.setContentDescription("Crear una tarea o nota")',
+                     'home_create_button'):
         if required not in content:
             raise RuntimeError('Missing final polish requirement: ' + required)
     MAIN.write_text(content, encoding='utf-8')
