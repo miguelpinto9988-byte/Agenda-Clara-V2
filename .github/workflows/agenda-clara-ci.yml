@@ -146,6 +146,12 @@ jobs:
           python3 updates/phase54/test_navigation_static.py
           python3 updates/phase55/test_release_readiness_static.py
           python3 updates/phase55/version_3_12_0.py
+          # Phases 9–11 are prepared but DO NOT trigger builds from this branch.
+          # These migrations will execute only once the user approves a final build.
+          python3 updates/phase56/apply_hero.py
+          python3 updates/phase57/apply_schedule.py
+          python3 updates/phase58/apply_activities.py
+          python3 updates/phase59/test_9_11_static.py
           python3 - <<'PY'
           from pathlib import Path
           app = Path("AgendaClara/app/src/main")
