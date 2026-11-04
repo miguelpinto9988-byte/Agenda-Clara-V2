@@ -1,38 +1,51 @@
 #!/usr/bin/env python3
-"""Entrega A: calendario con dos pestañas y registro independiente de 10 horarios.
-No modifica ScheduleDatabase, tareas, notificaciones, ni la clave de firma.
+"""Entrega A (sin APK): migración, pestañas, perfiles, clases, OCR y categorías.
+Ejecutar tras phase70. Aborta ante fuentes ajenas a la versión 3.13.2 esperada.
 """
 from pathlib import Path
 import shutil
+from patch_android_ui import transform_main,transform_schedule
+
 ROOT=Path("AgendaClara/app/src/main/java/pe/agendaclara/app")
 HERE=Path(__file__).resolve().parent
-MAIN=ROOT/"MainActivity.java"
 GRADLE=Path("AgendaClara/app/build.gradle")
-NAMES=("AcademicSchedules.java","CalendarStudyPanel.java","CalendarStudyTabs.java")
-BEFORE="else if(page==1)calendarPage();"
-AFTER="else if(page==1)CalendarStudyTabs.render(this);"
+STAGED=("AcademicSchedules.java","CalendarStudyPanel.java","CalendarStudyTabs.java",
+        "ScheduleTitleParser.java","ScheduleEntry.java","ScheduleDatabase.java")
 
 def run():
-    if not MAIN.is_file():raise RuntimeError("Primero reconstruir las fuentes 3.13.2")
-    source=MAIN.read_text(encoding="utf-8")
-    if AFTER not in source:
-        if source.count(BEFORE)!=1:
-            raise RuntimeError("Anclaje de Calendario distinto; detener sin modificar")
-        source=source.replace(BEFORE,AFTER,1)
-    for name in NAMES:
-        desired=(HERE/name).read_text(encoding="utf-8")
-        target=ROOT/name
-        if target.exists() and target.read_text(encoding="utf-8")!=desired:
-            raise RuntimeError("Archivo existente diferente: "+name)
+    main_file=ROOT/"MainActivity.java"
+    schedule_file=ROOT/"ScheduleActivity.java"
+    if not main_file.is_file() or not schedule_file.is_file():
+        raise RuntimeError("Reconstruye Agenda Clara 3.13.2 antes de la Entrega A")
+    for name in STAGED:
+        original=ROOT/name
+        expected=(HERE/name).read_text(encoding="utf-8")
+        if original.exists() and original.read_text(encoding="utf-8")!=expected:
+            # Only ScheduleEntry/Database are replaced, due to SQLite v1->v2.
+            if name=="ScheduleEntry.java":
+                old=original.read_text(encoding="utf-8")
+                if "public final class ScheduleEntry" not in old or "scheduleId" in old:
+                    raise RuntimeError("ScheduleEntry cambiado; migración no aplicada")
+            elif name=="ScheduleDatabase.java":
+                old=original.read_text(encoding="utf-8")
+                if 'super(c,"class_schedule.db",null,1)' not in old:
+                    raise RuntimeError("ScheduleDatabase cambiado; migración no aplicada")
+            else:
+                raise RuntimeError("Archivo inesperado: "+name)
+    main=transform_main(main_file.read_text(encoding="utf-8"))
+    schedule=transform_schedule(schedule_file.read_text(encoding="utf-8"))
     gradle=GRADLE.read_text(encoding="utf-8")
     if "versionCode 59" in gradle and "versionName '3.13.3'" in gradle:
         pass
     elif gradle.count("versionCode 58")==1 and gradle.count("versionName '3.13.2'")==1:
         gradle=gradle.replace("versionCode 58","versionCode 59",1).replace(
             "versionName '3.13.2'","versionName '3.13.3'",1)
-    else:raise RuntimeError("Versión Android desconocida")
-    MAIN.write_text(source,encoding="utf-8")
-    for name in NAMES:shutil.copyfile(HERE/name,ROOT/name)
+    else:raise RuntimeError("Versión Android inesperada")
+    for name in STAGED:shutil.copyfile(HERE/name,ROOT/name)
+    main_file.write_text(main,encoding="utf-8")
+    schedule_file.write_text(schedule,encoding="utf-8")
     GRADLE.write_text(gradle,encoding="utf-8")
-    print("PASS Entrega A inicial: pestañas Calendario/Plan de estudio; 10 horarios; categorías y cursos")
+    print("PASS: Entrega A integrada a fuentes: 10 horarios aislados, SQLite v2, OCR y categorías")
+    print("NO APK: esta fase realiza solo una transformación de código fuente")
+
 if __name__=="__main__":run()
