@@ -135,6 +135,8 @@ jobs:
           python3 updates/phase51/stage_text_resources.py
           python3 updates/phase51/install_bundled_artwork.py
           python3 updates/phase51/apply_mi_dia.py
+          python3 updates/phase52/apply_header.py
+          python3 updates/phase52/test_header.py
           python3 - <<'PY'
           from pathlib import Path
           app = Path("AgendaClara/app/src/main")
