@@ -33,6 +33,8 @@ more = (CODE / "MiDiaMorePage.java").read_text(encoding="utf-8")
 for term in ('MiDiaDashboard.render(this)', 'MiDiaStudyPage.render(this)',
              'MiDiaMorePage.render(this)', 'body.setPadding(isHome?',
              'newTask.setContentDescription("Crear una tarea o nota")',
+             'newTask.setTag("home_create_button")',
+             'if(add==null||!add.isShown())add=root==null?null:root.findViewWithTag("new_task_button")',
              'out.putInt("mi_dia_home_section",homeSection)',
              'page=Math.max(0,Math.min(4,state.getInt("page")))',
              'void tasksPage()', 'void calendarPage()', 'void messagesPage()',
