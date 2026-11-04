@@ -106,10 +106,21 @@ public final class MiDiaDashboard {
                     if (progress != null) a.contentScroll.smoothScrollTo(0, progress.getTop());
                 }
         };
+        int widthDp = a.getResources().getConfiguration().screenWidthDp;
+        float fontScale = a.getResources().getConfiguration().fontScale;
+        boolean twoRows = widthDp < 360 || fontScale > 1.28f;
         for (int i = 0; i < labels.length; i++) {
-            LinearLayout card = stat(a, icons[i], values[i], labels[i], colors[i], accents[i], actions[i]);
+            if (twoRows && i == 2) {
+                parent.addView(row);
+                a.gap(parent, 6);
+                row = a.row();
+                row.setGravity(Gravity.CENTER_VERTICAL);
+            }
+            LinearLayout card = stat(a, icons[i], values[i], labels[i],
+                    colors[i], accents[i], actions[i]);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, -2, 1);
-            if (i > 0) lp.leftMargin = a.dp(6);
+            if ((twoRows && i % 2 == 1) || (!twoRows && i > 0))
+                lp.leftMargin = a.dp(6);
             row.addView(card, lp);
         }
         parent.addView(row);
@@ -301,7 +312,8 @@ public final class MiDiaDashboard {
         List<Task> tasks = Store.get(activity).all();
         MiDiaDayMetrics.Result metrics = MiDiaDayMetrics.calculate(tasks, dayStart, dayEnd);
 
-        boolean hasCalendarPermission = CalendarBridge.allowed(activity);
+        boolean hasCalendarPermission = CalendarBridge.allowed(activity)
+                && !Prefs.calendars(activity).isEmpty();
         List<CalendarBridge.Event> events = new ArrayList<>();
         if (hasCalendarPermission) {
             try {
