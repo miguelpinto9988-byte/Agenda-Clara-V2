@@ -168,6 +168,9 @@ jobs:
           python3 updates/phase67/test_phase18_regressions.py
           python3 updates/phase68/version_3_13_1.py
           python3 updates/phase68/test_phase19_release.py
+          # Staged only on this no-build branch; not added to CI push triggers.
+          python3 updates/phase69/apply_home_quick_actions.py
+          python3 updates/phase69/test_home_quick_actions_static.py
           python3 - <<'PY'
           from pathlib import Path
           app = Path("AgendaClara/app/src/main")
