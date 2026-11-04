@@ -15,7 +15,8 @@ assert "task.completedAt >= dayStart" in metrics, "Completed tasks counted by co
 assert "task.due > 0 && task.due < dayEnd" in metrics, "Include due and overdue tasks"
 assert "task.done != b.done" in metrics or "a.done != b.done" in metrics
 assert "UiDesign.OutlineIcon" in dashboard
-assert dashboard.count('"ic_midia_') == 4
+for icon in ('ic_midia_tareas', 'ic_midia_eventos', 'ic_midia_estudio', 'ic_midia_logros'):
+    assert ('"' + icon + '"') in dashboard, 'Missing summary icon: ' + icon
 assert 'MiDiaNavigation.open(a, 1)' in dashboard
 assert 'MiDiaNavigation.open(a, 2)' in dashboard
 assert 'MiDiaNavigation.open(a, 3)' in dashboard
