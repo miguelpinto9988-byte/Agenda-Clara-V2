@@ -8,8 +8,13 @@ from pathlib import Path
 CODE = Path("AgendaClara/app/src/main/java/pe/agendaclara/app")
 HEADER = CODE / "MiDiaHeaderView.java"
 
-OLD = """        int visualHeight = Math.max(dp(205),
-                Math.min(dp(450), Math.round(width * 864f / 1920f)));"""
+OLD = """        // Phones as narrow as 280dp need a taller cover to hold the greeting
+        // and leave the date floating below. Tablets retain a panoramic ratio.
+        float widthDp = width / getResources().getDisplayMetrics().density;
+        int minimum = widthDp < 360 ? 224 : widthDp < 480 ? 215 : 205;
+        int visualHeight = Math.max(dp(minimum),
+                Math.min(dp(450), Math.round(width * 864f / 1920f)));
+        greeting.setTextSize(widthDp < 330 ? 19 : widthDp < 400 ? 21 : 23);"""
 NEW = """        // Compact phones need an actual scenic hero, not a thin panoramic strip.
         // Tablets can keep the 1920x864 artwork ratio at much larger heights.
         float density = getResources().getDisplayMetrics().density;
