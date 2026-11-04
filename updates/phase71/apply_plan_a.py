@@ -4,7 +4,7 @@ Ejecutar tras phase70. Aborta ante fuentes ajenas a la versión 3.13.2 esperada.
 """
 from pathlib import Path
 import shutil
-from patch_android_ui import transform_main,transform_schedule
+from patch_android_ui import transform_main,transform_schedule,transform_dashboard,transform_categories
 
 ROOT=Path("AgendaClara/app/src/main/java/pe/agendaclara/app")
 HERE=Path(__file__).resolve().parent
@@ -16,6 +16,8 @@ STAGED=("AcademicSchedules.java","CalendarStudyPanel.java","CalendarStudyTabs.ja
 def run():
     main_file=ROOT/"MainActivity.java"
     schedule_file=ROOT/"ScheduleActivity.java"
+    dashboard_file=ROOT/"MiDiaDashboard.java"
+    categories_file=ROOT/"CategoryRegistry.java"
     if not main_file.is_file() or not schedule_file.is_file():
         raise RuntimeError("Reconstruye Agenda Clara 3.13.2 antes de la Entrega A")
     for name in STAGED:
@@ -39,6 +41,8 @@ def run():
                 raise RuntimeError("Archivo inesperado: "+name)
     main=transform_main(main_file.read_text(encoding="utf-8"))
     schedule=transform_schedule(schedule_file.read_text(encoding="utf-8"))
+    dashboard=transform_dashboard(dashboard_file.read_text(encoding="utf-8"))
+    categories=transform_categories(categories_file.read_text(encoding="utf-8"))
     gradle=GRADLE.read_text(encoding="utf-8")
     if "versionCode 59" in gradle and "versionName '3.13.3'" in gradle:
         pass
@@ -49,6 +53,8 @@ def run():
     for name in STAGED:shutil.copyfile(HERE/name,ROOT/name)
     main_file.write_text(main,encoding="utf-8")
     schedule_file.write_text(schedule,encoding="utf-8")
+    dashboard_file.write_text(dashboard,encoding="utf-8")
+    categories_file.write_text(categories,encoding="utf-8")
     GRADLE.write_text(gradle,encoding="utf-8")
     print("PASS: Entrega A integrada a fuentes: 10 horarios aislados, SQLite v2, OCR y categorías")
     print("NO APK: esta fase realiza solo una transformación de código fuente")
