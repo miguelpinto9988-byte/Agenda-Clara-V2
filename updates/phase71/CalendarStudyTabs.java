@@ -11,6 +11,7 @@ public final class CalendarStudyTabs {
     private static final String PREF="agenda_clara_calendar_study";
     private CalendarStudyTabs(){}
     public static void render(MainActivity a){
+        AcademicSchedules.migrateLegacy(a);
         int selected=a.getSharedPreferences(PREF,Context.MODE_PRIVATE).getInt("panel",0);
         LinearLayout tabs=a.row();
         tabs.setPadding(a.dp(4),a.dp(5),a.dp(4),a.dp(5));
@@ -21,10 +22,6 @@ public final class CalendarStudyTabs {
         a.gap(a.body,14);
         if(selected==0)a.calendarPage();
         else {
-            // Non-destructive migration from existing single-schedule data.
-            java.util.ArrayList<String> names=new java.util.ArrayList<>();
-            for(ScheduleEntry s:ScheduleDatabase.get(a).all())names.add(s.course);
-            AcademicSchedules.importLegacy(a,names);
             CalendarStudyPanel.render(a);
         }
     }
