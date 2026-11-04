@@ -39,6 +39,7 @@ capture(){
     adb exec-out screencap -p >"screenshots/$1.png"
     test -s "screenshots/$1.png"
 }
+find_and_tap "Tareas, abrir pestaña"
 find_and_tap "Crear una tarea"
 find_and_tap "Nueva tarea"
 find_and_tap "Elegir fecha"
@@ -56,6 +57,7 @@ capture "10-selector-hora-moderno"
 adb shell am force-stop "$PKG" || true
 adb shell am start -W -n "$PKG/.MainActivity" >/dev/null
 sleep 4
+find_and_tap "Tareas, abrir pestaña"
 find_and_tap "Crear una tarea"
 find_and_tap "Nueva tarea"
 find_and_tap "Seleccionar categoría:"
