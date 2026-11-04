@@ -11,130 +11,179 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Calendar > Plan de estudio, using Agenda Clara's existing card/button primitives. */
+/** Original Agenda Clara white/pastel visual language in Calendario > Plan de estudio. */
 public final class CalendarStudyPanel {
-    private static final int INK=0xff182746;
-    private static final int MUTED=0xff61738f;
-    private static final int BLUE=0xff3864f4;
+    private static final int INK=0xff182746,MUTED=0xff61738f,BLUE=0xff3864f4;
     private CalendarStudyPanel(){}
 
     public static void render(MainActivity a){
-        LinearLayout heading=a.card(a.body);
-        heading.addView(a.text("Horarios",20,INK,true));
+        LinearLayout schedules=a.card(a.body);
         List<AcademicSchedules.Profile> profiles=AcademicSchedules.all(a);
-        heading.addView(a.text("Organiza tus horarios con sus cursos · "+profiles.size()+
-                " de "+AcademicSchedules.LIMIT,12,MUTED,false));
-        a.gap(heading,12);
-        for(AcademicSchedules.Profile p:profiles){
-            LinearLayout row=a.column();
-            row.setPadding(a.dp(12),a.dp(11),a.dp(12),a.dp(11));
-            GradientDrawable background=a.rounded(0xfff0f4ff,15);
-            background.setStroke(a.dp(1),0xffdce5fb);
-            row.setBackground(background);
-            row.addView(a.text(p.name,16,INK,true));
-            row.addView(a.text(p.courses.size()+" cursos · Categoría: "+p.name,
-                    12,MUTED,false));
-            row.setOnClickListener(v->details(a,p));
-            row.setFocusable(true);
-            row.setContentDescription("Horario "+p.name+", "+p.courses.size()+" cursos. Abrir");
-            heading.addView(row);
-            a.gap(heading,7);
+        schedules.addView(a.text("Horarios",20,INK,true));
+        schedules.addView(a.text("Organiza hasta 10 horarios con cursos y categorías independientes.",
+                12,MUTED,false));
+        a.gap(schedules,8);
+        schedules.addView(a.text(profiles.size()+" de "+AcademicSchedules.LIMIT+" horarios",13,BLUE,true));
+        a.gap(schedules,12);
+
+        for(AcademicSchedules.Profile initial:profiles){
+            AcademicSchedules.syncFromSessions(a,initial.id);
+            AcademicSchedules.Profile p=AcademicSchedules.find(a,initial.id);
+            LinearLayout card=a.column();
+            card.setPadding(a.dp(14),a.dp(12),a.dp(14),a.dp(12));
+            GradientDrawable bg=a.rounded(0xfff0f4ff,16);
+            bg.setStroke(a.dp(1),0xffdce5fb);
+            card.setBackground(bg);
+            card.addView(a.text(p.name+"   ›",16,INK,true));
+            card.addView(a.text(p.courses.size()+" cursos · "+
+                    ScheduleDatabase.get(a).all(p.id).size()+" clases semanales",12,MUTED,false));
+            card.setFocusable(true);card.setClickable(true);
+            card.setContentDescription("Abrir horario "+p.name);
+            card.setOnClickListener(v->details(a,p.id));
+            schedules.addView(card);
+            a.gap(schedules,8);
         }
         if(profiles.isEmpty()){
-            heading.addView(a.text("Todavía no tienes horarios organizados. Crea uno para agrupar sus cursos.",
+            schedules.addView(a.text("Aún no tienes horarios. Crea uno nuevo o importa una fotografía.",
                     13,MUTED,false));
-            a.gap(heading,10);
+            a.gap(schedules,12);
         }
-        if(profiles.size()<AcademicSchedules.LIMIT){
-            heading.addView(a.button("＋  Nuevo horario",()->newSchedule(a)));
-        }else{
-            heading.addView(a.text("Has alcanzado el máximo de 10 horarios.",13,MUTED,true));
-        }
-        a.gap(heading,8);
-        heading.addView(a.button("Abrir horario de clases",()->
-                a.startActivity(new Intent(a,ScheduleActivity.class))));
-        a.gap(a.body,16);
+        if(profiles.size()<AcademicSchedules.LIMIT)
+            schedules.addView(a.button("＋  Nuevo horario",()->newSchedule(a,false)));
+        else schedules.addView(a.text("Máximo de diez horarios alcanzado. Puedes gestionar los existentes.",
+                13,BLUE,true));
+        schedules.addView(a.button("Importar horario desde foto",()->importPhoto(a)));
+        a.gap(a.body,15);
 
         LinearLayout exams=a.card(a.body);
         exams.addView(a.text("Exámenes y parciales",19,INK,true));
-        exams.addView(a.text("Importa un sílabo o registra evaluaciones por curso.",
+        a.gap(exams,5);
+        exams.addView(a.text("Importación de sílabos, exámenes y recordatorios: Entrega B.",
                 12,MUTED,false));
-        a.gap(exams,12);
-        exams.addView(a.text("La importación de sílabos y sus recordatorios se implementará en la Entrega B.",
+        a.gap(exams,10);
+        exams.addView(a.text("Los cursos registrados aquí estarán disponibles para elegir al crear evaluaciones.",
                 13,MUTED,false));
     }
 
-    private static void newSchedule(MainActivity a){
-        EditText field=new EditText(a);
-        field.setSingleLine(true);
-        field.setHint("Ej.: Educación 2026");
-        field.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        LinearLayout wrapper=a.column();
-        wrapper.setPadding(a.dp(18),0,a.dp(18),0);
-        wrapper.addView(field);
-        AlertDialog dialog=new AlertDialog.Builder(a)
-                .setTitle("Confirmar nombre del horario")
-                .setMessage("Este nombre identificará la categoría de sus cursos y tareas.")
-                .setView(wrapper)
-                .setNegativeButton("Cancelar",null)
+    private static EditText field(MainActivity a,String hint,String value){
+        EditText edit=new EditText(a);
+        edit.setSingleLine(true);
+        edit.setText(value);
+        edit.setHint(hint);
+        edit.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        return edit;
+    }
+    private static LinearLayout wrapper(MainActivity a,EditText edit){
+        LinearLayout box=a.column();
+        box.setPadding(a.dp(20),a.dp(4),a.dp(20),a.dp(6));
+        box.addView(edit);
+        return box;
+    }
+    private static void open(MainActivity a,AcademicSchedules.Profile p,boolean photo){
+        AcademicSchedules.activate(a,p.id);
+        Intent i=new Intent(a,ScheduleActivity.class);
+        i.putExtra("profile_id",p.id);
+        if(photo)i.putExtra("start_photo",true);
+        a.startActivity(i);
+    }
+
+    private static void newSchedule(MainActivity a,boolean photo){
+        EditText input=field(a,"Ej.: Educación 2026","");
+        AlertDialog dialog=a.dialogBuilder().setTitle("Nuevo horario")
+                .setMessage("Confirma el nombre que identificará su categoría y sus cursos.")
+                .setView(wrapper(a,input)).setNegativeButton("Cancelar",null)
                 .setPositiveButton("Crear horario",null).create();
-        dialog.setOnShowListener(unused->dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setOnClickListener(v->{
-                    try{
-                        AcademicSchedules.create(a,field.getText().toString(),new ArrayList<>());
-                        dialog.dismiss();a.render();
-                    }catch(IllegalArgumentException|IllegalStateException ex){
-                        field.setError(ex.getMessage());
-                    }
-                }));
+        dialog.setOnShowListener(x->dialog.getButton(-1).setOnClickListener(v->{
+            try{
+                AcademicSchedules.Profile p=AcademicSchedules.create(a,input.getText().toString(),
+                        new ArrayList<String>());
+                dialog.dismiss();
+                open(a,p,photo);
+            }catch(IllegalArgumentException|IllegalStateException err){
+                input.setError(err.getMessage());
+            }
+        }));
         dialog.show();
     }
-
-    private static void details(MainActivity a,AcademicSchedules.Profile profile){
-        LinearLayout panel=a.column();
-        panel.setPadding(a.dp(18),a.dp(4),a.dp(18),a.dp(4));
-        panel.addView(a.text("Categoría: "+profile.name,15,INK,true));
-        a.gap(panel,8);
-        if(profile.courses.isEmpty())panel.addView(a.text(
-                "Aún no hay cursos vinculados. Agrégalos manualmente.",13,MUTED,false));
-        else for(String name:profile.courses)panel.addView(a.text("• "+name,14,INK,false));
-        a.gap(panel,12);
-        panel.addView(a.button("Agregar curso",()->addCourse(a,profile)));
-        panel.addView(a.button("Cambiar nombre",()->rename(a,profile)));
-        new AlertDialog.Builder(a).setTitle(profile.name).setView(panel)
-                .setPositiveButton("Cerrar",null).show();
+    private static void importPhoto(MainActivity a){
+        List<AcademicSchedules.Profile> profiles=AcademicSchedules.all(a);
+        if(profiles.isEmpty()){newSchedule(a,true);return;}
+        ArrayList<String> options=new ArrayList<>();
+        for(AcademicSchedules.Profile p:profiles)options.add(p.name);
+        if(profiles.size()<AcademicSchedules.LIMIT)options.add("＋ Crear horario nuevo");
+        a.dialogBuilder().setTitle("¿A qué horario pertenece la foto?")
+                .setItems(options.toArray(new String[0]),(dialog,which)->{
+                    if(which==profiles.size()){newSchedule(a,true);return;}
+                    open(a,profiles.get(which),true);
+                }).setNegativeButton("Cancelar",null).show();
     }
-
-    private static void addCourse(MainActivity a,AcademicSchedules.Profile profile){
-        EditText field=new EditText(a);field.setSingleLine(true);
-        field.setHint("Nombre del curso");
-        AlertDialog d=new AlertDialog.Builder(a).setTitle("Nuevo curso en "+profile.name)
-                .setView(field).setNegativeButton("Cancelar",null)
+    private static void details(MainActivity a,String profileId){
+        AcademicSchedules.Profile p=AcademicSchedules.find(a,profileId);
+        if(p==null){a.render();return;}
+        LinearLayout box=a.column();
+        box.setPadding(a.dp(18),a.dp(5),a.dp(18),a.dp(5));
+        box.addView(a.text("Categoría: "+p.category,14,BLUE,true));
+        a.gap(box,8);
+        if(p.courses.isEmpty())
+            box.addView(a.text("Todavía no hay cursos registrados.",13,MUTED,false));
+        else for(String course:p.courses)box.addView(a.text("• "+course,14,INK,false));
+        a.gap(box,12);
+        box.addView(a.button("Abrir clases de este horario",()->open(a,p,false)));
+        box.addView(a.button("Agregar curso",()->addCourse(a,p.id)));
+        box.addView(a.button("Cambiar nombre",()->rename(a,p.id)));
+        box.addView(a.button("Eliminar este horario",()->confirmDelete(a,p.id)));
+        a.dialogBuilder().setTitle(p.name).setView(box).setPositiveButton("Cerrar",null).show();
+    }
+    private static void addCourse(MainActivity a,String id){
+        AcademicSchedules.Profile p=AcademicSchedules.find(a,id);
+        if(p==null)return;
+        EditText input=field(a,"Nombre del curso","");
+        AlertDialog dialog=a.dialogBuilder().setTitle("Curso de "+p.name)
+                .setView(wrapper(a,input)).setNegativeButton("Cancelar",null)
                 .setPositiveButton("Guardar",null).create();
-        d.setOnShowListener(x->d.getButton(-1).setOnClickListener(v->{
-            String name=field.getText().toString().trim();
-            if(name.length()<2){field.setError("Escribe el nombre del curso");return;}
-            ArrayList<String> names=new ArrayList<>(profile.courses);
-            for(String other:names)if(AcademicSchedules.key(other).equals(AcademicSchedules.key(name))){
-                field.setError("Este curso ya existe en el horario");return;
+        dialog.setOnShowListener(x->dialog.getButton(-1).setOnClickListener(v->{
+            String name=input.getText().toString().trim();
+            if(name.length()<2||name.length()>120){
+                input.setError("Indica un nombre de 2 a 120 caracteres");return;
             }
-            names.add(name);
-            AcademicSchedules.setCourses(a,profile.id,names);
-            d.dismiss();a.render();
+            for(String existing:p.courses)if(AcademicSchedules.key(existing).equals(
+                    AcademicSchedules.key(name))){
+                input.setError("El curso ya existe en este horario");return;
+            }
+            ArrayList<String> courses=new ArrayList<>(p.courses);courses.add(name);
+            AcademicSchedules.setCourses(a,p.id,courses);
+            dialog.dismiss();a.render();
         }));
-        d.show();
+        dialog.show();
     }
-
-    private static void rename(MainActivity a,AcademicSchedules.Profile profile){
-        EditText field=new EditText(a);field.setSingleLine(true);field.setText(profile.name);
-        AlertDialog d=new AlertDialog.Builder(a).setTitle("Editar nombre del horario")
-                .setView(field).setNegativeButton("Cancelar",null)
+    private static void rename(MainActivity a,String id){
+        AcademicSchedules.Profile p=AcademicSchedules.find(a,id);
+        if(p==null)return;
+        EditText input=field(a,"Nombre del horario",p.name);
+        AlertDialog dialog=a.dialogBuilder().setTitle("Renombrar horario")
+                .setMessage("La categoría académica se actualizará sin borrar las tareas existentes.")
+                .setView(wrapper(a,input)).setNegativeButton("Cancelar",null)
                 .setPositiveButton("Guardar",null).create();
-        d.setOnShowListener(x->d.getButton(-1).setOnClickListener(v->{
-            try{AcademicSchedules.rename(a,profile.id,field.getText().toString());
-                d.dismiss();a.render();}
-            catch(IllegalArgumentException ex){field.setError(ex.getMessage());}
+        dialog.setOnShowListener(x->dialog.getButton(-1).setOnClickListener(v->{
+            try{AcademicSchedules.rename(a,p.id,input.getText().toString());
+                dialog.dismiss();a.render();
+            }catch(IllegalArgumentException|IllegalStateException err){
+                input.setError(err.getMessage());
+            }
         }));
-        d.show();
+        dialog.show();
+    }
+    private static void confirmDelete(MainActivity a,String id){
+        AcademicSchedules.Profile p=AcademicSchedules.find(a,id);
+        if(p==null)return;
+        a.dialogBuilder().setTitle("¿Eliminar el horario «"+p.name+"»?")
+                .setMessage("Se eliminarán sus sesiones de clase y avisos semanales. "
+                    +"Sus tareas y notas se conservarán en la categoría General. "
+                    +"Esta acción no puede deshacerse.")
+                .setNegativeButton("Cancelar",null)
+                .setPositiveButton("Eliminar horario",(x,y)->{
+                    AcademicSchedules.deleteConfirmed(a,id);
+                    a.render();
+                }).show();
     }
 }
