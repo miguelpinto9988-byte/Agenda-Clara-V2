@@ -23,7 +23,7 @@ import java.time.temporal.IsoFields;
 import java.util.Locale;
 
 /**
- * Phase 5: visual header of Inicio — Mi día.
+ * Phase 9: full-width responsive visual header of Inicio — Mi día.
  * Only adds home-local chrome; the original Activity, stores and tabs remain.
  * All 30 images and 50 phrases continue to rotate fully offline.
  */
@@ -219,7 +219,7 @@ public final class MiDiaHeaderView extends LinearLayout {
 
         View readableOverlay = new View(context);
         readableOverlay.setBackground(new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[]{0xf5ffffff, 0xaaffffff, 0x12ffffff}));
+                new int[]{0xc7ffffff, 0x64ffffff, 0x00ffffff}));
         landscapeFrame.addView(readableOverlay, new FrameLayout.LayoutParams(-1, -1));
 
         LinearLayout welcome = new LinearLayout(context);
