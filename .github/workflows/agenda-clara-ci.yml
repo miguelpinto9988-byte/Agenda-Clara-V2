@@ -159,6 +159,12 @@ jobs:
           python3 updates/phase63/test_12_14_static.py
           python3 updates/phase62/version_3_13_0.py
           python3 updates/phase62/test_release_static.py
+          # Phases 15–17 are prepared, but branch pushes do NOT trigger CI.
+          # Compiling and emulator QA require separate authorization.
+          python3 updates/phase64/apply_header_blends.py
+          python3 -m pip install --quiet 'Pillow==11.3.0'
+          python3 updates/phase65/normalize_backgrounds.py
+          python3 updates/phase66/test_header_assets_static.py
           python3 - <<'PY'
           from pathlib import Path
           app = Path("AgendaClara/app/src/main")
