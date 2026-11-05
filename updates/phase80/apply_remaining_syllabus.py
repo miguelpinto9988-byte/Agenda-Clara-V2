@@ -58,15 +58,15 @@ def run():
 '''
     text=once(text,marker,extra+marker,"revision review methods")
     # Only record a new document manifest when the successful save flow is reached.
-    marker='''        TaskWidget.refresh(this);
-        new AlertDialog.Builder(this,R.style.DialogTheme)
-                .setTitle("Importación revisada")'''
-    replacement='''        SyllabusRevisionReview.record(this,selectedCourse.profileId,
+    # The success path ends with a widget refresh; the error path refreshes earlier.
+    # Attach the revision manifest only to the last refresh in saveSelected.
+    success_anchor="        TaskWidget.refresh(this);"
+    index=text.rfind(success_anchor)
+    if index<text.index("    private void saveSelected(int offset){"):
+        raise RuntimeError("Could not locate successful save path")
+    text=text[:index]+'''        SyllabusRevisionReview.record(this,selectedCourse.profileId,
                 documentTitle,selectedRevisionEvents());
-        TaskWidget.refresh(this);
-        new AlertDialog.Builder(this,R.style.DialogTheme)
-                .setTitle("Importación revisada")'''
-    text=once(text,marker,replacement,"successful import revision snapshot")
+'''+text[index:]
     files=("SyllabusTableInterpreter.java","SyllabusImportPipeline.java",
            "SyllabusRevisionComparator.java","SyllabusRevisionReview.java")
     for name in files:
