@@ -9,6 +9,7 @@ ROOT=Path("AgendaClara/app/src/main/java/pe/agendaclara/app")
 GRADLE=Path("AgendaClara/app/build.gradle")
 SOURCES=("SyllabusTableNormalizer.java","SyllabusColumnTextStripper.java",
          "SyllabusImportPolicy.java")
+UPGRADED_REVIEW=Path("updates/phase79/SyllabusReviewIntelligence.java")
 
 def once(text,old,new,label):
     if text.count(old)!=1:
@@ -343,7 +344,7 @@ def patch_reader(text):
 
 def run(dry_run=False):
     for path in [GRADLE,ROOT/"SyllabusImportActivity.java",
-                 ROOT/"SyllabusDocumentReader.java"]+[HERE/name for name in SOURCES]:
+                 ROOT/"SyllabusDocumentReader.java",UPGRADED_REVIEW]+[HERE/name for name in SOURCES]:
         if not path.is_file():raise RuntimeError(f"Missing input: {path}")
     old_version=GRADLE.read_text(encoding="utf-8")
     if old_version.count("versionCode 65")!=1 or old_version.count("versionName '3.13.9'")!=1:
@@ -358,6 +359,7 @@ def run(dry_run=False):
         print("PASS: preflight and all exact anchors, no files written")
         return
     for name in SOURCES:shutil.copyfile(HERE/name,ROOT/name)
+    shutil.copyfile(UPGRADED_REVIEW,ROOT/"SyllabusReviewIntelligence.java")
     (ROOT/"SyllabusImportActivity.java").write_text(importer,encoding="utf-8")
     (ROOT/"SyllabusDocumentReader.java").write_text(reader,encoding="utf-8")
     GRADLE.write_text(version,encoding="utf-8")
