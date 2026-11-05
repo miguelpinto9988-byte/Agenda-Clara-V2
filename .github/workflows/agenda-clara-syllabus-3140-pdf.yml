@@ -1,0 +1,50 @@
+name: Agenda Clara 3.14.0 - Importación PDF real en emulador
+on:
+  push:
+    branches: [feat/silabos-fases-restantes-3-14-0-20261105]
+    paths:
+      - 'updates/phase80/qa_emulator_pdf.py'
+      - '.github/workflows/agenda-clara-syllabus-3140-pdf.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  importar-pdf:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperar APK compilada y firmada
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 42119808566 --repo "$GITHUB_REPOSITORY" --name Agenda-Clara-3.14.0-Silabos-Revisados-APK --dir artifact-apk
+          test -s artifact-apk/app-debug.apk
+      - name: Preparar fixture PDF
+        run: python3 -m pip install --user reportlab
+      - name: Habilitar KVM
+        run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - name: Importar PDF y verificar resultados en Android 15
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: default
+          profile: pixel_6
+          avd-name: agenda-clara-syllabus-pdf
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: |
+            adb install -r artifact-apk/app-debug.apk
+            adb shell am start -n pe.agendaclara.app/.MainActivity
+            sleep 7
+            python3 updates/phase80/qa_emulator_pdf.py
+      - name: Adjuntar capturas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.14.0-PDF-QA-Capturas
+          path: screenshots/
+          if-no-files-found: ignore
