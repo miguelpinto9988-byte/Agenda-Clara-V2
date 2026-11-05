@@ -44,6 +44,16 @@ public final class Phase80EndToEndTests {
                 "week-only events must not invent a day");
         check(pending.get(0).week==15&&pending.get(1).week==16,
                 "week-only numbers belong to correct event");
+        List<SyllabusEventParser.Event> ranged=parse(
+            "Semana | Evaluación | Fecha"+System.lineSeparator()+
+            "XIV"+System.lineSeparator()+
+            "Proyecto final"+System.lineSeparator()+
+            "Del 12 al 16 de octubre de 2026"+System.lineSeparator());
+        check(ranged.size()==1,"complex date range reconstructed");
+        check(ranged.get(0).date==null,"range must not become guessed exam day");
+        check(LocalDate.of(2026,10,12).equals(ranged.get(0).windowStart)&&
+            LocalDate.of(2026,10,16).equals(ranged.get(0).windowEnd),
+            "exact documented range preserved");
         List<SyllabusEventParser.Event> unusual=parse(
             "Quiz 2 | Semana 7"+System.lineSeparator()+
             "Prueba oral de unidad | Semana VIII"+System.lineSeparator());
