@@ -57,3 +57,16 @@ Sin un ejemplo concreto de la fotografía que falló, no se puede garantizar el 
 Para una futura optimización basada en datos reales: añadir pruebas con fotografías anonimizadas de distintos formatos y comparar la cantidad de materias, sesiones y advertencias contra una transcripción de referencia.
 
 Rama: `feat/ocr-fusion-cursos-3-13-7-20261105`.
+
+
+## Resultado final verificado: 5 de noviembre de 2026
+
+- **Código y JVM:** todas las pruebas de las fases 76 y 77 correctas; ejecución https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42016358575.
+- **APK 3.13.7, compilación, firma y navegación Android 15:** correctas; ejecución https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42016503685, artefacto APK: https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42016503685/artifacts/13408609660.
+- **Prueba de fotografía sintética a través de la interfaz Android 15:** correcta; ejecución https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42018452189. El usuario automatizado abrió «Calendario > Plan de estudio > Nuevo horario > Subir imagen», seleccionó la foto desde el sistema y aguardó al OCR local.
+- El OCR local reconstruyó **seis bloques**, incluyendo «Tendencias educativas», «Tendencias» e «Historia de la educación», y llegó a la revisión de cursos, **antes de solicitar el nombre del horario**.
+- Al pulsar «Corroborar cursos y continuar», apareció el diálogo real «¿Son el mismo curso?» para **«Tendencias educativas» (lunes 08:00–09:00) y «Tendencias» (martes 08:00–09:00)**, con las decisiones «No · separados» y «Sí · mismo curso» visibles.
+- Capturas del emulador: https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42018452189/artifacts/13410038639.
+- **Alcance de esta prueba:** se verificó la lectura de una foto sintética, la revisión visual y el diálogo de coincidencia; **no** se verificó la aceptación y escritura final de las seis clases ni se usaron fotografías reales del usuario. No afirmar que todos los tipos de horario funcionarán.
+
+Siguiente mejora opcional: evitar mostrar «¿Son el mismo curso?» dos veces dentro del mismo cuadro (título de la ventana y subtítulo interno); es un detalle de presentación, no una falla de reconocimiento.
