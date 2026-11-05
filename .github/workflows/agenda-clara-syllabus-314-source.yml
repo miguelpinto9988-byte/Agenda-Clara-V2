@@ -1,0 +1,55 @@
+name: Agenda Clara 3.14.0 - Sílabos Fases A B C - Pruebas de código
+on:
+  push:
+    branches: [feat/silabos-fases-completas-3-14-0-20261105]
+    paths:
+      - 'updates/phase80/**'
+      - '.github/workflows/agenda-clara-syllabus-314-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  prueba-analizador-y-migracion:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperar fuentes reales 3.13.9
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 42104750703 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.9-Silabos-Revisados-Fuentes --dir baseline
+          unzip -q baseline/Agenda-Clara-3.13.9-Silabos-Revisados-Fuentes.zip
+          test -s AgendaClara/app/src/main/java/pe/agendaclara/app/SyllabusImportActivity.java
+      - name: Preflight 3.14.0 y migracion
+        run: |
+          set -euo pipefail
+          python3 updates/phase80/apply_syllabus_complete.py --dry-run
+          python3 updates/phase80/apply_syllabus_complete.py
+          grep -q "versionCode 66" AgendaClara/app/build.gradle
+          grep -q "SyllabusTableNormalizer.normalize" AgendaClara/app/src/main/java/pe/agendaclara/app/SyllabusImportActivity.java
+          grep -q "SyllabusImportPolicy.signature" AgendaClara/app/src/main/java/pe/agendaclara/app/SyllabusImportActivity.java
+          grep -q "showCoursePanel" AgendaClara/app/src/main/java/pe/agendaclara/app/SyllabusImportActivity.java
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Regresiones de tablas, semanas y comparación
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$(mktemp -d)"
+          SRC=AgendaClara/app/src/main/java/pe/agendaclara/app
+          javac -encoding UTF-8 -d "$OUT" \
+            "$SRC/AcademicCourseMatcher.java" \
+            "$SRC/SyllabusDateInterpreter.java" \
+            "$SRC/SyllabusEventParser.java" \
+            "$SRC/SyllabusReviewIntelligence.java" \
+            "$SRC/SyllabusImportPolicy.java" \
+            "$SRC/SyllabusTableNormalizer.java" \
+            updates/phase80/Phase80EndToEndTests.java
+          java -cp "$OUT" pe.agendaclara.app.Phase80EndToEndTests
+          echo "PASS: fuente de sílabos 3.14.0 e integridad de horarios anteriores"
