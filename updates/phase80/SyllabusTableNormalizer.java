@@ -15,6 +15,7 @@ public final class SyllabusTableNormalizer {
     private static final Pattern SEPARATOR=Pattern.compile("\\s*\\|\\s*|\\t+| {3,}");
     private static final Pattern WEEK=Pattern.compile(
         "(?iu)^(?:semana\\s*)?([0-9]{1,2}|[IVXLCDM]{1,8})$");
+    private static final Pattern WEIGHT=Pattern.compile("^\\d{1,3}(?:[.,]\\d{1,2})?\\s*%$");
     private static final Pattern DATE=Pattern.compile(
         "(?iu)^(?:\\d{1,2}[./-]\\d{1,2}(?:[./-]\\d{2,4})?|"+
         "\\d{4}-\\d{2}-\\d{2}|\\d{1,2}\\s+de\\s+[a-záéíóú]+.*)$");
@@ -26,7 +27,7 @@ public final class SyllabusTableNormalizer {
             if(page==null)continue;
             String[] lines=page.text.split("\\r?\\n");
             StringBuilder output=new StringBuilder();
-            int weekIndex=-1,activityIndex=-1,dateIndex=-1,columns=0;
+            int weekIndex=-1,activityIndex=-1,dateIndex=-1,weightIndex=-1,columns=0;
             for(int i=0;i<lines.length;i++){
                 String[] fields=split(lines[i]);
                 if(isHeader(fields)){
@@ -35,6 +36,7 @@ public final class SyllabusTableNormalizer {
                     activityIndex=index(fields,"evaluacion","actividad","evidencia",
                         "producto","examen","evaluaciones");
                     dateIndex=index(fields,"fecha","dia","plazo");
+                    weightIndex=index(fields,"ponderacion","porcentaje","peso","valor");
                     output.append(lines[i]).append('\n');
                     continue;
                 }
@@ -52,7 +54,7 @@ public final class SyllabusTableNormalizer {
                     if(oneCellPerLine && !SyllabusEventParser.assessmentType(
                         candidates[activityIndex]).isEmpty() &&
                         validContext(candidates,weekIndex,dateIndex)){
-                        String merged=merge(candidates,weekIndex,activityIndex,dateIndex);
+                        String merged=merge(candidates,weekIndex,activityIndex,dateIndex,weightIndex);
                         output.append(merged).append('\n');
                         i+=columns-1;
                         continue;
@@ -69,7 +71,7 @@ public final class SyllabusTableNormalizer {
         if(week>=0&&week<fields.length && WEEK.matcher(fields[week]).matches())return true;
         return date>=0&&date<fields.length&&isDateCell(fields[date]);
     }
-    private static String merge(String[] cells,int week,int activity,int date){
+    private static String merge(String[] cells,int week,int activity,int date,int weight){
         StringBuilder result=new StringBuilder(cells[activity].trim());
         if(week>=0&&week<cells.length){
             Matcher w=WEEK.matcher(cells[week]);
@@ -77,6 +79,8 @@ public final class SyllabusTableNormalizer {
         }
         if(date>=0&&date<cells.length&&isDateCell(cells[date]))
             result.append(" | ").append(cells[date]);
+        if(weight>=0&&weight<cells.length&&WEIGHT.matcher(cells[weight]).matches())
+            result.append(" | ").append(cells[weight]);
         return result.toString();
     }
     private static boolean isDateCell(String value){
