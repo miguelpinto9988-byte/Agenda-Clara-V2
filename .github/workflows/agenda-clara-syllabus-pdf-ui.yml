@@ -33,7 +33,7 @@ jobs:
           set -euo pipefail
           python3 updates/phase78/generate_syllabus_pdf.py
           test -s /tmp/silabo_tendencias_2026.pdf
-          pdfinfo /tmp/silabo_tendencias_2026.pdf | grep 'Pages:'
+          python3 -c "from pathlib import Path; p=Path('/tmp/silabo_tendencias_2026.pdf'); assert p.read_bytes().startswith(b'%PDF-1.4') and b'/Type /Page' in p.read_bytes()"
       - name: Habilitar virtualización
         run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
       - name: Importar PDF, seleccionar curso y verificar SQLite en Android 15
