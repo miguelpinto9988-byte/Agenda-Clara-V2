@@ -66,13 +66,30 @@ try:
         time.sleep(2)
     if not found:raise AssertionError("Android document picker didn't expose "+filename+
                                       "; this is a picker setup failure")
-    wait_for("Corroborar cursos y continuar",25)
+    wait_for("Paso 2 de 3",25)
     texts=[label(n) for n in inspect() if label(n)]
-    assert any("Tendencias" in t for t in texts), "OCR missed Tendencias entirely"
-    assert any("Historia" in t for t in texts), "OCR missed Historia entirely"
+    assert any("Tendencias educativas" in t for t in texts), (
+        "OCR missed the complete Tendencias educativas name")
+    assert any("Historia de la educación" in t for t in texts), (
+        "OCR missed Historia de la educación")
     screenshot("04-synthetic-colored-ocr-review")
-    print("PASS: on-device photo OCR recognized synthetic shared-prefix subjects",flush=True)
-    print("PASS: review was shown before timetable-name dialog",flush=True)
+    # The continue button is BELOW six course cards. Android exposes only
+    # on-screen elements, so scroll before querying the accessibility tree.
+    for _ in range(14):
+        if lookup("Corroborar cursos y continuar"):break
+        adb("shell","input","swipe","430","1660","430","550","460")
+        time.sleep(.8)
+    else:raise AssertionError("Course confirmation button unavailable after scrolling")
+    press("Corroborar cursos y continuar")
+    wait_for("¿Son el mismo curso?",10)
+    assert lookup("No · separados"),"Separate subjects action missing"
+    assert lookup("Sí · mismo curso"),"Same subject action missing"
+    screenshot("05-ambiguous-course-dialog")
+    print("PASS: on-device photo OCR recognized colored blocks and complete course names",
+          flush=True)
+    print("PASS: shared-prefix course triggered real ¿Son el mismo curso? dialog",
+          flush=True)
+    print("PASS: timetable name comes only after academic corroboration",flush=True)
 except Exception:
     try:screenshot("04-synthetic-ocr-diagnostic")
     except Exception:pass
