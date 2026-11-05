@@ -16,7 +16,21 @@ public final class SyllabusImportPipeline {
         Set<String> keys=new HashSet<>();
         // Prefer table cells when they provide an explicit row-local date.
         for(SyllabusEventParser.Event event:tables)append(merged,keys,event);
-        for(SyllabusEventParser.Event event:ordinary)append(merged,keys,event);
+        for(SyllabusEventParser.Event event:ordinary){
+            boolean sameRow=false;
+            for(SyllabusEventParser.Event table:tables){
+                if(table.page!=event.page)continue;
+                String t=SyllabusReviewIntelligence.fold(table.title);
+                String e=SyllabusReviewIntelligence.fold(event.sourceText);
+                if(t.length()<5||!e.contains(t))continue;
+                if(table.date!=null&&event.date!=null&&!table.date.equals(event.date))continue;
+                int w1=SyllabusReviewIntelligence.week(table.sourceText);
+                int w2=SyllabusReviewIntelligence.week(event.sourceText);
+                if(w1>0&&w2>0&&w1!=w2)continue;
+                sameRow=true;break;
+            }
+            if(!sameRow)append(merged,keys,event);
+        }
         return merged;
     }
     private static void append(List<SyllabusEventParser.Event> output,Set<String> keys,
