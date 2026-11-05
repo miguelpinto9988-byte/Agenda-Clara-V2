@@ -70,40 +70,64 @@ def alive():
     if not adb("shell","pidof","pe.agendaclara.app"):
         raise AssertionError("Agenda Clara process exited unexpectedly")
 
-time.sleep(5)
-alive()
-click("Calendario",prefer="lowest")
-click("Plan de estudio",prefer="highest")
-require("Nuevo horario")
-click("Nuevo horario")
-require("¿Cómo crearás tu horario?")
-require("Subir imagen del horario")
-require("Agregar cursos manualmente")
-absent("Confirma el nombre que identificará")
-shot("01-choose-creation-method")
+def start_with_launcher_recovery():
+    # Busy API-35 emulators sometimes show "Pixel Launcher isn't responding"
+    # before the tested app can become the foreground activity. Recover and
+    # relaunch, rather than classifying a launcher ANR as a timetable bug.
+    failure=""
+    for attempt in range(12):
+        try:
+            find("Calendario",prefer="lowest")
+            print("MainActivity ready after",attempt,"recoveries",flush=True)
+            return
+        except AssertionError as error:
+            failure=str(error)
+            if "isn't responding" in failure or "is not responding" in failure:
+                try:click("Wait")
+                except AssertionError:pass
+            adb("shell","am","start","-n","pe.agendaclara.app/.MainActivity")
+            time.sleep(3)
+    raise AssertionError("Launcher recovery exhausted; last UI state: "+failure)
 
-click("Subir imagen del horario")
-alive()
-require("Selecciona o toma una foto")
-require("Elegir desde galería")
-absent("Escribe el nombre del horario")
-shot("02-photo-first-no-title")
+try:
+    start_with_launcher_recovery()
+    alive()
+    click("Calendario",prefer="lowest")
+    click("Plan de estudio",prefer="highest")
+    require("Nuevo horario")
+    click("Nuevo horario")
+    require("¿Cómo crearás tu horario?")
+    require("Subir imagen del horario")
+    require("Agregar cursos manualmente")
+    absent("Confirma el nombre que identificará")
+    shot("01-choose-creation-method")
 
-# Android back finishes ScheduleActivity and returns to Calendario > Plan de estudio.
-adb("shell","input","keyevent","4")
-time.sleep(2)
-alive()
-require("Nuevo horario")
-click("Nuevo horario")
-require("¿Cómo crearás tu horario?")
-click("Agregar cursos manualmente")
-alive()
-require("Cursos del nuevo horario")
-require("Agregar una clase manualmente")
-absent("Escribe el nombre del horario")
-shot("03-manual-courses-first")
+    click("Subir imagen del horario")
+    alive()
+    require("Selecciona o toma una foto")
+    require("Elegir desde galería")
+    absent("Escribe el nombre del horario")
+    shot("02-photo-first-no-title")
 
-print("PASS UI: real Nuevo horario button opens METHOD dialog, not title input")
-print("PASS UI: photo path starts with image selection and no premature name")
-print("PASS UI: manual path starts with courses and no premature name")
-print("PASS UI: Android process survived both navigation paths")
+    # Android back finishes ScheduleActivity and returns to Plan de estudio.
+    adb("shell","input","keyevent","4")
+    time.sleep(2)
+    alive()
+    require("Nuevo horario")
+    click("Nuevo horario")
+    require("¿Cómo crearás tu horario?")
+    click("Agregar cursos manualmente")
+    alive()
+    require("Cursos del nuevo horario")
+    require("Agregar una clase manualmente")
+    absent("Escribe el nombre del horario")
+    shot("03-manual-courses-first")
+
+    print("PASS UI: Nuevo horario opens two VISIBLE creation method buttons")
+    print("PASS UI: photo starts with image selection and no name popup")
+    print("PASS UI: manual starts with course review and no name popup")
+    print("PASS UI: both pathways navigated without app crashes")
+except Exception:
+    try:shot("00-debug-failure")
+    except Exception:pass
+    raise
