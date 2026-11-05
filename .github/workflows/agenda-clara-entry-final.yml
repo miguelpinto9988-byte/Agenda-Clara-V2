@@ -3,6 +3,7 @@ on:
   push:
     branches: [fix/horario-entrada-3-13-5-20261105]
     paths:
+      - 'updates/phase75/**'
       - '.github/workflows/agenda-clara-entry-final.yml'
   workflow_dispatch:
 
