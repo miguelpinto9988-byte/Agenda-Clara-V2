@@ -2,6 +2,12 @@ package pe.agendaclara.app;
 
 import android.content.Context;
 import android.net.Uri;
+import android.graphics.Bitmap;
+import com.tom_roush.pdfbox.rendering.PDFRenderer;
+import com.google.android.gms.tasks.Tasks;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.TextRecognition;
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 import android.util.Xml;
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
@@ -53,14 +59,25 @@ public final class SyllabusDocumentReader {
             int count=document.getNumberOfPages();
             if(count>MAX_PAGES)throw new IOException("Máximo 120 páginas");
             PDFTextStripper stripper=new PDFTextStripper();
-            int total=0;
+            int total=0,scanned=0;
+            PDFRenderer renderer=new PDFRenderer(document);
+            com.google.mlkit.vision.text.TextRecognizer ocr=null;
+            try {
             for(int i=1;i<=count;i++){
                 stripper.setStartPage(i);stripper.setEndPage(i);
                 String text=stripper.getText(document);
+                if(text.trim().length()<12){
+                    if(++scanned>20)throw new IOException("PDF escaneado: máximo 20 páginas OCR por documento");
+                    if(ocr==null)ocr=TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
+                    Bitmap bitmap=renderer.renderImageWithDPI(i-1,140);
+                    try{text=Tasks.await(ocr.process(InputImage.fromBitmap(bitmap,0))).getText();}
+                    finally{bitmap.recycle();}
+                }
                 total+=text.length();
                 if(total>MAX_TEXT)throw new IOException("El texto del documento supera el límite");
                 pages.add(new SyllabusEventParser.Page(i,text));
             }
+            } finally {if(ocr!=null)ocr.close();}
         }
         return pages;
     }
