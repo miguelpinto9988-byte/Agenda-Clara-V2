@@ -45,8 +45,8 @@ public final class Phase80EndToEndTests {
         check(pending.get(0).week==15&&pending.get(1).week==16,
                 "week-only numbers belong to correct event");
         List<SyllabusEventParser.Event> unusual=parse(
-            "Quiz 2 | Semana 7\\n"+
-            "Prueba oral de unidad | Semana VIII\\n");
+            "Quiz 2 | Semana 7"+System.lineSeparator()+
+            "Prueba oral de unidad | Semana VIII"+System.lineSeparator());
         check(unusual.size()==2,"quiz and oral exam remain recognized by filter");
         String before=SyllabusImportPolicy.signature("Historia de la educación","Examen",
             "Examen final | Semana XV | 25/11/2026 | 30%",1);
