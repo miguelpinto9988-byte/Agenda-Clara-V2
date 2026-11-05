@@ -18,6 +18,9 @@ assert 'setTag("new_task_button")' not in main
 assert 'setTitle("Crear en Agenda Clara")' in main
 assert 'SyllabusImportActivity" android:exported="false"' in manifest
 assert "versionCode 59" in gradle and "versionName '3.13.3'" in gradle
+assert "Horarios y cursos se gestionan en Calendario > Plan de estudio." in main
+assert 'LinearLayout schedule=card(body);' not in main
+assert "Agrega tus cursos en Calendario > Plan de estudio." in (j/"MiDiaClassCard.java").read_text()
 assert "pdfbox-android:2.0.27.0" in gradle and "poi-scratchpad:5.4.1" in gradle
 schedule=(j/"AcademicSchedules.java").read_text()
 assert "LIMIT = 10" in schedule and "migrateLegacy" in schedule
