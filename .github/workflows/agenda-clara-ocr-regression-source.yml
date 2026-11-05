@@ -1,0 +1,55 @@
+name: Agenda Clara 3.13.6 - QA de coincidencias OCR - SIN APK
+on:
+  push:
+    branches: [fix/ocr-cursos-ambiguos-3-13-6-20261105]
+    paths:
+      - 'updates/phase76/**'
+      - '.github/workflows/agenda-clara-ocr-regression-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  regresion-ocr:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Obtener repositorio
+        uses: actions/checkout@v4
+      - name: Recuperar fuentes verificadas de Agenda Clara 3.13.5
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 41953754958 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.5-Entrada-Horario-Corregida-Fuentes --dir source-artifact
+          unzip -q source-artifact/Agenda-Clara-3.13.5-Entrada-Horario-Corregida-Fuentes.zip
+          test -s AgendaClara/app/src/main/java/pe/agendaclara/app/ScheduleCourseRecognition.java
+      - name: Aplicar corrección OCR y comprobar flujo
+        run: |
+          python3 updates/phase76/apply_ocr_corroboration.py
+          python3 updates/phase76/test_ocr_regression.py
+      - name: Preparar Java 17 para pruebas JVM
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Probar nombres parciales y múltiples coincidencias sin Gradle
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$(mktemp -d)"
+          DIR=AgendaClara/app/src/main/java/pe/agendaclara/app
+          javac -encoding UTF-8 -d "$OUT" \
+            "$DIR/ScheduleEntry.java" \
+            "$DIR/ScheduleCourseColors.java" \
+            "$DIR/ScheduleCourseRecognition.java" \
+            "$DIR/ScheduleParser.java" \
+            "$DIR/ScheduleGridInterpreter.java" \
+            "$DIR/SchedulePhotoReview.java" \
+            updates/phase76/Phase76RecognitionTests.java
+          java -cp "$OUT" pe.agendaclara.app.Phase76RecognitionTests
+          echo 'PASS: source-only QA. NO APK, NO firma.'
