@@ -340,6 +340,42 @@ def overview(source):
 
 def safeguards(source):
     source=one(source,
+'''        Intent pick=new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        pick.addCategory(Intent.CATEGORY_OPENABLE);
+        pick.setType("*/*");
+        pick.putExtra(Intent.EXTRA_MIME_TYPES,new String[]{
+                "application/pdf","application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+        startActivityForResult(pick,REQUEST_DOCUMENT);''',
+'''        // We only read once, so GET_CONTENT works on more document providers.
+        // OPEN_DOCUMENT remains as a fallback on devices with a restricted picker.
+        Intent pick=new Intent(Intent.ACTION_GET_CONTENT);
+        pick.addCategory(Intent.CATEGORY_OPENABLE);
+        pick.setType("*/*");
+        pick.putExtra(Intent.EXTRA_MIME_TYPES,new String[]{
+                "application/pdf","application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+        try{
+            startActivityForResult(Intent.createChooser(pick,"Seleccionar sílabo"),
+                REQUEST_DOCUMENT);
+        }catch(android.content.ActivityNotFoundException|SecurityException error){
+            Intent alternate=new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            alternate.addCategory(Intent.CATEGORY_OPENABLE);
+            alternate.setType("*/*");
+            alternate.putExtra(Intent.EXTRA_MIME_TYPES,new String[]{
+                "application/pdf","application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+            try{startActivityForResult(alternate,REQUEST_DOCUMENT);}
+            catch(android.content.ActivityNotFoundException|SecurityException second){
+                new AlertDialog.Builder(this,R.style.DialogTheme)
+                    .setTitle("No hay un selector de archivos disponible")
+                    .setMessage("Instala o habilita una aplicación de Archivos y "+
+                        "vuelve a importar el sílabo. También puedes registrar "+
+                        "la evaluación manualmente.")
+                    .setPositiveButton("Entendido",null).show();
+            }
+        }''',"document picker fallback")
+    source=one(source,
 '''        double weight=-1;
         String title;''',
 '''        double weight=-1;
