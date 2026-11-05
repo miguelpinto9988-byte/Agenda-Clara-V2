@@ -15,6 +15,7 @@ public final class Phase80Tests {
                 "row-local date");
         ok(rows.get(1).date==null,"week-only no invented date");
         ok(rows.get(0).page==7,"provenance page");
+        ok(SyllabusReviewIntelligence.week(rows.get(0).sourceText)==12,"table week preserved");
         List<SyllabusEventParser.Event> all=SyllabusImportPipeline.extract(pages);
         ok(all.size()>=2,"table events merged");
         Map<String,String> previous=new HashMap<>();
