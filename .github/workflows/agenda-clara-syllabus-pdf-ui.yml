@@ -3,6 +3,7 @@ on:
   push:
     branches: [feat/silabos-examenes-finales-3-13-8-20261105]
     paths:
+      - 'updates/phase78/qa_syllabus_pdf.py'
       - '.github/workflows/agenda-clara-syllabus-pdf-ui.yml'
   workflow_dispatch:
 
