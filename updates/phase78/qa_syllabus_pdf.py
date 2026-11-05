@@ -81,8 +81,15 @@ def set_preferences(name,data):
                     for k,v in data.items())
     content="<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map>"+\
         entries+"</map>"
-    proc=subprocess.run(["adb","shell","run-as",PACKAGE,"sh","-c",
-        "mkdir -p shared_prefs; cat > shared_prefs/"+name+".xml"],
+    mkdir=subprocess.run(["adb","shell","run-as",PACKAGE,
+                          "mkdir","-p","shared_prefs"],
+        stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=30)
+    if mkdir.returncode:
+        raise AssertionError("Creating test preferences: "+mkdir.stderr)
+    # adb shell concatenates argv. Quote the entire sh -c program explicitly
+    # or Android sh interprets 'mkdir' as a command missing its arguments.
+    program="'cat > shared_prefs/"+name+".xml'"
+    proc=subprocess.run(["adb","shell","run-as",PACKAGE,"sh","-c",program],
         input=content,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
         timeout=30)
     if proc.returncode:raise AssertionError("Seeding academic profiles: "+proc.stderr)
