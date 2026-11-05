@@ -49,3 +49,11 @@ El lector de DOC/DOCX conserva compatibilidad; las reglas de clasificación acad
 La extracción de un sílabo puede verse afectada por tablas particularmente complejas, páginas borrosas, cronogramas expresados solo como «evaluación final al concluir el ciclo» o PDFs con demasiadas páginas escaneadas. Una semana académica no determina un día exacto sin otras evidencias; por eso se registran pendientes sin recordatorios.
 
 Rama: `feat/silabos-examenes-finales-3-13-8-20261105`.
+
+
+## Resultado de verificación y límites
+
+- QA del analizador y fechas: **superado**, incluyendo semanas, fechas complejas y cursos iguales en varios horarios. Ejecución: https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42092767475.
+- APK 3.13.8: compilación, firma, instalación y apertura en Android 15 **superadas**. Ejecución: https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42093209511; artefacto APK: https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42093209511/artifacts/13446875917.
+- Importación completa de PDF hasta verificar SQLite: aún no certificada. Los primeros ensayos quedaron bloqueados en el selector de documentos del emulador; esto no demuestra que el lector falle en el teléfono. No se declara ese test como aprobado.
+- Ningún sílabo personal fue usado ni se modificaron agendas personales.
