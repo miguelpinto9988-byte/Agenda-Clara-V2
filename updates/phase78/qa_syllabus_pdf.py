@@ -162,19 +162,29 @@ try:
     click("Calendario")
     click("Plan de estudio")
     click("Subir sílabo")
-    time.sleep(2)
-    filename="silabo_tendencias_2026.pdf"
+    time.sleep(3)
+    capture("00-document-picker")
+    filename="silabo_tendencias"
     seen=False
-    for attempt in range(10):
+    for attempt in range(12):
+        labels=[label(node) for node in screen() if label(node)]
+        print("Picker attempt",attempt,labels[:40],flush=True)
         if find(filename):
             click(filename);seen=True;break
-        if attempt==0:
+        if find("Downloads"):
+            click("Downloads")
+        elif find("Descargas"):
+            click("Descargas")
+        elif attempt==0:
             try:click("Show roots")
             except AssertionError:
                 try:click("Open navigation drawer")
                 except AssertionError:pass
-        if find("Downloads"):click("Downloads")
-        elif find("Descargas"):click("Descargas")
+        elif attempt==1:
+            try:click("Browse")
+            except AssertionError:
+                try:click("Examinar")
+                except AssertionError:pass
         time.sleep(1.5)
     if not seen:raise AssertionError("PDF not found in document picker")
     wait("¿A qué curso corresponde este sílabo?",25)
