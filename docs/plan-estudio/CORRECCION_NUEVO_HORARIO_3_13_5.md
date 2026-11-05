@@ -27,3 +27,14 @@ En ambos casos, cancelar sin guardar conserva los datos anteriores. Crear un hor
 El test automatizado verifica el selector y los comienzos de ambos caminos. La corroboración con una **fotografía real**, la interpretación OCR de diferentes diseños y la creación final de una categoría tras la revisión deberán complementarse con pruebas prácticas en un dispositivo.
 
 El número de versión pasa a `3.13.5` (`versionCode 61`) para distinguirlo de las APK 3.13.3 y 3.13.4. No se altera la base de datos de horarios existente.
+
+
+## Resultado de pruebas reales (5 de noviembre de 2026)
+
+- **Compilación Gradle y firma de la APK 3.13.5:** correcto; artefacto `Agenda-Clara-3.13.5-Entrada-Horario-Corregida-APK` generado en la ejecución `41953754958`. El trabajo de compilación fue satisfactorio.
+- **Prueba de interfaz automatizada con Android 15 AOSP:** ejecución `41955101938`, resultado `success`.
+- Se pulsó realmente el botón **Calendario > Plan de estudio > Nuevo horario**. Se verificó un diálogo con los **dos botones visibles** `Subir imagen del horario` y `Agregar cursos manualmente`, sin abrir un campo de nombre.
+- Al escoger imagen se abrió **Selecciona o toma una foto**. Al escoger la opción manual se abrió **Cursos del nuevo horario** con el botón **Agregar una clase manualmente**. No apareció el diálogo de nombre antes de estas etapas.
+- **Capturas:** artefacto `Agenda-Clara-3.13.5-Botones-Horarios-Capturas` (tres imágenes), ejecución `41955101938`.
+- **Pendiente de prueba funcional:** reconocimiento OCR de una fotografía real, corroboración completa y escritura final en SQLite tras la confirmación; las pruebas automatizadas presentes llegan a la entrada de ambos caminos y a la lógica de código.
+- **Mejora visual pendiente:** al iniciar la creación manual sin clases, el mensaje heredado «No se han detectado clases completas» es inapropiado; sustituirlo por «Añade tu primer curso» en una actualización posterior, tras autorización.
