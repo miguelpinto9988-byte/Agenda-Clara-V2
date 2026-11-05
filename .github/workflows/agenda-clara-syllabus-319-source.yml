@@ -1,0 +1,54 @@
+name: Agenda Clara 3.13.9 - Validacion de silabos sin APK
+on:
+  push:
+    branches: [feat/silabos-fiabilidad-fases-abc-20261105]
+    paths:
+      - 'updates/phase79/**'
+      - '.github/workflows/agenda-clara-syllabus-319-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  analisis-y-regresiones:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperar fuentes verificadas 3.13.8
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh run download 42093209511 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.8-Silabos-Examenes-Finales-Fuentes --dir previous
+          unzip -q previous/Agenda-Clara-3.13.8-Silabos-Examenes-Finales-Fuentes.zip
+          test -s AgendaClara/app/src/main/java/pe/agendaclara/app/SyllabusImportActivity.java
+      - name: Aplicar mejoras de corroboracion
+        run: |
+          set -euo pipefail
+          python3 updates/phase79/apply_syllabus_review.py
+          grep -q 'SyllabusReviewIntelligence.filter(rawEvents)' AgendaClara/app/src/main/java/pe/agendaclara/app/SyllabusImportActivity.java
+          grep -q "versionCode 65" AgendaClara/app/build.gradle
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Pruebas de regresion de fechas, tipos y exclusiones
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$(mktemp -d)"
+          SRC=AgendaClara/app/src/main/java/pe/agendaclara/app
+          javac -encoding UTF-8 -d "$OUT" \
+            "$SRC/AcademicCourseMatcher.java" \
+            "$SRC/SyllabusDateInterpreter.java" \
+            "$SRC/SyllabusEventParser.java" \
+            "$SRC/SyllabusCourseResolver.java" \
+            "$SRC/SyllabusReviewIntelligence.java" \
+            updates/phase78/SyllabusAcademicTests.java \
+            updates/phase79/Phase79ReviewTests.java
+          java -cp "$OUT" pe.agendaclara.app.SyllabusAcademicTests
+          java -cp "$OUT" pe.agendaclara.app.Phase79ReviewTests
+          echo 'PASS: sin compilacion APK, no modifica datos existentes'
