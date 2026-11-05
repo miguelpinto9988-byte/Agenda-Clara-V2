@@ -42,7 +42,7 @@ public final class SyllabusReimportPlanner {
     public static String identity(String text){
         // Strip percentages before accent/punctuation normalization drops the % sign.
         String name=fold(text==null?"":text.replaceAll(
-            "(?iu)\\\\b\\\\d{1,3}(?:[.,]\\\\d{1,2})?\\\\s*%"," "));
+            "(?iu)\\b\\d{1,3}(?:[.,]\\d{1,2})?\\s*%"," "));
         name=name.replaceAll("\\b(?:20\\d{2}|\\d{1,2}\\s+de\\s+\\w+\\s+de\\s+20\\d{2})\\b"," ");
         name=name.replaceAll("\\b\\d{1,2}\\s*\\d{1,2}\\s*20\\d{2}\\b"," ");
         name=name.replaceAll("\\b(?:semana|sem)\\s*(?:\\d{1,2}|[ivxlcdm]{1,6})\\b"," ");
