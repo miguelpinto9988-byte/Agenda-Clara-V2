@@ -86,6 +86,9 @@ public final class SyllabusAssessmentExtractor {
             if(next>=lines.length)break;
             String raw=normalized(lines[next]);
             if(!SyllabusEventParser.assessmentType(raw).isEmpty())break;
+            // A new "Semana 13" heading AFTER the current row's weight
+            // belongs to the NEXT evaluation, not this one.
+            if(distance>1&&SyllabusDateInterpreter.weekNumbers(raw)[0]>0)break;
             if(isDateCell(raw)||isWeightCell(raw)){
                 if(out.length()>0)out.append(" | ");
                 out.append(raw);
