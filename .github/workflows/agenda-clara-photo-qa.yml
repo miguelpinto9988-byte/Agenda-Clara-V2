@@ -1,0 +1,60 @@
+name: Agenda Clara 3.13.7 - Prueba OCR foto sintetica en Android
+on:
+  push:
+    branches: [feat/ocr-fusion-cursos-3-13-7-20261105]
+    paths:
+      - '.github/workflows/agenda-clara-photo-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  foto-colores-android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Descargar APK 3.13.7 ya compilada
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifact-apk
+          gh run download 42016503685 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.7-OCR-Multicapa-APK --dir artifact-apk
+          test -s artifact-apk/app-debug.apk
+      - name: Preparar imagen sintética de horario
+        shell: bash
+        run: |
+          python3 -m pip install --quiet --user Pillow
+          python3 updates/phase77/generate_ocr_fixture.py
+          test -s /tmp/horario_ocr_regresion.png
+      - name: Habilitar KVM
+        run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - name: Probar reconocimiento OCR local en Android 15
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: default
+          profile: pixel_6
+          avd-name: agenda-clara-ocr-photo-317
+          disable-animations: true
+          script: |
+            adb install -r artifact-apk/app-debug.apk
+            adb push /tmp/horario_ocr_regresion.png /sdcard/Download/horario_ocr_regresion.png
+            adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE \
+              -d file:///sdcard/Download/horario_ocr_regresion.png
+            adb shell am start -n pe.agendaclara.app/.MainActivity
+            sleep 7
+            python3 updates/phase77/qa_emulator_photo.py
+      - name: Adjuntar captura y diagnóstico
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.13.7-Foto-Sintetica-OCR
+          path: screenshots/
+          if-no-files-found: ignore
