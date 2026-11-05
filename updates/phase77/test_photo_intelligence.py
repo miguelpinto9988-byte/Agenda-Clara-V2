@@ -29,6 +29,8 @@ assert "chooseFinalCourseName(" in activity
 assert "scheduleDialog().setTitle(\"Confirmar nombre del curso\")" in activity
 assert 'confirmPhotoWarnings(approved,()->confirmPhotoName(approved))' in activity
 assert 'a.button("＋  Nuevo horario",()->chooseMethod(a))' in source("CalendarStudyPanel.java")
+assert "ScheduleColorTileDetector.detect(pixels,width,height)" in source("ScheduleImageBlocks.java")
+assert "private static boolean colored(int argb)" in source("ScheduleColorTileDetector.java")
 assert "Bitmap.Config.ARGB_8888" in source("SchedulePhotoLoader.java")
 assert "bounds.outHeight)/sample>2560" in source("SchedulePhotoLoader.java")
 assert "columns.isEmpty()||periods.isEmpty()" in source("ScheduleGridInterpreter.java")
