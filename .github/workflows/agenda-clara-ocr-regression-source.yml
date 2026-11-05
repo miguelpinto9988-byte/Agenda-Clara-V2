@@ -50,6 +50,8 @@ jobs:
             "$DIR/ScheduleParser.java" \
             "$DIR/ScheduleGridInterpreter.java" \
             "$DIR/SchedulePhotoReview.java" \
-            updates/phase76/Phase76RecognitionTests.java
+            updates/phase76/Phase76RecognitionTests.java \
+            updates/phase76/Phase76GridTests.java
           java -cp "$OUT" pe.agendaclara.app.Phase76RecognitionTests
+          java -cp "$OUT" pe.agendaclara.app.Phase76GridTests
           echo 'PASS: source-only QA. NO APK, NO firma.'
