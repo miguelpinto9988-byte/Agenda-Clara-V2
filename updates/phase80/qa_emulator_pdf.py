@@ -51,8 +51,16 @@ def fixture():
 fixture()
 run("push",FILE,"/sdcard/Download/"+FILE)
 try:
-    run("shell","am","start","-n","pe.agendaclara.app/.SyllabusImportActivity")
-    wait("Subir sílabo")
+    run("shell","am","start","-n","pe.agendaclara.app/.MainActivity")
+    wait("Calendario")
+    tap("Calendario")
+    wait("Plan de estudio")
+    tap("Plan de estudio")
+    for _ in range(14):
+        if find("Subir sílabo"):break
+        run("shell","input","swipe","420","1650","420","570","450")
+        time.sleep(1)
+    else:raise AssertionError("Syllabus import button not reachable")
     tap("Subir sílabo")
     time.sleep(3)
     for _ in range(12):
