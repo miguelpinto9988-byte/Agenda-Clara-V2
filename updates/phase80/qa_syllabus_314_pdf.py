@@ -14,8 +14,8 @@ translations={
     'wait("Evaluaciones incorporadas")':'wait("Sílabo incorporado")',
 }
 # Confirm the new per-course panel before inspecting the saved SQLite records.
-panel_before='    adb("shell","am","force-stop",PACKAGE)\\n    verify_tasks()'
-panel_after='    click("Ver evaluaciones")\\n    wait("Evaluaciones de Tendencias educativas")\\n    wait("Fecha pendiente")\\n    capture("05-syllabus-course-panel")\\n    adb("shell","am","force-stop",PACKAGE)\\n    verify_tasks()'
+panel_before='    adb("shell","am","force-stop",PACKAGE)\n    verify_tasks()'
+panel_after='    click("Ver evaluaciones")\n    wait("Evaluaciones de Tendencias educativas")\n    wait("Fecha pendiente")\n    capture("05-syllabus-course-panel")\n    adb("shell","am","force-stop",PACKAGE)\n    verify_tasks()'
 for before,after in translations.items():
     if text.count(before)!=1:
         raise RuntimeError("QA anchor changed: "+before)
