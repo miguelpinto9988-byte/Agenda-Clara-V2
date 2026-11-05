@@ -28,3 +28,10 @@
 1. Añadir fixtures de PDF reales anonimizados de varias universidades para medir falsos positivos y negativos.
 2. Permitir que el usuario seleccione una fila de evaluación y vea resaltada su posición exacta en el PDF.
 3. Agregar una operación transaccional de actualización de tareas existentes con confirmación y reprogramación de avisos.
+
+## Evidencia de QA de esta entrega
+
+- Pruebas JVM del pipeline, fechas por fila, semana, filtros y comparador: exitosas en [run 42119808558](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42119808558).
+- APK 3.14.0 compilada, firmada, instalada y abierta en Android 15: [run 42119808566](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42119808566). APK: artifact 13458975146.
+- Prueba de importación de un PDF sintético: [run 42121071993](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42121071993). **No superada**: el selector de documentos del emulador no mostró el PDF copiado a Descargas; no se llegó al lector de PDF ni al guardado. Esta incidencia de automatización no demuestra un error del parser, pero impide certificar el flujo completo.
+- **Pendiente**: validar importación de un sílabo real, asignación a un curso, persistencia y reimportación con cambios.
