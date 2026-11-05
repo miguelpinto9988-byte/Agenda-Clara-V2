@@ -1,0 +1,51 @@
+name: Agenda Clara 3.13.4 - QA foto primero - SOLO FUENTES
+on:
+  push:
+    branches: [fix/horario-foto-primero-3-13-4-20261104]
+    paths:
+      - 'updates/phase74/**'
+      - '.github/workflows/agenda-clara-photo-first-source-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  validar-sin-compilar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Obtener los cambios
+        uses: actions/checkout@v4
+      - name: Recuperar las fuentes verificadas 3.13.3
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh run download 41945081534 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.3-Plan-Estudio-Fuentes --dir prev
+          unzip -q prev/Agenda-Clara-3.13.3-Plan-Estudio-Fuentes.zip
+          test -s AgendaClara/app/src/main/java/pe/agendaclara/app/ScheduleActivity.java
+      - name: Aplicar el flujo imagen-cursos-nombre sin generar APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 updates/phase74/apply_photo_first.py
+          python3 updates/phase74/test_photo_first.py
+      - name: Preparar Java 17 para las pruebas puras de OCR
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Probar sugerencias de nombre y semana sin Android
+        shell: bash
+        run: |
+          set -euo pipefail
+          TMP="$(mktemp -d)"
+          javac -encoding UTF-8 -d "$TMP" \
+            AgendaClara/app/src/main/java/pe/agendaclara/app/ScheduleTitleParser.java \
+            updates/phase74/Phase74NameTests.java
+          java -cp "$TMP" pe.agendaclara.app.Phase74NameTests
+          echo 'PASS: sin Gradle, sin APK, sin firma'
