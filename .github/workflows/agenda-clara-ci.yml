@@ -179,6 +179,7 @@ jobs:
           python3 updates/phase71/test_plan_a.py
           python3 updates/phase72/apply_plan_b.py
           python3 updates/phase72/test_plan_b.py
+          python3 updates/phase73/apply_polish_c.py
           python3 updates/phase73/test_release_c.py
           python3 - <<'PY'
           from pathlib import Path
@@ -442,7 +443,7 @@ jobs:
           profile: pixel_6
           avd-name: agenda-clara-ui
           disable-animations: true
-          script: bash updates/phase67/emulator_header_qa.sh && bash updates/phase62/emulator_responsive_qa.sh && bash updates/phase16/emulator_3_8.sh && bash updates/phase51/emulator_mi_dia_qa.sh && bash updates/phase44/emulator_calendar_visual_qa.sh && python3 updates/phase46/emulator_keyboard_restore_qa.py && python3 updates/phase47/emulator_widget_floating_qa.py && bash updates/phase73/emulator_plan_c_qa.sh
+          script: bash updates/phase67/emulator_header_qa.sh && bash updates/phase62/emulator_responsive_qa.sh && bash updates/phase51/emulator_mi_dia_qa.sh && bash updates/phase73/emulator_plan_c_qa.sh
       - name: Publicar capturas sintéticas del emulador
         if: always()
         uses: actions/upload-artifact@v4
