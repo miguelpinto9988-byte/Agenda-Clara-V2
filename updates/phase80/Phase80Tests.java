@@ -17,7 +17,7 @@ public final class Phase80Tests {
         ok(rows.get(0).page==7,"provenance page");
         ok(SyllabusReviewIntelligence.week(rows.get(0).sourceText)==12,"table week preserved");
         List<SyllabusEventParser.Event> all=SyllabusImportPipeline.extract(pages);
-        ok(all.size()>=2,"table events merged");
+        ok(all.size()==2,"no duplicate events between table and text readers");
         Map<String,String> previous=new HashMap<>();
         previous.put("examen final","2026-11-20");
         previous.put("producto final","2026-11-25");
