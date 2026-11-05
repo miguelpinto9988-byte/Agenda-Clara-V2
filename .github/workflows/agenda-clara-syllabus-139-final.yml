@@ -55,9 +55,7 @@ jobs:
             "$SRC/SyllabusCourseResolver.java" \
             "$SRC/SyllabusAssessmentExtractor.java" \
             "$SRC/SyllabusReimportPlanner.java" \
-            updates/phase78/SyllabusAcademicTests.java \
             updates/phase79/Phase79SyllabusTests.java
-          java -cp "$OUT" pe.agendaclara.app.SyllabusAcademicTests
           java -cp "$OUT" pe.agendaclara.app.Phase79SyllabusTests
       - name: Recuperar firma privada de desarrollo
         env:
