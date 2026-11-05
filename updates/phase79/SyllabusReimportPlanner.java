@@ -41,8 +41,15 @@ public final class SyllabusReimportPlanner {
     /** Remove DATE and assessment weight, retain ordinal (parcial 1 vs parcial 2). */
     public static String identity(String text){
         // Strip percentages before accent/punctuation normalization drops the % sign.
-        String name=fold(text==null?"":text.replaceAll(
-            "(?iu)\\b\\d{1,3}(?:[.,]\\d{1,2})?\\s*%"," "));
+        String raw=text==null?"":text;
+        raw=raw.replaceAll("(?iu)\\b(?:del\\s+|desde\\s+|entre\\s+)?"+
+            "\\d{1,2}\\s+(?:de\\s+)?"+
+            "(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|"+
+            "septiembre|setiembre|octubre|noviembre|diciembre)"+
+            "(?:\\s+(?:de|del)\\s+20\\d{2})?\\b"," ");
+        raw=raw.replaceAll("(?iu)\\b\\d{1,2}[./-]\\d{1,2}(?:[./-]\\d{2,4})?\\b"," ");
+        raw=raw.replaceAll("(?iu)\\b\\d{1,3}(?:[.,]\\d{1,2})?\\s*%"," ");
+        String name=fold(raw);
         name=name.replaceAll("\\b(?:20\\d{2}|\\d{1,2}\\s+de\\s+\\w+\\s+de\\s+20\\d{2})\\b"," ");
         name=name.replaceAll("\\b\\d{1,2}\\s*\\d{1,2}\\s*20\\d{2}\\b"," ");
         name=name.replaceAll("\\b(?:semana|sem)\\s*(?:\\d{1,2}|[ivxlcdm]{1,6})\\b"," ");
