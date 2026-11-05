@@ -50,7 +50,8 @@ jobs:
             "$SRC/SyllabusRevisionComparator.java" \
             updates/phase79/Phase79ReviewTests.java \
             updates/phase80/Phase80Tests.java
-          java -cp "$OUT" pe.agendaclara.app.Phase79ReviewTests\n          java -cp "$OUT" pe.agendaclara.app.Phase80Tests
+          java -cp "$OUT" pe.agendaclara.app.Phase79ReviewTests
+          java -cp "$OUT" pe.agendaclara.app.Phase80Tests
       - name: Recuperar firma privada de desarrollo
         env:
           SIGNING_JKS_BASE64: ${{ secrets.SIGNING_JKS_BASE64 }}
