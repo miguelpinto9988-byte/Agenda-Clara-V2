@@ -1,0 +1,37 @@
+name: Agenda Clara 3.13.5 - Verificar entrada de horarios - SIN APK
+on:
+  push:
+    branches: [fix/horario-entrada-3-13-5-20261105]
+    paths:
+      - 'updates/phase75/**'
+      - '.github/workflows/agenda-clara-horario-entry-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prueba-captura-sin-apk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Obtener repositorio
+        uses: actions/checkout@v4
+      - name: Recuperar fuentes de la APK 3.13.4 verificada
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 41949630141 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.4-Foto-Cursos-Nombre-Fuentes --dir source-artifact
+          unzip -q source-artifact/Agenda-Clara-3.13.4-Foto-Cursos-Nombre-Fuentes.zip
+          test -s AgendaClara/app/src/main/java/pe/agendaclara/app/CalendarStudyPanel.java
+      - name: Aplicar y verificar la corrección de la captura
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 updates/phase75/apply_creation_entry.py
+          python3 updates/phase75/test_creation_entry.py
+          echo 'No Gradle, no APK. Verificación de código real modificado.'
