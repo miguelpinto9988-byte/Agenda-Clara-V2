@@ -113,7 +113,8 @@ def run():
     for path,transform in paths.items():
         rewritten[path]=transform(path.read_text(encoding="utf-8"))
     main=BASE/"SyllabusImportActivity.java"
-    rewritten[main]=(HERE/"SyllabusImportActivity.java").read_text(encoding="utf-8")
+    from patch_syllabus_ui import run as patch_ui
+    rewritten[main]=patch_ui(main.read_text(encoding="utf-8"))
     for name in NEW:
         target=BASE/name
         if target.exists():raise RuntimeError("No sustituir componente existente: "+name)
