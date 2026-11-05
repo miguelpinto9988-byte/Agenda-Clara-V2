@@ -10,7 +10,7 @@ public final class Phase74NameTests {
     public static void main(String[] args) {
         expect("HORARIO: Educación 2026\nLunes\nMatemática","Educación 2026");
         expect("Horario de clases — Semana 4\nMartes 08:00","Semana 4");
-        expect("Semana: 7\nJueves 10:00","7");
+        expect("Semana: 7\nJueves 10:00","Semana 7");
         expect("Semana 12\nLunes 09:00\nDidáctica","Semana 12");
         expect("Lunes\nMartes\nTendencias educativas\n08:00",""); // no header: manual prompt
         expect("Horario de clases\nMiércoles\n16:30",""); // generic heading is not a name
