@@ -99,7 +99,10 @@ public final class SyllabusReviewIntelligence {
         for(SyllabusEventParser.Event e:events){
             if(e==null)continue;
             String evidence=e.sourceText==null?"":e.sourceText;
-            String kind=classify(evidence+" "+e.type);
+            // The core parser already supports quiz, OSCE, oral/written tests and
+            // several final-product aliases: do not discard them in this layer.
+            String kind=SyllabusEventParser.assessmentType(evidence);
+            if(kind.isEmpty())kind=SyllabusEventParser.assessmentType(e.type);
             if(kind.isEmpty())continue;
             int w=week(evidence);
             int p=weight(evidence);
