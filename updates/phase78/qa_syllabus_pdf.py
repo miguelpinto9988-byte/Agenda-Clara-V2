@@ -21,11 +21,21 @@ def adb(*args,timeout=45):
     return subprocess.check_output(["adb",*args],text=True,timeout=timeout).strip()
 
 def screen():
-    adb("shell","uiautomator","dump","/sdcard/window.xml")
-    raw=adb("shell","cat","/sdcard/window.xml")
-    idx=raw.find("<?xml")
-    if idx<0:raise AssertionError("Android UI hierarchy unavailable: "+raw[:300])
-    return list(ET.fromstring(raw[idx:]).iter("node"))
+    # Google APIs first boot may temporarily return a null accessibility root.
+    last=""
+    for attempt in range(7):
+        proc=subprocess.run(["adb","shell","uiautomator","dump","/sdcard/window.xml"],
+            capture_output=True,text=True,timeout=40)
+        last=(proc.stdout or "")+" "+(proc.stderr or "")
+        check=subprocess.run(["adb","shell","cat","/sdcard/window.xml"],
+            capture_output=True,text=True,timeout=20)
+        raw=check.stdout
+        idx=raw.find("<?xml")
+        if idx>=0:
+            try:return list(ET.fromstring(raw[idx:]).iter("node"))
+            except ET.ParseError:pass
+        time.sleep(2)
+    raise AssertionError("Android UI hierarchy unavailable: "+last[:400])
 
 def label(node):
     return " ".join((node.attrib.get("text",""),node.attrib.get("content-desc",""))).strip()
@@ -158,11 +168,16 @@ try:
     adb("shell","am","force-stop",PACKAGE)
     seed_two_profiles()
     adb("shell","am","start","-n",PACKAGE+"/.MainActivity")
+    time.sleep(8)
     wait("Calendario")
     click("Calendario")
     click("Plan de estudio")
     click("Subir sílabo")
     time.sleep(3)
+    focus=adb("shell","dumpsys","window")
+    for line in focus.splitlines():
+        if "mCurrentFocus" in line or "mFocusedApp" in line:
+            print("After upload:",line.strip()[:250],flush=True)
     capture("00-document-picker")
     filename="silabo_tendencias"
     seen=False
