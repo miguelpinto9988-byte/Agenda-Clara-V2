@@ -229,8 +229,14 @@ def transform_schedule(source):
     }
 
     private void completePhotoImport(ArrayList<ScheduleEntry> approved,int added){
-        AcademicSchedules.syncFromSessions(this,profileId);
-        ScheduleReminders.rebuild(this);
+        try{
+            AcademicSchedules.syncFromSessions(this,profileId);
+            ScheduleReminders.rebuild(this);
+        }catch(RuntimeException warning){
+            // The records already exist; do not recreate a duplicate timetable
+            // just because updating reminders encountered a temporary error.
+            toast("Horario guardado. Revisa los avisos de clase.");
+        }
         detected=null;detectedTitle="";
         photoSaving=false;
         toast("Clases guardadas: "+added+" · cursos: "+
@@ -239,6 +245,10 @@ def transform_schedule(source):
     }
 '''
     source=replace_between(source,start,end,method,"confirm title after OCR")
+    source=replace_once(source,
+        'body.addView(btn("Guardar clases seleccionadas",()->{',
+        'body.addView(btn("Corroborar cursos y continuar",()->{',
+        "review action label")
     return source
 
 def transform_title_parser(source):
