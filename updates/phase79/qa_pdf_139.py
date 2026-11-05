@@ -174,6 +174,15 @@ try:
     click("Plan de estudio")
     click("Subir sílabo")
     time.sleep(3)
+    for action in ("GET_CONTENT","OPEN_DOCUMENT"):
+        diagnostic=subprocess.run(["adb","shell","cmd","package","resolve-activity",
+            "-a","android.intent.action."+action,"-t","application/pdf"],
+            capture_output=True,text=True,timeout=20)
+        print("Resolver",action,diagnostic.stdout[:320],
+            diagnostic.stderr[:150],flush=True)
+    installed=adb("shell","pm","list","packages")
+    print("Document providers:",[p for p in installed.splitlines()
+        if "documents" in p.lower() or "files" in p.lower()],flush=True)
     focus=adb("shell","dumpsys","window")
     for line in focus.splitlines():
         if "mCurrentFocus" in line or "mFocusedApp" in line:
@@ -196,10 +205,13 @@ try:
                 try:click("Open navigation drawer")
                 except AssertionError:pass
         elif attempt==1:
-            try:click("Browse")
-            except AssertionError:
-                try:click("Examinar")
-                except AssertionError:pass
+            for option in ("Browse","Examinar","Archivos","Files","Documentos"):
+                if find(option):
+                    click(option);break
+        elif attempt==2:
+            for option in ("Files by Google","Descargas","Downloads"):
+                if find(option):
+                    click(option);break
         time.sleep(1.5)
     if not seen:raise AssertionError("PDF not found in document picker")
     wait("¿A qué curso corresponde este sílabo?",25)
