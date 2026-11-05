@@ -8,12 +8,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.provider.OpenableColumns;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -33,12 +36,17 @@ public final class SyllabusImportActivity extends Activity {
     private String documentTitle="";
     private LinearLayout body;
     private Spinner advance;
+    private int reminderSelection=0;
     private static final class Row {
         final SyllabusEventParser.Event event;
         boolean selected=true;
         LocalDate date;
         LocalTime time=LocalTime.of(23,59);
-        Row(SyllabusEventParser.Event e){event=e;date=e.date;}
+        String title;
+        Row(SyllabusEventParser.Event e){
+            event=e;date=e.date;
+            title="Registro manual".equals(e.sourceText)?"":e.title;
+        }
     }
     private int dp(int n){return UiDesign.dp(this,n);}
     private LinearLayout column(){LinearLayout x=new LinearLayout(this);x.setOrientation(1);return x;}
@@ -148,6 +156,7 @@ public final class SyllabusImportActivity extends Activity {
         });
     }
     private void showEvents(){
+        if(advance!=null)reminderSelection=advance.getSelectedItemPosition();
         body.removeAllViews();
         body.addView(label("Revisar evaluaciones",24,true));
         body.addView(label(documentTitle,12,false));
@@ -171,11 +180,23 @@ public final class SyllabusImportActivity extends Activity {
         for(Row row:items){
             gap(review,12);
             CheckBox check=new CheckBox(this);check.setChecked(row.selected);
-            check.setText(row.event.title);
+            check.setText(row.title.isEmpty()?"Nueva evaluación":row.title);
             check.setTextColor(UiDesign.INK);
             check.setMinHeight(dp(48));
             check.setOnCheckedChangeListener((v,on)->row.selected=on);
             review.addView(check);
+            EditText titleField=new EditText(this);
+            UiDesign.input(titleField);
+            titleField.setHint("Nombre del examen o entrega");
+            titleField.setSingleLine(false);
+            titleField.setMaxLines(2);
+            titleField.setText(row.title);
+            titleField.addTextChangedListener(new TextWatcher(){
+                public void beforeTextChanged(CharSequence s,int start,int count,int after){}
+                public void onTextChanged(CharSequence s,int start,int before,int count){}
+                public void afterTextChanged(Editable text){row.title=text.toString();}
+            });
+            review.addView(titleField);
             review.addView(label(row.event.page>0?"Fuente: página "+row.event.page:
                     "Fuente: texto del documento o registro manual",12,false));
             Button date=button(row.date==null?"Elegir fecha (obligatorio)":
@@ -200,6 +221,7 @@ public final class SyllabusImportActivity extends Activity {
             advance.setAdapter(new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_dropdown_item,
                     new String[]{"10 días y 12 horas antes","7 días antes"}));
+            advance.setSelection(reminderSelection);
             settings.addView(advance);
             settings.addView(label("Se avisará cuando Android permita notificaciones. Si la anticipación ya pasó, no se generará un aviso retroactivo.",12,false));
             Button save=button("Crear tareas y recordatorios",true);
@@ -215,6 +237,11 @@ public final class SyllabusImportActivity extends Activity {
         }
         int checked=0;for(Row row:items)if(row.selected){
             checked++;
+            if(row.title.trim().length()<3){
+                new AlertDialog.Builder(this,R.style.DialogTheme).setMessage(
+                        "Escribe el nombre de todas las evaluaciones seleccionadas.")
+                        .setPositiveButton("Entendido",null).show();return;
+            }
             if(row.date==null){
                 new AlertDialog.Builder(this,R.style.DialogTheme).setMessage(
                         "Hay evaluaciones seleccionadas sin fecha. Corrige esas fechas antes de guardarlas.")
@@ -246,9 +273,9 @@ public final class SyllabusImportActivity extends Activity {
             if(!row.selected||row.date==null)continue;
             long due=row.date.atTime(row.time).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
             String origin="syllabus:"+sha(selectedCourse.profileId+"|"+selectedCourse.name+"|"+
-                    AcademicCourseMatcher.fold(row.event.title)+"|"+row.date);
+                    AcademicCourseMatcher.fold(row.title)+"|"+row.date);
             if(Store.get(this).findOrigin(origin)!=null){duplicate++;continue;}
-            Task task=new Task();task.title=row.event.title;
+            Task task=new Task();task.title=row.title.trim();
             task.category=selectedCourse.category;
             task.notes="Curso: "+selectedCourse.name+"\n"+
                     "Documento: "+documentTitle+"\n"+
