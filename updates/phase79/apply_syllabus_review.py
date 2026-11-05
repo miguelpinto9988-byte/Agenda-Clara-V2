@@ -19,32 +19,12 @@ def run():
     text=old
     # Do not touch the document reader, profile database or old events.
     text=replace_once(text,
-        "List<SyllabusEventParser.Event> extracted=SyllabusEventParser.extract(pages);",
-        "List<SyllabusEventParser.Event> rawEvents=SyllabusEventParser.extract(pages);\n"
-        "                List<SyllabusReviewIntelligence.Review> verified="
-        "SyllabusReviewIntelligence.filter(rawEvents);\n"
-        "                List<SyllabusEventParser.Event> extracted=new ArrayList<>();\n"
-        "                for(SyllabusReviewIntelligence.Review candidate:verified)\n"
-        "                    extracted.add(candidate.event);",
-        "filter ordinary coursework before review")
-    # The original source already displays source page; supplement it with
-    # reliable metadata, but never imply a week is a specific due date.
-    old_source='''            review.addView(label(row.event.page>0?"Fuente: página "+row.event.page:
-                    "Fuente: texto del documento o registro manual",12,false));'''
-    new_source='''            review.addView(label(row.event.page>0?"Fuente: página "+row.event.page:
-                    "Fuente: texto del documento o registro manual",12,false));
-            if(!"Registro manual".equals(row.event.sourceText)){
-                String evidence=row.event.sourceText==null?"":row.event.sourceText;
-                int academicWeek=SyllabusReviewIntelligence.week(evidence);
-                int percentage=SyllabusReviewIntelligence.weight(evidence);
-                String classification=SyllabusReviewIntelligence.classify(evidence+" "+row.event.type);
-                review.addView(label("Tipo: "+classification+
-                    (academicWeek>0?" · Semana "+academicWeek:"")+
-                    (percentage>=0?" · Valor "+percentage+" %":"")+
-                    (row.date==null?" · Fecha pendiente de confirmación":""),12,false));
-                review.addView(label("Fragmento: "+evidence,12,false));
-            }'''
-    text=replace_once(text,old_source,new_source,"source evidence UI")
+        "SyllabusEventParser.extract(pages)",
+        "SyllabusReviewIntelligence.onlyEvents(SyllabusEventParser.extract(pages))",
+        "filter extracted evaluations")
+    # Keep the existing UI, editing and save workflow intact. The filter
+    # does not modify dates or event identifiers; it only removes irrelevant
+    # non-final activities from the review list.
     gradle=GRADLE.read_text(encoding="utf-8")
     if gradle.count("versionCode 64")!=1 or gradle.count("versionName '3.13.8'")!=1:
         raise RuntimeError("Expected version 3.13.8 (64); abort without modifying sources")
