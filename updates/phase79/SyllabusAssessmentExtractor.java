@@ -99,7 +99,10 @@ public final class SyllabusAssessmentExtractor {
             if(prev<0)break;
             String raw=normalized(lines[prev]);
             if(!SyllabusEventParser.assessmentType(raw).isEmpty())break;
-            if(isDateCell(raw)||isWeightCell(raw)){
+            // A percentage on the preceding line normally closes the previous
+            // assessment row. Never borrow its date/weight for this exam.
+            if(isWeightCell(raw))break;
+            if(isDateCell(raw)){
                 if(out.length()>0)out.append(" | ");
                 out.append(raw);
                 if(SyllabusDateInterpreter.weekNumbers(raw)[0]>0)break;
