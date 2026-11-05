@@ -38,15 +38,22 @@ def panel(source):
                 .setPositiveButton("Entendido",null).show();
             return;
         }
-        a.dialogBuilder().setTitle("¿Cómo crearás tu horario?")
+        // Explicit buttons are necessary: AlertDialog.setItems was hidden by
+        // the app's dialog window measurements on Android 15.
+        LinearLayout options=a.column();
+        options.setPadding(a.dp(20),a.dp(8),a.dp(20),a.dp(10));
+        android.widget.Button photo=a.button("Subir imagen del horario",()->{});
+        android.widget.Button manual=a.button("Agregar cursos manualmente",()->{});
+        options.addView(photo);
+        a.gap(options,10);
+        options.addView(manual);
+        AlertDialog picker=a.dialogBuilder().setTitle("¿Cómo crearás tu horario?")
             .setMessage("Primero importa la imagen o registra tus cursos. "+
                         "El nombre y la categoría se confirman al terminar.")
-            .setItems(new String[]{"Subir imagen del horario","Agregar cursos manualmente"},
-                (dialog,which)->{
-                    if(which==0)importPhoto(a);
-                    else startManual(a);
-                })
-            .setNegativeButton("Cancelar",null).show();
+            .setView(options).setNegativeButton("Cancelar",null).create();
+        photo.setOnClickListener(v->{picker.dismiss();importPhoto(a);});
+        manual.setOnClickListener(v->{picker.dismiss();startManual(a);});
+        picker.show();
     }
 
     private static void startManual(MainActivity a){
@@ -99,20 +106,24 @@ def activity(source):
     last='''    @Override protected void onResume()'''
     method='''    /** A direct launch with zero profiles must not bypass method selection. */
     private void askFirstSchedule(){
-        scheduleDialog().setTitle("¿Cómo crearás tu horario?")
+        LinearLayout actions=col();
+        actions.setPadding(dp(18),dp(8),dp(18),dp(10));
+        Button photo=btn("Subir imagen del horario",()->{},true);
+        Button manual=btn("Agregar cursos manualmente",()->{},false);
+        actions.addView(photo);space(actions,10);actions.addView(manual);
+        AlertDialog picker=scheduleDialog().setTitle("¿Cómo crearás tu horario?")
             .setMessage("Primero registra tus cursos. El nombre se elige al final.")
-            .setItems(new String[]{"Subir imagen del horario","Agregar cursos manualmente"},
-                (d,which)->{
-                    if(which==0){
-                        photoFirst=true;manualMode=false;profileId="";show(1);
-                    }else{
-                        photoFirst=true;manualMode=true;profileId="";
-                        detected=new ScheduleParser.Result();chosen.clear();
-                        show(5);
-                    }
-                })
-            .setNegativeButton("Cancelar",(d,w)->finish())
-            .setOnCancelListener(d->finish()).show();
+            .setView(actions)
+            .setNegativeButton("Cancelar",(d,w)->finish()).create();
+        photo.setOnClickListener(v->{
+            picker.dismiss();photoFirst=true;manualMode=false;profileId="";show(1);
+        });
+        manual.setOnClickListener(v->{
+            picker.dismiss();photoFirst=true;manualMode=true;profileId="";
+            detected=new ScheduleParser.Result();chosen.clear();show(5);
+        });
+        picker.setOnCancelListener(d->finish());
+        picker.show();
     }
 '''
     source=between(source,first,last,method,"no profile initial dialog")
