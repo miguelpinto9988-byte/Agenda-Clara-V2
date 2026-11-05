@@ -67,7 +67,7 @@ public final class SyllabusTableNormalizer {
     }
     private static boolean validContext(String[] fields,int week,int date){
         if(week>=0&&week<fields.length && WEEK.matcher(fields[week]).matches())return true;
-        return date>=0&&date<fields.length&&DATE.matcher(fields[date]).matches();
+        return date>=0&&date<fields.length&&isDateCell(fields[date]);
     }
     private static String merge(String[] cells,int week,int activity,int date){
         StringBuilder result=new StringBuilder(cells[activity].trim());
@@ -75,9 +75,15 @@ public final class SyllabusTableNormalizer {
             Matcher w=WEEK.matcher(cells[week]);
             if(w.matches())result.append(" | Semana ").append(w.group(1));
         }
-        if(date>=0&&date<cells.length&&DATE.matcher(cells[date]).matches())
+        if(date>=0&&date<cells.length&&isDateCell(cells[date]))
             result.append(" | ").append(cells[date]);
         return result.toString();
+    }
+    private static boolean isDateCell(String value){
+        if(DATE.matcher(value).matches())return true;
+        SyllabusDateInterpreter.Temporal parsed=
+            SyllabusDateInterpreter.interpret(value,null);
+        return parsed.exact!=null||parsed.rangeStart!=null||parsed.week>0;
     }
     public static String[] split(String line){
         if(line==null)return new String[0];
