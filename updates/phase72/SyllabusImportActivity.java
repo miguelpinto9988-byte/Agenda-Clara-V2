@@ -64,6 +64,7 @@ public final class SyllabusImportActivity extends Activity {
         body=column();body.setPadding(dp(16),dp(16),dp(16),dp(25));
         body.setBackgroundColor(UiDesign.BG);scroll.addView(body);setContentView(scroll);
         landing();
+        if(getIntent().getBooleanExtra("manual",false))chooseCourseForManual();
     }
     private void landing(){
         body.removeAllViews();
