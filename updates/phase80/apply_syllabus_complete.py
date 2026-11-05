@@ -27,6 +27,7 @@ def patch_importer(text):
         '        final String manualKey=UUID.randomUUID().toString();\n'
         '        int occurrence=1;\n'
         '        boolean applyChange=false;\n'
+        '        int reminderMinutes=-1;\n'
         '        boolean timeTouched=false;\n'
         '        boolean selected=true;', "row identity")
     text=once(text,
@@ -63,6 +64,9 @@ def patch_importer(text):
     text=once(text,
         '            review.addView(label(row.event.scheduleDescription(),13,true));',
         '            review.addView(label(row.event.scheduleDescription(),13,true));\n'
+        '            int weight=SyllabusReviewIntelligence.weight(row.event.sourceText+" "+\n'
+        '                row.event.dateEvidence);\n'
+        '            if(weight>=0)review.addView(label("Ponderación: "+weight+" %",12,true));\n'
         '            if(row.event.page>0){\n'
         '                Button source=button("Ver texto original · página "+row.event.page,false);\n'
         '                source.setOnClickListener(v->showSourceEvidence(row.event));\n'
@@ -93,6 +97,25 @@ def patch_importer(text):
         '                    row.time=LocalTime.of(h,m);showEvents();',
         '                    row.time=LocalTime.of(h,m);row.timeTouched=true;showEvents();',
         "preserve chosen time")
+    text=once(text,
+        '                review.addView(timeButton);\n'
+        '                Button clearDate=button("Dejar fecha pendiente",false);',
+        '                review.addView(timeButton);\n'
+        '                Button personal=button(row.reminderMinutes<0?\n'
+        '                    "Aviso: usar anticipación general":\n'
+        '                    "Aviso individual: "+row.reminderMinutes+" minutos antes",false);\n'
+        '                personal.setOnClickListener(v->new AlertDialog.Builder(\n'
+        '                    this,R.style.DialogTheme)\n'
+        '                    .setTitle("Recordatorio para esta evaluación")\n'
+        '                    .setItems(new String[]{"Usar anticipación general",\n'
+        '                        "10 días y 12 horas antes","7 días antes",\n'
+        '                        "3 días antes","1 día antes"},(dialog,choice)->{\n'
+        '                        int[] values={-1,15120,10080,4320,1440};\n'
+        '                        row.reminderMinutes=values[choice];showEvents();\n'
+        '                    }).show());\n'
+        '                review.addView(personal);\n'
+        '                Button clearDate=button("Dejar fecha pendiente",false);',
+        "per-event reminders")
     begin=text.index("    private void confirmSave(){")
     end=text.index("    private static String sha(",begin)
     text=text[:begin]+CONFIRM+text[end:]
@@ -285,7 +308,7 @@ SAVE=r'''    private void saveSelected(int offset){
                             .atZone(ZoneId.systemDefault()).toLocalTime();
                     task.due=row.date.atTime(time).atZone(ZoneId.systemDefault())
                         .toInstant().toEpochMilli();
-                    task.offsets=String.valueOf(offset);
+                    task.offsets=String.valueOf(row.reminderMinutes>0?row.reminderMinutes:offset);
                     notes.append("Fecha confirmada: ").append(row.date).append('\n');
                 }
                 notes.append("Texto original: ").append(row.event.sourceText);
