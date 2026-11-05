@@ -3,6 +3,7 @@ on:
   push:
     branches: [feat/ocr-fusion-cursos-3-13-7-20261105]
     paths:
+      - 'updates/phase77/qa_emulator_photo.py'
       - '.github/workflows/agenda-clara-photo-qa.yml'
   workflow_dispatch:
 
