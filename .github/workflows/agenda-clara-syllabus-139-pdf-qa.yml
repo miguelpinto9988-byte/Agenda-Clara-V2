@@ -26,7 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p artifact-apk
-          gh run download 42102348734 --repo "$GITHUB_REPOSITORY" \
+          gh run download 42103831397 --repo "$GITHUB_REPOSITORY" \
             --name Agenda-Clara-3.13.9-Silabos-Integrales-APK --dir artifact-apk
           test -s artifact-apk/app-debug.apk
       - name: Generar PDF sintético con semanas, porcentaje y fechas entre meses
