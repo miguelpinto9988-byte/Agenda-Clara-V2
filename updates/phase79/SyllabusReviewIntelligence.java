@@ -87,6 +87,11 @@ public final class SyllabusReviewIntelligence {
         if(EXAM.matcher(s).find())return "Examen";
         return "";
     }
+    public static List<SyllabusEventParser.Event> onlyEvents(List<SyllabusEventParser.Event> events){
+        ArrayList<SyllabusEventParser.Event> safe=new ArrayList<>();
+        for(Review item:filter(events))safe.add(item.event);
+        return safe;
+    }
     public static List<Review> filter(List<SyllabusEventParser.Event> events){
         ArrayList<Review> out=new ArrayList<>();
         Set<String> seen=new HashSet<>();
