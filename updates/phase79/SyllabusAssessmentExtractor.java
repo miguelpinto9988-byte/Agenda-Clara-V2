@@ -79,17 +79,8 @@ public final class SyllabusAssessmentExtractor {
     }
     private static String adjacent(String[] lines,int index) {
         StringBuilder out=new StringBuilder();
-        for(int distance=1;distance<=3;distance++) {
-            int prev=index-distance;
-            if(prev>=0){
-                String raw=normalized(lines[prev]);
-                if(!SyllabusEventParser.assessmentType(raw).isEmpty())break;
-                if(isDateCell(raw)||isWeightCell(raw)){
-                    if(out.length()>0)out.append(" | ");
-                    out.append(raw);
-                }else if(distance>1)break;
-            }
-        }
+        // Table layouts: the nearest NEXT cell belongs to the assessment row.
+        // Prefer it to an assessment weight/date from the PREVIOUS row.
         for(int distance=1;distance<=3;distance++){
             int next=index+distance;
             if(next>=lines.length)break;
@@ -98,6 +89,17 @@ public final class SyllabusAssessmentExtractor {
             if(isDateCell(raw)||isWeightCell(raw)){
                 if(out.length()>0)out.append(" | ");
                 out.append(raw);
+            }else if(distance>1)break;
+        }
+        for(int distance=1;distance<=3;distance++) {
+            int prev=index-distance;
+            if(prev<0)break;
+            String raw=normalized(lines[prev]);
+            if(!SyllabusEventParser.assessmentType(raw).isEmpty())break;
+            if(isDateCell(raw)||isWeightCell(raw)){
+                if(out.length()>0)out.append(" | ");
+                out.append(raw);
+                if(SyllabusDateInterpreter.weekNumbers(raw)[0]>0)break;
             }else if(distance>1)break;
         }
         return out.toString();
