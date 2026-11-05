@@ -1,0 +1,60 @@
+name: Agenda Clara 3.13.9 - PDF complejo - Integración real Android
+on:
+  push:
+    branches: [feat/silabos-integrales-3-13-9-20261105]
+    paths:
+      - 'updates/phase79/qa_pdf_139.py'
+      - 'updates/phase79/generate_complex_syllabus_pdf.py'
+      - '.github/workflows/agenda-clara-syllabus-139-pdf-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  importar-y-verificar-sqlite:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Descargar scripts de prueba
+        uses: actions/checkout@v4
+      - name: Recuperar APK 3.13.9 YA compilada
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifact-apk
+          gh run download 42102348734 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.9-Silabos-Integrales-APK --dir artifact-apk
+          test -s artifact-apk/app-debug.apk
+      - name: Generar PDF sintético con semanas, porcentaje y fechas entre meses
+        shell: bash
+        run: |
+          python3 updates/phase79/generate_complex_syllabus_pdf.py
+          test -s /tmp/silabo_tendencias_2026.pdf
+          file /tmp/silabo_tendencias_2026.pdf
+      - name: Habilitar KVM
+        run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - name: Probar importación real y datos persistidos en Android 15 AOSP
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: default
+          profile: pixel_6
+          avd-name: agenda-clara-syllabus-139-pdf
+          disable-animations: true
+          script: |
+            adb install -r artifact-apk/app-debug.apk
+            adb push /tmp/silabo_tendencias_2026.pdf /sdcard/Download/silabo_tendencias_2026.pdf
+            adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/silabo_tendencias_2026.pdf
+            python3 updates/phase79/qa_pdf_139.py
+      - name: Adjuntar capturas de revisión y guardado
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.13.9-Silabos-PDF-Complejo-Capturas
+          path: screenshots/*.png
+          if-no-files-found: ignore
