@@ -57,6 +57,41 @@ def photo(text):
                       "preserve small timetable text")
     return text
 
+def colored_tiles(text):
+    return patch(text,
+        '''            }
+        }finally{if(small!=bitmap)small.recycle();}''',
+        '''            }
+            // Timetable blocks can be blue/green/pink rather than white.
+            // Keep the old white detector; add independent pastel rectangles
+            // only when not already represented by a matching white tile.
+            if(output.size()<100)
+                for(ScheduleGridInterpreter.Tile candidate:
+                        ScheduleColorTileDetector.detect(pixels,width,height)){
+                    int left=(int)Math.round(candidate.left/scale);
+                    int top=(int)Math.round(candidate.top/scale);
+                    int right=(int)Math.round(candidate.right/scale);
+                    int bottom=(int)Math.round(candidate.bottom/scale);
+                    int area=Math.max(1,(right-left)*(bottom-top));
+                    boolean represented=false;
+                    for(ScheduleGridInterpreter.Tile old:output){
+                        int ix=Math.max(0,Math.min(right,old.right)-
+                            Math.max(left,old.left));
+                        int iy=Math.max(0,Math.min(bottom,old.bottom)-
+                            Math.max(top,old.top));
+                        int oldArea=Math.max(1,(old.right-old.left)*
+                            (old.bottom-old.top));
+                        if((double)ix*iy/Math.min(area,oldArea)>.65){
+                            represented=true;break;
+                        }
+                    }
+                    if(!represented&&output.size()<100)
+                        output.add(new ScheduleGridInterpreter.Tile(
+                            left,top,right,bottom));
+                }
+        }finally{if(small!=bitmap)small.recycle();}''',
+        "detect pastel tiles without breaking white detector")
+
 def grid(text):
     text=patch(text,"if(columns.size()<2||periods.size()<2)return result;",
                     "if(columns.isEmpty()||periods.isEmpty())return result;",
@@ -240,6 +275,7 @@ def run():
         "ScheduleParser.java":parser,
         "ScheduleOcr.java":ocr,
         "SchedulePhotoLoader.java":photo,
+        "ScheduleImageBlocks.java":colored_tiles,
         "ScheduleGridInterpreter.java":grid,
         "ScheduleVirtualGrid.java":virtual,
         "ScheduleCourseRecognition.java":matching,
@@ -251,8 +287,11 @@ def run():
         path=JAVA/filename
         staged[path]=transform(path.read_text(encoding="utf-8"))
     fusion_path=JAVA/"ScheduleOcrFusion.java"
-    if fusion_path.exists():raise RuntimeError("Fusion component already installed")
-    fusion=(HERE/"ScheduleOcrFusion.java").read_text(encoding="utf-8")
+    colored_path=JAVA/"ScheduleColorTileDetector.java"
+    if fusion_path.exists() or colored_path.exists():
+        raise RuntimeError("Fusion or color tile component already installed")
+    for library in ("ScheduleOcrFusion.java","ScheduleColorTileDetector.java"):
+        if not (HERE/library).is_file():raise RuntimeError("Missing component "+library)
     gradle=GRADLE.read_text(encoding="utf-8")
     if gradle.count("versionCode 62")!=1 or gradle.count("versionName '3.13.6'")!=1:
         raise RuntimeError("Expected version 3.13.6 (62). Stop before modifying.")
@@ -260,7 +299,9 @@ def run():
         "versionName '3.13.6'","versionName '3.13.7'",1)
     for path,content in staged.items():path.write_text(content,encoding="utf-8")
     shutil.copyfile(HERE/"ScheduleOcrFusion.java",fusion_path)
+    shutil.copyfile(HERE/"ScheduleColorTileDetector.java",colored_path)
     print("PASS: OCR 3.13.7 source installed: three interpretations, optional alternatives")
+    print("PASS: detects solid pastel course tiles as well as white tiles")
     print("PASS: user-confirmed course names, one-day photos, improved image color depth")
     print("PASS: no auto-save of ambiguous readings; old schedules and tasks untouched")
 
