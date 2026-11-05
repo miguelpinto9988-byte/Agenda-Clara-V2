@@ -28,6 +28,10 @@ def update(source):
         }
         Row(SyllabusAssessmentExtractor.Finding f){
             this(f.event);weight=f.weight;suggestedDay=f.suggestedDay;
+            // A rubric mention without date or academic week is uncertain.
+            // Keep it visible, but do not import it without an explicit check.
+            if(f.event.date==null&&f.event.week==0&&f.event.windowStart==null)
+                selected=false;
         }''',"row model")
     source=one(source,
 '''        manual.setOnClickListener(v->chooseCourseForManual());panel.addView(manual);
@@ -75,6 +79,9 @@ def update(source):
             review.addView(label(row.event.scheduleDescription(),13,true));
             if(row.weight>=0)
                 review.addView(label("Ponderación detectada: "+row.weight+" %",12,false));
+            if(row.event.date==null&&row.event.week==0&&row.event.windowStart==null)
+                review.addView(label("Sin fecha ni semana en el sílabo: propuesta sin marcar. "+
+                    "Verifica si es una evaluación programada.",12,false));
             if(row.event.dateEvidence!=null&&!row.event.dateEvidence.isEmpty())
                 review.addView(label("Referencia del documento: "+
                     row.event.dateEvidence,12,false));
