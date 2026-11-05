@@ -73,7 +73,8 @@ public final class SyllabusAssessmentExtractor {
         return (low.startsWith("el examen ")||low.startsWith("los examenes ")||
                 low.startsWith("la evaluacion "))&&
                 (low.contains("consiste en")||low.contains("se realizara")||
-                 low.contains("se evaluara")) &&
+                 low.contains("se evaluara")||low.contains("equivale")||
+                 low.contains("representa")||low.contains("ponderacion")) &&
                 SyllabusDateInterpreter.date(value,0)==null &&
                 SyllabusDateInterpreter.weekNumbers(value)[0]==0;
     }
