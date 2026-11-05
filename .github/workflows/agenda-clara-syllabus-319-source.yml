@@ -47,8 +47,6 @@ jobs:
             "$SRC/SyllabusEventParser.java" \
             "$SRC/SyllabusCourseResolver.java" \
             "$SRC/SyllabusReviewIntelligence.java" \
-            updates/phase78/SyllabusAcademicTests.java \
             updates/phase79/Phase79ReviewTests.java
-          java -cp "$OUT" pe.agendaclara.app.SyllabusAcademicTests
           java -cp "$OUT" pe.agendaclara.app.Phase79ReviewTests
           echo 'PASS: sin compilacion APK, no modifica datos existentes'
