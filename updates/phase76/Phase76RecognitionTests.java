@@ -20,6 +20,7 @@ public final class Phase76RecognitionTests {
         relation("Investigación","Investigación educativa",ScheduleCourseRecognition.Relation.SHARED_START);
         relation("Historia","Historia de la educación",ScheduleCourseRecognition.Relation.SHARED_START);
         relation("Arte","Arte y creatividad",ScheduleCourseRecognition.Relation.SHARED_START);
+        relation("TIC","TIC aplicada",ScheduleCourseRecognition.Relation.SHARED_START);
         relation("Tendencias","Tendencias educativas",ScheduleCourseRecognition.Relation.TRUNCATED);
         relation("Tendencias educativas","Tendencias tecnológicas",ScheduleCourseRecognition.Relation.SHARED_START);
         relation("Pedagogía aplicada","Pedagogía social",ScheduleCourseRecognition.Relation.SHARED_START);
