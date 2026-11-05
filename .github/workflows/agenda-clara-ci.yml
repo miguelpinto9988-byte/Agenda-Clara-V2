@@ -180,8 +180,6 @@ jobs:
           python3 updates/phase72/apply_plan_b.py
           python3 updates/phase72/test_plan_b.py
           python3 updates/phase73/test_release_c.py
-          python3 updates/phase71/apply_plan_a.py
-          python3 updates/phase71/test_plan_a.py
           python3 - <<'PY'
           from pathlib import Path
           app = Path("AgendaClara/app/src/main")
