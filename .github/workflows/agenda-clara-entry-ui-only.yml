@@ -30,12 +30,12 @@ jobs:
       - name: Habilitar virtualización KVM
         run: |
           if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
-      - name: Verificar el flujo de la captura en Android 15
+      - name: Verificar el flujo en Android 15 AOSP sin Pixel Launcher
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
           arch: x86_64
-          target: google_apis
+          target: default
           profile: pixel_6
           avd-name: agenda-clara-verify-creation
           disable-animations: true
