@@ -139,6 +139,14 @@ CONFIRM=r'''    private void confirmSave(){
                     .setPositiveButton("Entendido",null).show();return;
             }
             Task old=existingFor(row);
+            if(old==null&&ambiguousLegacyFor(row)){
+                new AlertDialog.Builder(this,R.style.DialogTheme)
+                    .setTitle("Evaluación anterior ambigua")
+                    .setMessage("Hay varias evaluaciones parecidas en el horario para: "+
+                        row.title+". Desmarca este evento y comprueba los existentes "+
+                        "antes de importar. No se crearán duplicados por suposición.")
+                    .setPositiveButton("Revisar",null).show();return;
+            }
             if(old==null){create++;if(row.date==null)pending++;}
             else if(row.applyChange&&!sameEvent(old,row)){
                 update++;if(row.date==null)pending++;
@@ -188,6 +196,21 @@ CONFIRM=r'''    private void confirmSave(){
             candidate=task;
         }
         return candidate;
+    }
+    private boolean ambiguousLegacyFor(Row row){
+        if(selectedCourse==null||"Registro manual".equals(row.event.sourceText))return false;
+        int count=0;
+        String label=SyllabusImportPolicy.normalized(row.event.title);
+        for(Task previous:Store.get(this).all()){
+            if(previous.source==null||!previous.source.startsWith("Sílabo"))continue;
+            AcademicTaskLinks.Link link=AcademicTaskLinks.get(this).find(previous.id);
+            if(link==null||!link.profileId.equals(selectedCourse.profileId)||
+                !AcademicCourseMatcher.fold(link.course).equals(
+                    AcademicCourseMatcher.fold(selectedCourse.name)))continue;
+            if(SyllabusImportPolicy.normalized(previous.title).equals(label)&&++count>1)
+                return true;
+        }
+        return false;
     }
     private boolean sameEvent(Task old,Row row){
         LocalDate previous=old.due>0?Instant.ofEpochMilli(old.due)
