@@ -24,13 +24,13 @@ def recognition(s):
         int largest=Math.max(a.length(),b.length());''',
     '''        // Shared first words always require a HUMAN decision, never automatic merge.
         // Generic subjects (Historia, Investigación, Educación) still need an alert.
-        if(shortName.length()>=4&&longName.startsWith(shortName+" ")
+        if(shortName.length()>=3&&longName.startsWith(shortName+" ")
                 &&longName.split(" ").length>sw.length){
             if(sw.length==1&&GENERIC.contains(shortName))return Relation.SHARED_START;
             return shortName.length()>=6?Relation.TRUNCATED:Relation.SHARED_START;
         }
         String firstA=a.split(" ")[0],firstB=b.split(" ")[0];
-        if(firstA.length()>=4&&firstA.equals(firstB)){
+        if(firstA.length()>=3&&firstA.equals(firstB)){
             // e.g. Tendencias educativas vs Tendencias tecnológicas: may be different.
             return Relation.SHARED_START;
         }
