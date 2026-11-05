@@ -4,6 +4,7 @@ on:
     branches: [feat/silabos-fases-completas-3-14-0-20261105]
     paths:
       - '.github/workflows/agenda-clara-syllabus-314-final.yml'
+      - 'updates/phase80/qa_syllabus_314_pdf.py'
   workflow_dispatch:
 permissions:
   contents: read
