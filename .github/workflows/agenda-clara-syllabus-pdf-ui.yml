@@ -42,7 +42,7 @@ jobs:
         with:
           api-level: 35
           arch: x86_64
-          target: default
+          target: google_apis
           profile: pixel_6
           avd-name: agenda-clara-syllabus-318
           disable-animations: true
@@ -50,6 +50,8 @@ jobs:
             adb install -r artifact-apk/app-debug.apk
             adb push /tmp/silabo_tendencias_2026.pdf /sdcard/Download/silabo_tendencias_2026.pdf
             adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/silabo_tendencias_2026.pdf
+            adb shell pm list packages | grep -E 'documentsui|permissioncontroller' || true
+            adb shell cmd package resolve-activity -a android.intent.action.OPEN_DOCUMENT -t application/pdf || true
             python3 updates/phase78/qa_syllabus_pdf.py
       - name: Adjuntar capturas de revisión y vinculación
         if: always()
