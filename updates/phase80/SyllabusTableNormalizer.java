@@ -5,95 +5,97 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** Reconstructs only well-delimited academic table rows, without joining unrelated weeks. */
+/**
+ * Reconstructs well-delimited PDF/Word table rows only when the column header
+ * identifies an evaluation and its week/date. Never borrows a neighbouring
+ * evaluation's date. Raw rows with insufficient evidence are left unchanged.
+ */
 public final class SyllabusTableNormalizer {
     private SyllabusTableNormalizer() {}
-    private static final Pattern CELL_SEPARATOR=Pattern.compile("\\s*\\|\\s*|\\t+| {3,}");
-    private static final Pattern WEEK_CELL=Pattern.compile("(?iu)^(?:semana\\s*)?([0-9]{1,2}|[IVXLCDM]{1,8})$");
-    private static final Pattern DATE_CELL=Pattern.compile(
+    private static final Pattern SEPARATOR=Pattern.compile("\\s*\\|\\s*|\\t+| {3,}");
+    private static final Pattern WEEK=Pattern.compile(
+        "(?iu)^(?:semana\\s*)?([0-9]{1,2}|[IVXLCDM]{1,8})$");
+    private static final Pattern DATE=Pattern.compile(
         "(?iu)^(?:\\d{1,2}[./-]\\d{1,2}(?:[./-]\\d{2,4})?|"+
         "\\d{4}-\\d{2}-\\d{2}|\\d{1,2}\\s+de\\s+[a-záéíóú]+.*)$");
 
-    public static List<SyllabusEventParser.Page> normalize(List<SyllabusEventParser.Page> pages){
-        ArrayList<SyllabusEventParser.Page> out=new ArrayList<>();
-        if(pages==null)return out;
+    public static List<SyllabusEventParser.Page> normalize(List<SyllabusEventParser.Page> pages) {
+        ArrayList<SyllabusEventParser.Page> results=new ArrayList<>();
+        if(pages==null)return results;
         for(SyllabusEventParser.Page page:pages){
-            if(page==null){continue;}
+            if(page==null)continue;
             String[] lines=page.text.split("\\r?\\n");
-            StringBuilder extras=new StringBuilder();
-            int weekColumn=-1,activityColumn=-1,dateColumn=-1,headerCount=0;
+            StringBuilder output=new StringBuilder();
+            int weekIndex=-1,activityIndex=-1,dateIndex=-1,columns=0;
             for(int i=0;i<lines.length;i++){
                 String[] fields=split(lines[i]);
-                if(fields.length<2 && headerCount==0)continue;
                 if(isHeader(fields)){
-                    weekColumn=index(fields,"semana","sem.");
-                    activityColumn=index(fields,"evaluacion","actividad","evidencia","producto","examen");
-                    dateColumn=index(fields,"fecha","dia");
-                    headerCount=fields.length;
+                    columns=fields.length;
+                    weekIndex=index(fields,"semana","semanas","sem");
+                    activityIndex=index(fields,"evaluacion","actividad","evidencia",
+                        "producto","examen","evaluaciones");
+                    dateIndex=index(fields,"fecha","dia","plazo");
+                    output.append(lines[i]).append('\n');
                     continue;
                 }
-                if(headerCount>=3 && fields.length==1 && weekColumn==0 &&
-                        i+headerCount-1<lines.length){
-                    // PDF text extraction sometimes places each table cell on a separate line.
-                    // Only join a complete row starting with an explicit academic week.
-                    String[] pending=new String[headerCount];
-                    boolean singleCells=true;
-                    for(int col=0;col<headerCount;col++){
-                        String[] current=split(lines[i+col]);
-                        if(current.length!=1){singleCells=false;break;}
-                        pending[col]=current[0];
+                if(columns>=2 && fields.length==1 && i+columns<=lines.length &&
+                    activityIndex>=0 && (weekIndex>=0||dateIndex>=0)){
+                    String[] candidates=new String[columns];
+                    boolean oneCellPerLine=true;
+                    for(int k=0;k<columns;k++){
+                        String[] single=split(lines[i+k]);
+                        if(single.length!=1||single[0].isEmpty()){
+                            oneCellPerLine=false;break;
+                        }
+                        candidates[k]=single[0];
                     }
-                    if(singleCells&&WEEK_CELL.matcher(pending[0]).matches()&&
-                            activityColumn<pending.length&&
-                            !SyllabusEventParser.assessmentType(pending[activityColumn]).isEmpty()){
-                        fields=pending;
-                        i+=headerCount-1;
-                    }
-                }
-                if(activityColumn<0||activityColumn>=fields.length)continue;
-                String activity=fields[activityColumn].trim();
-                if(SyllabusEventParser.assessmentType(activity).isEmpty())continue;
-                StringBuilder line=new StringBuilder(activity);
-                if(weekColumn>=0&&weekColumn<fields.length){
-                    Matcher week=WEEK_CELL.matcher(fields[weekColumn].trim());
-                    if(week.matches())line.append(" | Semana ").append(week.group(1));
-                }
-                if(dateColumn>=0&&dateColumn<fields.length){
-                    String value=fields[dateColumn].trim();
-                    if(DATE_CELL.matcher(value).matches()||
-                       SyllabusDateInterpreter.weekNumbers(value)[0]>0){
-                        line.append(" | ").append(value);
+                    if(oneCellPerLine && !SyllabusEventParser.assessmentType(
+                        candidates[activityIndex]).isEmpty() &&
+                        validContext(candidates,weekIndex,dateIndex)){
+                        String merged=merge(candidates,weekIndex,activityIndex,dateIndex);
+                        output.append(merged).append('\n');
+                        i+=columns-1;
+                        continue;
                     }
                 }
-                String reconstructed=line.toString();
-                // Source text stays present; only a bounded, evidenced second reading is added.
-                if(reconstructed.length()>activity.length()+4 && reconstructed.length()<500
-                        && !lines[i].contains(activity+" |") &&
-                        SyllabusDateInterpreter.interpret(lines[i],null).exact==null &&
-                        !page.text.contains(reconstructed))
-                    extras.append('\n').append(reconstructed);
+                // Ordinary inline row: the parser already reads its cells.
+                output.append(lines[i]).append('\n');
             }
-            // Do not add speculative rows on documents without recognizable columns.
-            out.add(new SyllabusEventParser.Page(page.number,page.text+extras));
+            results.add(new SyllabusEventParser.Page(page.number,output.toString()));
         }
-        return out;
+        return results;
     }
-    static String[] split(String line){
+    private static boolean validContext(String[] fields,int week,int date){
+        if(week>=0&&week<fields.length && WEEK.matcher(fields[week]).matches())return true;
+        return date>=0&&date<fields.length&&DATE.matcher(fields[date]).matches();
+    }
+    private static String merge(String[] cells,int week,int activity,int date){
+        StringBuilder result=new StringBuilder(cells[activity].trim());
+        if(week>=0&&week<cells.length){
+            Matcher w=WEEK.matcher(cells[week]);
+            if(w.matches())result.append(" | Semana ").append(w.group(1));
+        }
+        if(date>=0&&date<cells.length&&DATE.matcher(cells[date]).matches())
+            result.append(" | ").append(cells[date]);
+        return result.toString();
+    }
+    public static String[] split(String line){
         if(line==null)return new String[0];
-        String[] raw=CELL_SEPARATOR.split(line.trim());
-        ArrayList<String> values=new ArrayList<>();
-        for(String cell:raw)values.add(cell.trim());
-        return values.toArray(new String[0]);
+        String[] raw=SEPARATOR.split(line.trim());
+        for(int i=0;i<raw.length;i++)raw[i]=raw[i].trim();
+        return raw;
     }
-    private static int index(String[] header,String... labels){
-        for(int i=0;i<header.length;i++){
-            String s=AcademicCourseMatcher.fold(header[i]);
-            for(String label:labels)if(s.equals(label)||s.startsWith(label+" "))return i;
+    private static int index(String[] fields,String... names){
+        for(int i=0;i<fields.length;i++){
+            String column=AcademicCourseMatcher.fold(fields[i]);
+            for(String name:names)if(column.equals(name)||column.startsWith(name+" "))
+                return i;
         }
         return -1;
     }
-    private static boolean isHeader(String[] cells){
-        return index(cells,"semana","sem.","fecha")>=0&&
-                index(cells,"evaluacion","actividad","evidencia","producto","examen")>=0;
+    private static boolean isHeader(String[] fields){
+        return fields.length>=2 &&
+            index(fields,"evaluacion","actividad","evidencia","producto","examen")>=0 &&
+            index(fields,"semana","semanas","sem","fecha","dia","plazo")>=0;
     }
 }
