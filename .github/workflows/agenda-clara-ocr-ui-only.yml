@@ -1,0 +1,55 @@
+name: Agenda Clara 3.13.6 - Verificacion Android sin recompilar
+on:
+  push:
+    branches: [fix/ocr-cursos-ambiguos-3-13-6-20261105]
+    paths:
+      - '.github/workflows/agenda-clara-ocr-ui-only.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  interfaz-en-emulador:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Obtener scripts de QA
+        uses: actions/checkout@v4
+      - name: Recuperar APK 3.13.6 ya compilada
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact-apk
+          gh run download 41961746709 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.6-Cursos-OCR-Corroboracion-APK --dir artifact-apk
+          test -s artifact-apk/app-debug.apk
+      - name: Habilitar KVM
+        run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - name: Probar navegacion y selector de horarios en Android 15
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: default
+          profile: pixel_6
+          avd-name: agenda-clara-ocr-316-ui
+          disable-animations: true
+          script: |
+            adb install -r artifact-apk/app-debug.apk
+            adb shell am start -n pe.agendaclara.app/.MainActivity
+            sleep 8
+            adb shell pidof pe.agendaclara.app
+            python3 updates/phase75/qa_emulator_creation.py
+            adb shell pidof pe.agendaclara.app
+            echo 'PASS: navegación y creación de horarios sin fallos'
+      - name: Adjuntar capturas de la interfaz
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.13.6-OCR-Emulador-Capturas
+          path: screenshots/
+          if-no-files-found: ignore
