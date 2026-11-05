@@ -1,0 +1,56 @@
+name: Agenda Clara 3.13.8 - QA fechas y cursos del silabo - SIN APK
+on:
+  push:
+    branches: [feat/silabos-examenes-finales-3-13-8-20261105]
+    paths:
+      - 'updates/phase78/**'
+      - '.github/workflows/agenda-clara-syllabus-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  validar-silabos:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Obtener cambios
+        uses: actions/checkout@v4
+      - name: Recuperar fuentes verificadas 3.13.7
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 42016503685 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.7-OCR-Multicapa-Fuentes --dir previous
+          unzip -q previous/Agenda-Clara-3.13.7-OCR-Multicapa-Fuentes.zip
+          test -s AgendaClara/app/src/main/java/pe/agendaclara/app/SyllabusImportActivity.java
+      - name: Aplicar mejoras de sílabos y control de regresiones
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 updates/phase78/apply_syllabus.py
+          python3 updates/phase78/test_syllabus.py
+      - name: Java 17 para pruebas puras, sin Android
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Probar exámenes, productos finales y fechas complejas
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$(mktemp -d)"
+          SRC=AgendaClara/app/src/main/java/pe/agendaclara/app
+          javac -encoding UTF-8 -d "$OUT" \
+            "$SRC/AcademicCourseMatcher.java" \
+            "$SRC/SyllabusDateInterpreter.java" \
+            "$SRC/SyllabusEventParser.java" \
+            "$SRC/SyllabusCourseResolver.java" \
+            updates/phase78/SyllabusAcademicTests.java
+          java -cp "$OUT" pe.agendaclara.app.SyllabusAcademicTests
+          echo 'PASS: semana sin fecha -> pendiente; selección de curso por horario'
+          echo 'NO Gradle, NO APK, NO firma'
