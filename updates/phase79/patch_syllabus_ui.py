@@ -331,5 +331,87 @@ def overview(source):
 '''
     return one(source,hook,impl+hook,"overview methods")
 
+def safeguards(source):
+    source=one(source,
+'''        double weight=-1;
+        String title;''',
+'''        double weight=-1;
+        int reminderOffset=0;
+        String title;''',"row-specific reminders")
+    source=one(source,
+'''    /** Explicit, scrollable destination buttons; never silently select one profile. */''',
+'''    private void assignCourse(AcademicCourseMatcher.Course course){
+        selectedCourse=course;
+        // A change of profile MUST invalidate old task update targets.
+        for(Row row:items){
+            row.updateTarget=null;row.createSeparate=false;row.plan=null;
+            row.selected=true;row.selectionTouched=false;
+        }
+        showEvents();
+    }
+    /** Explicit, scrollable destination buttons; never silently select one profile. */''',
+    "course selection reset")
+    source=one(source,
+'''                selectedCourse=match;dialog.dismiss();showEvents();''',
+'''                dialog.dismiss();assignCourse(match);''',"header course selection")
+    source=one(source,
+'''            pick.setOnClickListener(v->{selectedCourse=course;dialog.dismiss();showEvents();});''',
+'''            pick.setOnClickListener(v->{dialog.dismiss();assignCourse(course);});''',
+    "catalog course selection")
+    source=one(source,
+'''                review.addView(timeButton);
+                Button clearDate=button("Dejar fecha pendiente",false);''',
+'''                review.addView(timeButton);
+                Button perAlert=button("Aviso de esta evaluación: "+
+                    (row.reminderOffset==15120?"10 días y 12 horas":
+                     row.reminderOffset==10080?"7 días":"usar opción general"),false);
+                perAlert.setOnClickListener(v->chooseReminder(row));
+                review.addView(perAlert);
+                Button clearDate=button("Dejar fecha pendiente",false);''',
+    "individual reminder")
+    source=one(source,
+'''    private long dueMillis(Row row){''',
+'''    private void chooseReminder(Row row){
+        LinearLayout options=column();
+        options.setPadding(dp(16),dp(8),dp(16),dp(8));
+        ScrollView scroll=new ScrollView(this);scroll.addView(options);
+        AlertDialog dialog=new AlertDialog.Builder(this,R.style.DialogTheme)
+            .setTitle("Recordatorio de esta evaluación")
+            .setView(scroll).setNegativeButton("Cancelar",null).create();
+        int[] values={0,15120,10080};
+        String[] labels={"Utilizar aviso general","10 días y 12 horas antes",
+            "7 días antes"};
+        for(int i=0;i<values.length;i++){
+            final int value=values[i];
+            Button b=button(labels[i],false);
+            b.setOnClickListener(v->{
+                row.reminderOffset=value;
+                dialog.dismiss();showEvents();
+            });
+            options.addView(b);gap(options,8);
+        }
+        dialog.show();
+    }
+    private long dueMillis(Row row){''',"reminder chooser method")
+    source=one(source,
+'''        int selected=0,undated=0,changes=0,newCount=0;
+        for(Row row:items){''',
+'''        int selected=0,undated=0,changes=0,newCount=0;
+        // Titles and dates may have been edited since the last render:
+        // never rely on a stale reconciliation plan at save time.
+        final List<SyllabusReimportPlanner.Existing> latest=existingForCourse();
+        for(Row row:items){
+            row.plan=SyllabusReimportPlanner.compare(row.title,row.event.type,
+                dueMillis(row),documentTitle,latest);''',
+    "refresh reconciliation before save")
+    source=one(source,
+'''                    task.offsets=String.valueOf(offset);
+                    notes.append("Fecha confirmada por el usuario: ")''',
+'''                    task.offsets=String.valueOf(
+                        row.reminderOffset>0?row.reminderOffset:offset);
+                    notes.append("Fecha confirmada por el usuario: ")''',
+    "save per evaluation reminder")
+    return source
+
 def run(source):
-    return overview(update(source))
+    return safeguards(overview(update(source)))
