@@ -1,0 +1,148 @@
+name: Agenda Clara 3.14.0 - Sílabos Fases A B C - APK y QA Android
+on:
+  push:
+    branches: [feat/silabos-fases-completas-3-14-0-20261105]
+    paths:
+      - '.github/workflows/agenda-clara-syllabus-314-final.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: agenda-clara-syllabus-314
+  cancel-in-progress: true
+jobs:
+  compilacion:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperar código base verificado
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh run download 42104750703 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.9-Silabos-Revisados-Fuentes --dir previous
+          unzip -q previous/Agenda-Clara-3.13.9-Silabos-Revisados-Fuentes.zip
+      - name: Integrar fases A B C
+        run: |
+          set -euo pipefail
+          python3 updates/phase80/apply_syllabus_complete.py --dry-run
+          python3 updates/phase80/apply_syllabus_complete.py
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Pruebas de PDF, tablas y versiones
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$(mktemp -d)"
+          SRC=AgendaClara/app/src/main/java/pe/agendaclara/app
+          javac -encoding UTF-8 -d "$OUT" \
+            "$SRC/AcademicCourseMatcher.java" \
+            "$SRC/SyllabusDateInterpreter.java" \
+            "$SRC/SyllabusEventParser.java" \
+            "$SRC/SyllabusReviewIntelligence.java" \
+            "$SRC/SyllabusImportPolicy.java" \
+            "$SRC/SyllabusTableNormalizer.java" \
+            updates/phase80/Phase80EndToEndTests.java
+          java -cp "$OUT" pe.agendaclara.app.Phase80EndToEndTests
+      - name: Firma de desarrollo
+        env:
+          SIGNING_JKS_BASE64: ${{ secrets.SIGNING_JKS_BASE64 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$SIGNING_JKS_BASE64"
+          mkdir -p AgendaClara/signing
+          printf '%s' "$SIGNING_JKS_BASE64" | base64 -d > AgendaClara/signing/development.jks
+          chmod 600 AgendaClara/signing/development.jks
+          keytool -list -keystore AgendaClara/signing/development.jks \
+            -storepass android -alias agendaclara >/dev/null
+      - name: Android SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          SDKMANAGER="$(command -v sdkmanager || true)"
+          if [ -z "$SDKMANAGER" ]; then SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"; fi
+          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses >/dev/null || true
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" 'platforms;android-36' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - name: Compilar APK 3.14.0
+        working-directory: AgendaClara
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon --stacktrace :app:assembleDebug
+      - name: Verificar firma y version
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK=AgendaClara/app/build/outputs/apk/debug/app-debug.apk
+          test -s "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | \
+            grep -q "name='pe.agendaclara.app' versionCode='66' versionName='3.14.0'"
+      - name: Publicar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.14.0-Silabos-Fases-ABC-APK
+          path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+          if-no-files-found: error
+      - name: Preparar fuentes sin firma
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f AgendaClara/signing/development.jks
+          rm -rf AgendaClara/.gradle AgendaClara/app/build AgendaClara/build
+          zip -q -r Agenda-Clara-3.14.0-Silabos-Fases-ABC-Fuentes.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.14.0-Silabos-Fases-ABC-Fuentes
+          path: Agenda-Clara-3.14.0-Silabos-Fases-ABC-Fuentes.zip
+          retention-days: 30
+
+  android-pdf:
+    needs: compilacion
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: Agenda-Clara-3.14.0-Silabos-Fases-ABC-APK
+          path: artifact-apk
+      - name: Preparar sílabo de prueba
+        run: |
+          python3 updates/phase78/generate_syllabus_pdf.py
+          test -s /tmp/silabo_tendencias_2026.pdf
+      - name: Habilitar KVM
+        run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - name: Importar PDF, corroborar curso y verificar SQLite
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          avd-name: agenda-clara-syllabus-314
+          disable-animations: true
+          script: |
+            adb install -r artifact-apk/app-debug.apk
+            adb push /tmp/silabo_tendencias_2026.pdf /sdcard/Download/silabo_tendencias_2026.pdf
+            adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/silabo_tendencias_2026.pdf
+            python3 updates/phase80/qa_syllabus_314_pdf.py
+      - name: Adjuntar capturas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.14.0-Silabos-PDF-Emulador
+          path: screenshots/*.png
+          retention-days: 30
+          if-no-files-found: ignore
