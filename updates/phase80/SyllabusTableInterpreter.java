@@ -44,7 +44,10 @@ public final class SyllabusTableInterpreter {
                 if(conflictingDates)date=null;
                 if(title.isEmpty())title=line;
                 if(title.length()>130)title=title.substring(0,130);
-                result.add(new SyllabusEventParser.Event(title,kind,date,page.number,line));
+                String evidence=line;
+                if(cells.length>1 && cells[0].trim().matches("(?i)[0-9]{1,2}|[ivxlcdm]{1,8}"))
+                    evidence="Semana "+cells[0].trim()+" | "+line;
+                result.add(new SyllabusEventParser.Event(title,kind,date,page.number,evidence));
                 if(result.size()>=150)return result;
             }
         }
