@@ -263,7 +263,6 @@ SAVE=r'''    private void saveSelected(int offset){
                 }
                 String identity=originFor(row);
                 Task task=previous==null?new Task():previous;
-                if(previous!=null)Reminders.cancel(this,task.id);
                 String previousNotes=previous==null?"":task.notes;
                 task.title=row.title.trim();
                 task.category=selectedCourse.category;
@@ -294,6 +293,7 @@ SAVE=r'''    private void saveSelected(int offset){
                     .append(previousNotes);
                 task.notes=notes.toString();
                 Store.get(this).save(task);
+                if(previous!=null)Reminders.cancel(this,task.id);
                 AcademicTaskLinks.get(this).assign(task.id,selectedCourse.profileId,
                     selectedCourse.name);
                 if(task.due>0&&!task.done)Reminders.schedule(this,task);
