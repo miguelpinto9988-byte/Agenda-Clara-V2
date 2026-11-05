@@ -1,0 +1,55 @@
+name: Agenda Clara 3.13.9 - Sílabos - QA de fuentes SIN APK
+on:
+  push:
+    branches: [feat/silabos-integrales-3-13-9-20261105]
+    paths:
+      - 'updates/phase79/**'
+      - '.github/workflows/agenda-clara-syllabus-139-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  validar-analizador-e-integracion:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperar fuentes de 3.13.8 verificadas sin recompilar
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 42093209511 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.8-Silabos-Examenes-Finales-Fuentes --dir source-artifact
+          unzip -q source-artifact/Agenda-Clara-3.13.8-Silabos-Examenes-Finales-Fuentes.zip
+          test -s AgendaClara/app/src/main/java/pe/agendaclara/app/SyllabusImportActivity.java
+      - name: Integrar fases A, B y C y revisar fuentes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 updates/phase79/apply_syllabus_advanced.py
+          python3 updates/phase79/test_syllabus_139.py
+      - name: Java 17 para pruebas JVM independientes de Android
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Probar fechas, semanas, cronogramas y reimportaciones
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$(mktemp -d)"
+          DIR=AgendaClara/app/src/main/java/pe/agendaclara/app
+          javac -encoding UTF-8 -d "$OUT" \
+            "$DIR/AcademicCourseMatcher.java" \
+            "$DIR/SyllabusDateInterpreter.java" \
+            "$DIR/SyllabusEventParser.java" \
+            "$DIR/SyllabusAssessmentExtractor.java" \
+            "$DIR/SyllabusReimportPlanner.java" \
+            updates/phase79/Phase79SyllabusTests.java
+          java -cp "$OUT" pe.agendaclara.app.Phase79SyllabusTests
+          echo 'PASS: únicamente QA de fuentes/JVM; SIN Gradle, SIN APK'
