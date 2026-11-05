@@ -244,7 +244,7 @@ def transform_schedule(source):
 def transform_title_parser(source):
     before='''    private ScheduleTitleParser(){}'''
     after='''    private static final Pattern WEEK=Pattern.compile(
-        "(?iu)^semana\\\\s*(?:n[°ºo.]?\\\\s*)?(\\\\d{1,2})(?:\\\\b.*)?$");
+        "(?iu)^semana\\\\s*(?:(?:[:—–-]\\\\s*)|(?:n[°ºo.]?\\\\s*))?(\\\\d{1,2})(?:\\\\b.*)?$");
     private ScheduleTitleParser(){}'''
     source=replace_once(source,before,after,"week pattern")
     before='''        return "";
