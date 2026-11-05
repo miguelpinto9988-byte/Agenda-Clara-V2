@@ -53,10 +53,13 @@ jobs:
             "$DIR/ScheduleVirtualGrid.java" \
             "$DIR/SchedulePhotoReview.java" \
             "$DIR/ScheduleOcrFusion.java" \
+            "$DIR/ScheduleColorTileDetector.java" \
             updates/phase77/Phase77FusionTests.java \
+            updates/phase77/Phase77ColorTests.java \
             updates/phase76/Phase76RecognitionTests.java \
             updates/phase76/Phase76GridTests.java
           java -cp "$OUT" pe.agendaclara.app.Phase77FusionTests
+          java -cp "$OUT" pe.agendaclara.app.Phase77ColorTests
           java -cp "$OUT" pe.agendaclara.app.Phase76RecognitionTests
           java -cp "$OUT" pe.agendaclara.app.Phase76GridTests
           echo 'PASS OCR 3.13.7: solo pruebas JVM, sin Gradle ni APK'
