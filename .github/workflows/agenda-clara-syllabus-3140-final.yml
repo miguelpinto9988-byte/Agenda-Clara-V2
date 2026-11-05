@@ -122,10 +122,12 @@ jobs:
           profile: pixel_6
           avd-name: agenda-clara-syllabus-3140
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim\n          script: |
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: |
             adb install -r artifact-apk/app-debug.apk
             adb shell am start -n pe.agendaclara.app/.MainActivity
             sleep 9
             adb shell pidof pe.agendaclara.app
-            adb shell dumpsys activity activities | grep -q pe.agendaclara.app\n            echo 'PASS: aplicación instalada y abierta en Android 15; flujo PDF aún no verificado'
+            adb shell dumpsys activity activities | grep -q pe.agendaclara.app
+            echo 'PASS: aplicación instalada y abierta en Android 15; flujo PDF aún no verificado'
             adb shell pidof pe.agendaclara.app
