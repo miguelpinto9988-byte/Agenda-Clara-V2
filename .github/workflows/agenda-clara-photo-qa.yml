@@ -46,8 +46,7 @@ jobs:
           script: |
             adb install -r artifact-apk/app-debug.apk
             adb push /tmp/horario_ocr_regresion.png /sdcard/Download/horario_ocr_regresion.png
-            adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE \
-              -d file:///sdcard/Download/horario_ocr_regresion.png
+            adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/horario_ocr_regresion.png
             adb shell am start -n pe.agendaclara.app/.MainActivity
             sleep 7
             python3 updates/phase77/qa_emulator_photo.py
