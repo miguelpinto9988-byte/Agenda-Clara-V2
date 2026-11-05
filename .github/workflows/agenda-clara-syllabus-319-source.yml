@@ -29,7 +29,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 updates/phase79/apply_syllabus_review.py
-          grep -q 'SyllabusReviewIntelligence.filter(rawEvents)' AgendaClara/app/src/main/java/pe/agendaclara/app/SyllabusImportActivity.java
+          grep -q 'SyllabusReviewIntelligence.onlyEvents(SyllabusEventParser.extract(pages))' AgendaClara/app/src/main/java/pe/agendaclara/app/SyllabusImportActivity.java
           grep -q "versionCode 65" AgendaClara/app/build.gradle
       - uses: actions/setup-java@v4
         with:
