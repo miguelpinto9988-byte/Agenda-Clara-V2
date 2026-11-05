@@ -1,0 +1,62 @@
+name: Agenda Clara 3.13.7 - QA OCR multifuentemente - SIN APK
+on:
+  push:
+    branches: [feat/ocr-fusion-cursos-3-13-7-20261105]
+    paths:
+      - 'updates/phase77/**'
+      - '.github/workflows/agenda-clara-ocr-fusion-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  fusion-y-corrobacion:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperar fuentes verificadas 3.13.6
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh run download 41961746709 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.6-Cursos-OCR-Corroboracion-Fuentes --dir previous
+          unzip -q previous/Agenda-Clara-3.13.6-Cursos-OCR-Corroboracion-Fuentes.zip
+          test -s AgendaClara/app/src/main/java/pe/agendaclara/app/ScheduleOcr.java
+      - name: Aplicar cambios y comprobar fuentes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 updates/phase77/apply_photo_intelligence.py
+          python3 updates/phase77/test_photo_intelligence.py
+      - name: Java 17 para pruebas sin Android
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Probar fusión OCR, horarios parciales y nombres confirmados
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$(mktemp -d)"
+          DIR=AgendaClara/app/src/main/java/pe/agendaclara/app
+          javac -encoding UTF-8 -d "$OUT" \
+            "$DIR/ScheduleEntry.java" \
+            "$DIR/ScheduleCourseColors.java" \
+            "$DIR/ScheduleCourseRecognition.java" \
+            "$DIR/ScheduleParser.java" \
+            "$DIR/ScheduleGridInterpreter.java" \
+            "$DIR/ScheduleVirtualGrid.java" \
+            "$DIR/SchedulePhotoReview.java" \
+            "$DIR/ScheduleOcrFusion.java" \
+            updates/phase77/Phase77FusionTests.java \
+            updates/phase76/Phase76RecognitionTests.java \
+            updates/phase76/Phase76GridTests.java
+          java -cp "$OUT" pe.agendaclara.app.Phase77FusionTests
+          java -cp "$OUT" pe.agendaclara.app.Phase76RecognitionTests
+          java -cp "$OUT" pe.agendaclara.app.Phase76GridTests
+          echo 'PASS OCR 3.13.7: solo pruebas JVM, sin Gradle ni APK'
