@@ -28,8 +28,8 @@ jobs:
         run: |
           set -euo pipefail
           gh run download 41949630141 --repo "$GITHUB_REPOSITORY" \
-            --name Agenda-Clara-3.13.5-Entrada-Horario-Corregida-Fuentes --dir source-artifact
-          unzip -q source-artifact/Agenda-Clara-3.13.5-Entrada-Horario-Corregida-Fuentes.zip
+            --name Agenda-Clara-3.13.4-Foto-Cursos-Nombre-Fuentes --dir source-artifact
+          unzip -q source-artifact/Agenda-Clara-3.13.4-Foto-Cursos-Nombre-Fuentes.zip
           test -s AgendaClara/gradlew
       - name: Corregir la entrada Nuevo horario y probar ambos metodos
         run: |
