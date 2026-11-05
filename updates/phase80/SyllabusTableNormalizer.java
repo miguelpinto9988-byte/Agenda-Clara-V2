@@ -21,15 +21,34 @@ public final class SyllabusTableNormalizer {
             if(page==null){continue;}
             String[] lines=page.text.split("\\r?\\n");
             StringBuilder extras=new StringBuilder();
-            int weekColumn=-1,activityColumn=-1,dateColumn=-1;
+            int weekColumn=-1,activityColumn=-1,dateColumn=-1,headerCount=0;
             for(int i=0;i<lines.length;i++){
                 String[] fields=split(lines[i]);
-                if(fields.length<2)continue;
+                if(fields.length<2 && headerCount==0)continue;
                 if(isHeader(fields)){
                     weekColumn=index(fields,"semana","sem.");
                     activityColumn=index(fields,"evaluacion","actividad","evidencia","producto","examen");
                     dateColumn=index(fields,"fecha","dia");
+                    headerCount=fields.length;
                     continue;
+                }
+                if(headerCount>=3 && fields.length==1 && weekColumn==0 &&
+                        i+headerCount-1<lines.length){
+                    // PDF text extraction sometimes places each table cell on a separate line.
+                    // Only join a complete row starting with an explicit academic week.
+                    String[] pending=new String[headerCount];
+                    boolean singleCells=true;
+                    for(int col=0;col<headerCount;col++){
+                        String[] current=split(lines[i+col]);
+                        if(current.length!=1){singleCells=false;break;}
+                        pending[col]=current[0];
+                    }
+                    if(singleCells&&WEEK_CELL.matcher(pending[0]).matches()&&
+                            activityColumn<pending.length&&
+                            !SyllabusEventParser.assessmentType(pending[activityColumn]).isEmpty()){
+                        fields=pending;
+                        i+=headerCount-1;
+                    }
                 }
                 if(activityColumn<0||activityColumn>=fields.length)continue;
                 String activity=fields[activityColumn].trim();
@@ -49,7 +68,9 @@ public final class SyllabusTableNormalizer {
                 String reconstructed=line.toString();
                 // Source text stays present; only a bounded, evidenced second reading is added.
                 if(reconstructed.length()>activity.length()+4 && reconstructed.length()<500
-                        && !page.text.contains(reconstructed))
+                        && !lines[i].contains(activity+" |") &&
+                        SyllabusDateInterpreter.interpret(lines[i],null).exact==null &&
+                        !page.text.contains(reconstructed))
                     extras.append('\n').append(reconstructed);
             }
             // Do not add speculative rows on documents without recognizable columns.
