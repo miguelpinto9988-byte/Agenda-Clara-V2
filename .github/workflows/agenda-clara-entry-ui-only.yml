@@ -1,0 +1,54 @@
+name: Agenda Clara 3.13.5 - Probar botones reales - SOLO EMULADOR
+on:
+  push:
+    branches: [fix/horario-entrada-3-13-5-20261105]
+    paths:
+      - '.github/workflows/agenda-clara-entry-ui-only.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  reproducir-captura-en-android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Obtener script de QA
+        uses: actions/checkout@v4
+      - name: Recuperar APK 3.13.5 YA COMPILADA
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifact-apk
+          gh run download 41953754958 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.13.5-Entrada-Horario-Corregida-APK --dir artifact-apk
+          test -s artifact-apk/app-debug.apk
+      - name: Habilitar virtualización KVM
+        run: |
+          if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - name: Verificar el flujo de la captura en Android 15
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          avd-name: agenda-clara-verify-creation
+          disable-animations: true
+          script: |
+            adb install -r artifact-apk/app-debug.apk
+            adb shell am start -n pe.agendaclara.app/.MainActivity
+            sleep 10
+            adb shell pidof pe.agendaclara.app
+            python3 updates/phase75/qa_emulator_creation.py
+      - name: Adjuntar capturas (incluido error si lo hay)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.13.5-Botones-Horarios-Capturas
+          path: screenshots/
+          if-no-files-found: ignore
