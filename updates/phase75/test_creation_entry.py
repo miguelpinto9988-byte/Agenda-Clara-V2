@@ -26,8 +26,9 @@ chooser=PANEL[PANEL.index("    private static void chooseMethod("):
 assert 'setTitle("¿Cómo crearás tu horario?")' in chooser
 assert '"Subir imagen del horario"' in chooser
 assert '"Agregar cursos manualmente"' in chooser
-assert "if(which==0)importPhoto(a);" in chooser
-assert "else startManual(a);" in chooser
+assert "photo.setOnClickListener" in chooser and "importPhoto(a);" in chooser
+assert "manual.setOnClickListener" in chooser and "startManual(a);" in chooser
+assert ".setView(options)" in chooser and ".setItems(" not in chooser
 assert "AcademicSchedules.create(" not in chooser
 assert "new_manual" in chooser
 
@@ -42,6 +43,7 @@ assert 'profileId="";' in creation
 assert "show(5);" in creation
 assert "show(1);" in creation
 assert "private void askFirstSchedule()" in creation
+assert ".setView(actions)" in creation and ".setItems(" not in creation
 assert "Escribe el nombre" not in creation and "name.getText()" not in creation
 assert "AcademicSchedules.create(" not in creation
 
