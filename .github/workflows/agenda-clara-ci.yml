@@ -1,8 +1,8 @@
 # Único flujo vigente de compilación, pruebas JVM y emulador Android.
-name: Agenda Clara 3.13.3 · Entrega A Plan de estudio
+name: Agenda Clara 3.13.3 · Entrega C integración y APK
 on:
   push:
-    branches: [main, feat/iconografia-fase26-27-apk-20261104, feat/mi-dia-header-15-19-validated-apk, feat/mi-dia-class-schedule-home-v2-no-build, feat/mi-dia-phases-6-8-no-build, feat/top-plus-png-motion-3-8-2, feat/remove-compose-daily-view-3-8-2, feat/full-ui-categories-responsive-3-8-2, feat/category-only-agenda-navigation-3-8-2, feat/reference-iconography-branded-pickers-3-8-2, feat/png-approved-icons-symbol-color-pickers-3-8-2, feat/restore-nav-icons-performance-cleanup-3-8-2, feat/sticky-notes-plus-menu-3-9-0, feat/sticky-notes-home-widget-3-9-1, fix/category-selected-png-icons-3-9-2, feat/polished-sticky-art-3-9-3, feat/sticky-responsive-accessibility-3-9-4, feat/whatsapp-context-understanding-3-9-5, feat/schedule-photo-course-reconciliation-3-9-6, feat/schedule-per-day-12h-3-9-7, feat/calendar-png-today-schedule-3-9-8, feat/calendar-clean-transparent-png-3-9-9, restore/whatsapp-two-stage-300ms-3-10-3, fix/whatsapp-session-retry-3-10-4, fix/whatsapp-final-hardening-3-10-5, feat/voice-quick-task-general-catalog-3-10-6, feat/calendar-visual-task-note-3-10-7, feat/voice-natural-language-3-10-8, fix/calendar-remove-week-dialog-keyboard-3-10-9, feat/widget-floating-voice-manual-3-11-0, feat/academic-context-order-3-11-1, feat/white-widgets-preserve-icons-3-11-2, feat/widget-icons-waves-3-11-3]
+    branches: [main, feat/plan-estudio-entrega-c-final-20261104, feat/iconografia-fase26-27-apk-20261104, feat/mi-dia-header-15-19-validated-apk, feat/mi-dia-class-schedule-home-v2-no-build, feat/mi-dia-phases-6-8-no-build, feat/top-plus-png-motion-3-8-2, feat/remove-compose-daily-view-3-8-2, feat/full-ui-categories-responsive-3-8-2, feat/category-only-agenda-navigation-3-8-2, feat/reference-iconography-branded-pickers-3-8-2, feat/png-approved-icons-symbol-color-pickers-3-8-2, feat/restore-nav-icons-performance-cleanup-3-8-2, feat/sticky-notes-plus-menu-3-9-0, feat/sticky-notes-home-widget-3-9-1, fix/category-selected-png-icons-3-9-2, feat/polished-sticky-art-3-9-3, feat/sticky-responsive-accessibility-3-9-4, feat/whatsapp-context-understanding-3-9-5, feat/schedule-photo-course-reconciliation-3-9-6, feat/schedule-per-day-12h-3-9-7, feat/calendar-png-today-schedule-3-9-8, feat/calendar-clean-transparent-png-3-9-9, restore/whatsapp-two-stage-300ms-3-10-3, fix/whatsapp-session-retry-3-10-4, fix/whatsapp-final-hardening-3-10-5, feat/voice-quick-task-general-catalog-3-10-6, feat/calendar-visual-task-note-3-10-7, feat/voice-natural-language-3-10-8, fix/calendar-remove-week-dialog-keyboard-3-10-9, feat/widget-floating-voice-manual-3-11-0, feat/academic-context-order-3-11-1, feat/white-widgets-preserve-icons-3-11-2, feat/widget-icons-waves-3-11-3]
     paths:
       - 'updates/**'
       - 'Agenda-Clara-1.3.0-Fuentes-Sin-Clave.zip'
@@ -174,6 +174,12 @@ jobs:
           # Iconografía aprobada; instalar 68 PNG sin modificar flujos existentes.
           python3 updates/phase70/apply_iconography.py
           python3 updates/phase70/test_iconography.py
+          # C: integrar A y B sobre las fuentes verificadas antes de compilar.
+          python3 updates/phase71/apply_plan_a.py
+          python3 updates/phase71/test_plan_a.py
+          python3 updates/phase72/apply_plan_b.py
+          python3 updates/phase72/test_plan_b.py
+          python3 updates/phase73/test_release_c.py
           python3 updates/phase71/apply_plan_a.py
           python3 updates/phase71/test_plan_a.py
           python3 - <<'PY'
@@ -281,6 +287,10 @@ jobs:
           java -cp "$OUT" SchedulePhotoReviewTests
           javac -encoding UTF-8 -cp "$OUT" -d "$OUT" updates/phase36/SchedulePhotoIntelligenceTests.java
           java -cp "$OUT" pe.agendaclara.app.SchedulePhotoIntelligenceTests
+          javac -encoding UTF-8 -cp "$OUT" -d "$OUT" \
+            "$SRC/AcademicCourseMatcher.java" "$SRC/SyllabusEventParser.java" \
+            updates/phase72/PhaseBParserTests.java
+          java -cp "$OUT" pe.agendaclara.app.PhaseBParserTests
 
       - name: Pruebas JVM de comandos de voz y categoría General
         shell: bash
@@ -402,7 +412,7 @@ jobs:
           rm -rf AgendaClara/.gradle AgendaClara/app/build AgendaClara/build
           zip -q -r Agenda-Clara-3.13.3-Fuentes-Verificadas.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks' 'AgendaClara/*.keystore'
           if unzip -Z1 Agenda-Clara-3.13.3-Fuentes-Verificadas.zip | grep -Eq '\.(jks|keystore)$'; then exit 1; fi
-      - name: Publicar fuentes 3.13.1
+      - name: Publicar fuentes 3.13.3
         uses: actions/upload-artifact@v4
         with:
           name: Agenda-Clara-3.13.3-Fuentes-Verificadas
@@ -434,12 +444,12 @@ jobs:
           profile: pixel_6
           avd-name: agenda-clara-ui
           disable-animations: true
-          script: bash updates/phase67/emulator_header_qa.sh && bash updates/phase62/emulator_responsive_qa.sh && bash updates/phase16/emulator_3_8.sh && bash updates/phase51/emulator_mi_dia_qa.sh && bash updates/phase44/emulator_calendar_visual_qa.sh && python3 updates/phase46/emulator_keyboard_restore_qa.py && python3 updates/phase47/emulator_widget_floating_qa.py
+          script: bash updates/phase67/emulator_header_qa.sh && bash updates/phase62/emulator_responsive_qa.sh && bash updates/phase16/emulator_3_8.sh && bash updates/phase51/emulator_mi_dia_qa.sh && bash updates/phase44/emulator_calendar_visual_qa.sh && python3 updates/phase46/emulator_keyboard_restore_qa.py && python3 updates/phase47/emulator_widget_floating_qa.py && bash updates/phase73/emulator_plan_c_qa.sh
       - name: Publicar capturas sintéticas del emulador
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.13.1-Emulator-Capturas
+          name: Agenda-Clara-3.13.3-C-Emulator-Capturas
           path: screenshots/
           if-no-files-found: ignore
 
