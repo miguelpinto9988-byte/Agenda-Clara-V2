@@ -29,3 +29,12 @@ Se compararon las fuentes verificadas 3.13.2 y 3.13.5. El motor OCR ya contenía
 La app sigue procesando el OCR localmente con ML Kit; sin la fotografía específica que presenta las anomalías no es posible garantizar su interpretación o el reconocimiento correcto de todas sus palabras. Las alertas para bloques que el OCR no entiende requieren que el usuario revise o corrija manualmente las materias; no se inventan nombres ni horas.
 
 Rama: `fix/ocr-cursos-ambiguos-3-13-6-20261105`.
+
+
+## Resultado técnico verificado
+
+- QA de fuente y JVM, incluida detección de una palabra parcial, cursos con primera palabra compartida y bloques duplicados: **correcto**. Ejecución: https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/41961636784.
+- Compilación de la APK `3.13.6` (`versionCode 62`), firma y paquete: **correcto**. APK de la ejecución: https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/41961746709/artifacts/13385826822.
+- En la ejecución de compilación, la prueba de interfaz pasó, pero el trabajo completo quedó marcado en rojo porque buscaba cualquier línea `AndroidRuntime`, incluso registros normales de `uiautomator`. No se identificó una excepción fatal de Agenda Clara.
+- Se corrigió la interpretación de esa prueba ejecutándola por separado, sin recompilar la APK: navegación real en Android 15 AOSP **exitosa**. Ejecución: https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/41962318724, capturas: https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/41962318724/artifacts/13386041656.
+- La lectura de una **fotografía real del usuario** y su diálogo de comprobación aún requieren un ejemplo específico; estos resultados validan reglas de matching, datos geométricos sintéticos y navegación en Android, no todas las fotografías posibles.
