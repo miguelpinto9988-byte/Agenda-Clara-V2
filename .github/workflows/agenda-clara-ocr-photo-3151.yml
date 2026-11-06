@@ -66,7 +66,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m py_compile updates/phase86/*.py
-          python3 updates/phase86/apply_photo_semantics_3156.py
+          python3 updates/phase86/apply_photo_semantics_3155.py
           grep -q 'reviewSavedCourseNames' AgendaClara/app/src/main/java/pe/agendaclara/app/ScheduleActivity.java
           grep -q 'confirmPhotoGroupSummary' AgendaClara/app/src/main/java/pe/agendaclara/app/ScheduleActivity.java
       - name: Instalar memoria adaptativa y comprobar migración segura
