@@ -217,21 +217,30 @@ public final class SyllabusContextualPartials {
                 boolean anchor = isAnchor(line);
                 DateFinding date = dated(line, calendar);
                 if (date.date == null && !date.conflict) {
-                    // Adjacent dates are only considered when the whole cell looks like a date,
-                    // never an unrelated section, topic or another exam row.
-                    for (int near : new int[] {i - 1, i + 1}) {
-                        if (near < 0 || near >= lines.length) continue;
-                        String candidate = lines[near].trim();
-                        if (!pureAdjacentDate(candidate)) continue;
-                        DateFinding neighbor = dated(candidate, calendar);
-                        if (neighbor.conflict) {
-                            date = neighbor;
-                            break;
-                        }
-                        if (neighbor.date != null) {
-                            date = neighbor;
-                            break;
-                        }
+                    // A date-only row immediately FOLLOWING the exam is the safest
+                    // table/PDF continuation. A preceding date may already be the
+                    // trailing cell of a DIFFERENT numbered exam.
+                    DateFinding after = new DateFinding(null, false);
+                    DateFinding before = new DateFinding(null, false);
+                    if (i + 1 < lines.length &&
+                            pureAdjacentDate(lines[i + 1].trim())) {
+                        after = dated(lines[i + 1].trim(), calendar);
+                    }
+                    if (i > 0 && pureAdjacentDate(lines[i - 1].trim())) {
+                        boolean claimedByPrevious = i > 1 &&
+                            ordinal(lines[i - 2]) > 0 &&
+                            ordinal(lines[i - 2]) != n;
+                        if (!claimedByPrevious)
+                            before = dated(lines[i - 1].trim(), calendar);
+                    }
+                    if (after.conflict || before.conflict ||
+                        (after.date != null && before.date != null &&
+                         !after.date.equals(before.date))) {
+                        date = new DateFinding(null, true);
+                    } else if (after.date != null) {
+                        date = after;
+                    } else if (before.date != null) {
+                        date = before;
                     }
                 }
                 all.add(new Evidence(page.number, n, line, anchor, topic(line),
