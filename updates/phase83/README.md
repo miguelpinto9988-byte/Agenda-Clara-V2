@@ -25,6 +25,7 @@
 
 ## Validación automatizada completada
 - La ejecución [42164898395](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42164898395) compiló la APK 3.15.2, verificó su firma e instaló/abrió la aplicación en un emulador Android 15. Los trabajos `compilar-y-probar` y `android` finalizaron correctamente.
+- La validación repetida sobre la rama principal [42168646679](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42168646679) también finalizó correctamente con ambos trabajos aprobados y nuevos artefactos de APK y fuentes.
 
 ## Validaciones manuales pendientes
 - Colocar cada widget en el launcher y comprobar sus datos con horarios, tareas y evaluaciones de prueba (perfiles separados, cambios concurrentes, modo claro/oscuro y tamaños pequeños).
