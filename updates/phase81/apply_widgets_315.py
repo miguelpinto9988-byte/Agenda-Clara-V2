@@ -94,8 +94,7 @@ def run():
         "        AcademicWidgetSync.request(c);","sync academic widgets after task changes")
     w=replace_once(w,
         'v.setTextViewText(R.id.widget_subtitle,"Mis tareas de hoy · "+todayCount(all));',
-        'v.setTextViewText(R.id.widget_subtitle,"Pendientes: "+pendingCount(all)+
-                " · Hoy: "+todayCount(all));',
+        'v.setTextViewText(R.id.widget_subtitle,"Pendientes: "+pendingCount(all)+" · Hoy: "+todayCount(all));',
         "task summary")
     w=replace_once(w,"    private static int todayCount(List<Task> all){",
         '''    private static int pendingCount(List<Task> all){
