@@ -41,6 +41,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m py_compile updates/phase83/apply_widget_refresh_3152.py
+          python3 updates/phase83/test_widget_patch.py -v
           python3 updates/phase83/apply_widget_refresh_3152.py
       - uses: actions/setup-java@v4
         with:
@@ -57,6 +58,18 @@ jobs:
             updates/phase81/AcademicWidgetModels.java \
             updates/phase83/Phase83WidgetDataTests.java
           java -cp "$OUT" pe.agendaclara.app.Phase83WidgetDataTests
+      - name: Comprobar orden cronológico global de evaluaciones de diferentes cursos
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$(mktemp -d)"
+          javac -encoding UTF-8 -d "$OUT" \
+            AgendaClara/app/src/main/java/pe/agendaclara/app/Task.java \
+            AgendaClara/app/src/main/java/pe/agendaclara/app/AcademicWidgetEvaluationOrder.java \
+            updates/phase83/AcademicWidgetEvaluationOrderTests.java
+          java -cp "$OUT" pe.agendaclara.app.AcademicWidgetEvaluationOrderTests
+          grep -q 'AcademicWidgetEvaluationOrder.ordered(orderedEntries,startOfToday)' \
+            AgendaClara/app/src/main/java/pe/agendaclara/app/AcademicWeekWidget.java
       - name: Probar refresco concurrente de los widgets académicos
         run: bash updates/phase83/qa_widget_sync.sh
       - name: Probar coincidencia de una sola palabra y variantes OCR
