@@ -63,7 +63,7 @@ public final class AcademicDayWidget extends AppWidgetProvider {
                     label.append("☐ ").append(pref.hidePrivateTitles?"Tarea pendiente":
                             AcademicWidgetRepository.shortText(tasks.get(i).title,48));
                 }
-                if(tasks.size()>limit)label.append("\n+").append(tasks.size()-limit)+" más";
+                if(tasks.size()>limit)label.append("\n+").append(tasks.size()-limit).append(" más");
                 v.setTextViewText(R.id.academic_day_tasks,
                         tasks.isEmpty()?"No hay tareas pendientes de este curso.":label.toString());
             }
