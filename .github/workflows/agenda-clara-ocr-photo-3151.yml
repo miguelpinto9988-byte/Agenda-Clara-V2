@@ -41,9 +41,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile updates/phase83/apply_widget_refresh_3153.py
+          python3 -m py_compile updates/phase83/apply_widget_refresh_3152.py
           python3 updates/phase83/test_widget_patch.py -v
-          python3 updates/phase83/apply_widget_refresh_3153.py
+          python3 updates/phase83/apply_widget_refresh_3152.py
       - name: Corregir clases XML incompatibles con RemoteViews y probar sus proveedores
         shell: bash
         run: |
