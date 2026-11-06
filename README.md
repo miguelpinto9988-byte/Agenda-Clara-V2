@@ -68,9 +68,11 @@ trazable** de exámenes parciales numerados:
   no por el orden desordenado de las menciones ni por fechas supuestas.
 
 Las pruebas combinan regresiones existentes (fases 79/80) con nuevos casos
-sintéticos de la fase 85. La validación de rama
-[42202093509](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42202093509)
-terminó correctamente en Android 15. **No se ha probado todavía la precisión
+sintéticos de la fase 85. La validación **directamente en `main`**
+[42202717940](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42202717940)
+terminó correctamente: pruebas de sílabos, compilación y firma APK 3.15.4,
+instalación Android 15 y comprobación de widgets. Los artefactos de APK y
+fuentes se publicaron en esa ejecución. **No se ha probado todavía la precisión
 con un sílabo real proporcionado por el usuario**; los casos con OCR defectuoso
 se deben revisar antes del guardado.
 
