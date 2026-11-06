@@ -106,6 +106,14 @@ geometría y reglas de similitud; **no es un modelo general de visión artificia
 y la captura de la pantalla de cursos por sí sola no permite validar el
 reconocimiento de una fotografía original.
 
+La verificación [3.15.5 en `main`, ejecución 42207474190](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42207474190)
+concluyó satisfactoriamente: regresiones de nombres, limpieza OCR,
+protección de niveles, auditoría de sesiones, compilación/firma de APK y
+emulador Android 15 (incluido el ensayo `RemoteViews` de los widgets).
+La ejecución publicó la APK de desarrollo y las fuentes reconstruidas.
+No sustituye una prueba del flujo completo con la fotografía original del
+horario mostrado en la incidencia.
+
 ## Estado de funcionamiento
 
 - **Verificado por CI (base):** generación APK 3.15.4, firma de desarrollo,
