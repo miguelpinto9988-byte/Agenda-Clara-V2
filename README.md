@@ -1,7 +1,7 @@
 # Agenda Clara — Android nativo
 
-**Versión actual de la aplicación:** 3.15.4 (`versionCode 71`). El historial
-de migraciones se mantiene hasta `updates/phase85`.
+**Versión actual de la aplicación:** 3.15.5 (`versionCode 72`). El historial
+de migraciones se mantiene hasta `updates/phase86`.
 
 ## Widgets disponibles y corrección de carga
 
@@ -26,9 +26,9 @@ La actividad auxiliar de comprobación existe solo en el código `debug`.
 
 ## Compilación y pruebas de main
 
-- Flujo principal: [Agenda Clara 3.15.4 — Widgets, OCR y sílabos](.github/workflows/agenda-clara-ocr-photo-3151.yml).
-- Los cambios de `updates/phase82/**`, `updates/phase83/**`, `updates/phase84/**`, `updates/phase85/**`
-  y del propio flujo activan la compilación Android 3.15.4 en `main`.
+- Flujo principal: [Agenda Clara 3.15.5 — Widgets, OCR fotográfico y sílabos](.github/workflows/agenda-clara-ocr-photo-3151.yml).
+- Los cambios de `updates/phase82/**`, `updates/phase83/**`, `updates/phase84/**`, `updates/phase85/**`, `updates/phase86/**`
+  y del propio flujo activan la compilación Android 3.15.5 en `main`.
 - Se reconstruyen las fuentes, se prueban los datos académicos y el OCR,
   se usa la firma de desarrollo guardada en el secreto
   `SIGNING_JKS_BASE64`, y se valida la APK en emulador Android 15.
@@ -76,9 +76,39 @@ fuentes se publicaron en esa ejecución. **No se ha probado todavía la precisi�
 con un sílabo real proporcionado por el usuario**; los casos con OCR defectuoso
 se deben revisar antes del guardado.
 
+
+## Análisis de fotografías de horarios (3.15.5)
+
+La fase 86 corrige un incidente en que varias sesiones de **Tendencias
+educativas** aparecían divididas en grupos diferentes por descriptores OCR
+duplicados y por un nivel `I` potencialmente confundido. El comparador anterior
+también ofrecía unir **Tutoría educativa** e **Investigación educativa** al
+compartir la palabra genérica «educativa».
+
+El nuevo proceso aplica una limpieza muy limitada de palabras repetidas
+después de códigos de curso, descarta coincidencias basadas solo en conectores
+y adjetivos genéricos, compara los conceptos específicos y respeta las
+distinciones de niveles `I`/`II` y grupos explícitos. Los casos ambiguos
+siguen requiriendo confirmación humana: **no existe una fusión automática de
+materias diferentes por similitud superficial**.
+
+La pantalla de revisión añade una vista previa temporal de la fotografía con
+contornos geométricos aproximados, una auditoría final de cursos y sesiones,
+y la acción **«Revisar nombres duplicados del OCR»** dentro de «Mis cursos».
+Esta última permite corregir grupos previamente guardados, únicamente por
+aprobación explícita y mediante una transacción de SQLite que conserva sus
+sesiones, días, horas y aulas. Actualizar la APK **no cambia retroactivamente**
+los datos ya guardados.
+
+Las reglas están documentadas en
+[la fase 86](updates/phase86/README.md). El detector usa ML Kit OCR local,
+geometría y reglas de similitud; **no es un modelo general de visión artificial**
+y la captura de la pantalla de cursos por sí sola no permite validar el
+reconocimiento de una fotografía original.
+
 ## Estado de funcionamiento
 
-- **Verificado por CI:** generación APK 3.15.4, firma de desarrollo,
+- **Verificado por CI (base):** generación APK 3.15.4, firma de desarrollo,
   instalación/apertura en Android 15, 13/13 diseños `RemoteViews`,
   pruebas académicas y de OCR sintético.
 - **No verificado todavía:** presentación de datos reales en el lanzador
