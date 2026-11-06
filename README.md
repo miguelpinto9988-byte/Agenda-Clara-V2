@@ -15,9 +15,10 @@ mediante fotografía y la conservación del widget fotográfico de imagen fija.
 - El flujo usa el secreto `SIGNING_JKS_BASE64` para firmar la APK de desarrollo
   (la clave privada no está en el repositorio), verifica versión, firma y
   proveedores de los widgets, y comprueba la apertura de la app en Android 15.
-- **Última ejecución integral aprobada antes de la integración en main:**
-  [42164898395](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42164898395),
-  con `compilar-y-probar` y `android` correctos.
+- **Validación integral aprobada directamente en `main`:**
+  [42168646679](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42168646679),
+  con `compilar-y-probar` y `android` correctos. Esta ejecución generó
+  los artefactos de APK y fuentes Android 3.15.2.
 - El flujo anterior [3.13.3](.github/workflows/agenda-clara-ci.yml) se conserva
   solo para activación manual: no genera una APK antigua automáticamente al
   actualizar `main`.
