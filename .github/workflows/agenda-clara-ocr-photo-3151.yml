@@ -92,6 +92,7 @@ jobs:
           APK=AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           test -s "$APK"
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump xmltree "$APK" AndroidManifest.xml | grep -q ScheduleActivity
           "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | grep -q "name='pe.agendaclara.app' versionCode='68' versionName='3.15.1'"
       - uses: actions/upload-artifact@v4
         with:
@@ -136,5 +137,5 @@ jobs:
             adb shell am start -n pe.agendaclara.app/.MainActivity
             sleep 8
             adb shell pidof pe.agendaclara.app
-            adb shell dumpsys package pe.agendaclara.app | grep -q ScheduleActivity
+            adb shell pidof pe.agendaclara.app
             echo 'PASS: APK 3.15.1 launches; photo schedule screen registered'
