@@ -48,7 +48,7 @@ def main() -> None:
     photo_hash = {p: hashlib.sha256(p.read_bytes()).digest() for p in PHOTO}
     gradle = original[GRADLE]
     if "versionCode 70" in gradle and "versionName '3.15.3'" in gradle:
-        if any(re.search(r"<View(?:\\s|>)", original[p]) for p in (DAY, WEEK)):
+        if any(re.search(r"<View(?:\s|>)", original[p]) for p in (DAY, WEEK)):
             raise RuntimeError("3.15.3 version present but illegal XML widget views remain")
         print("PASS: 3.15.3 widget-layout patch already applied")
         return
@@ -57,9 +57,9 @@ def main() -> None:
     planned = {}
     for path in (DAY, WEEK):
         before = original[path]
-        if len(re.findall(r"<View(?=\\s)", before)) != 1:
+        if len(re.findall(r"<View(?=\s)", before)) != 1:
             raise RuntimeError(f"{path}: expected exactly one unsupported View divider")
-        after = re.sub(r"<View(?=\\s)", "<FrameLayout", before, count=1)
+        after = re.sub(r"<View(?=\s)", "<FrameLayout", before, count=1)
         if after == before:
             raise RuntimeError(f"{path}: unable to replace divider")
         ET.fromstring(after)
