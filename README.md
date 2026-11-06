@@ -1,7 +1,7 @@
 # Agenda Clara — Android nativo
 
-**Versión actual de la aplicación:** 3.15.5 (`versionCode 72`). El historial
-de migraciones se mantiene hasta `updates/phase86`.
+**Versión actual de la aplicación:** 3.15.6 (`versionCode 73`). El historial
+de migraciones se mantiene hasta `updates/phase87`.
 
 ## Widgets disponibles y corrección de carga
 
@@ -26,9 +26,9 @@ La actividad auxiliar de comprobación existe solo en el código `debug`.
 
 ## Compilación y pruebas de main
 
-- Flujo principal: [Agenda Clara 3.15.5 — Widgets, OCR fotográfico y sílabos](.github/workflows/agenda-clara-ocr-photo-3151.yml).
-- Los cambios de `updates/phase82/**`, `updates/phase83/**`, `updates/phase84/**`, `updates/phase85/**`, `updates/phase86/**`
-  y del propio flujo activan la compilación Android 3.15.5 en `main`.
+- Flujo principal: [Agenda Clara 3.15.6 — Widgets, OCR fotográfico y sílabos](.github/workflows/agenda-clara-ocr-photo-3151.yml).
+- Los cambios de `updates/phase82/**`, `updates/phase83/**`, `updates/phase84/**`, `updates/phase85/**`, `updates/phase86/**`, `updates/phase87/**`
+  y del propio flujo activan la compilación Android 3.15.6 en `main`.
 - Se reconstruyen las fuentes, se prueban los datos académicos y el OCR,
   se usa la firma de desarrollo guardada en el secreto
   `SIGNING_JKS_BASE64`, y se valida la APK en emulador Android 15.
@@ -113,6 +113,40 @@ emulador Android 15 (incluido el ensayo `RemoteViews` de los widgets).
 La ejecución publicó la APK de desarrollo y las fuentes reconstruidas.
 No sustituye una prueba del flujo completo con la fotografía original del
 horario mostrado en la incidencia.
+
+## Aprendizaje adaptativo de fotografías (3.15.6)
+
+Agenda Clara guarda **únicamente la confirmación explícita de una persona**
+sobre dos nombres de cursos: «son el mismo curso» con el nombre canónico
+elegido, o «son distintos». No aprende de lecturas OCR sin corregir.
+
+**Secuencia:** foto y OCR → propuestas de cursos → aceptación o separación
+explícita → guardado exitoso del horario → aprendizaje local. En la próxima
+fotografía, si se encuentra **exactamente la misma pareja de nombres**
+(normalizada por espacios, tildes y mayúsculas), la app puede reutilizar
+esa confirmación. Una regla negativa evita sugerir repetidamente la unión
+rechazada. Una regla positiva reutiliza solo el nombre canónico confirmado.
+Las agrupaciones resultantes se muestran en el resumen antes del guardado.
+
+**Límites de seguridad:** no se generaliza automáticamente una decisión a
+otras asignaturas; los niveles I/II, los grupos explícitos, nombres
+incompatibles y las coincidencias nuevas siguen bajo revisión. Si la
+persona cambia de opinión, la última confirmación sustituye la anterior.
+Se conservan días, horas y aulas. La memoria se limita a 80 decisiones.
+
+**Privacidad y control:** la memoria usa preferencias privadas del
+dispositivo; la app no envía fotografías ni reglas a un servidor para
+aprender. En «Mis cursos» y en la revisión de fotos se puede entrar en
+«Aprendizaje local» para visualizar las decisiones, pausarlas, borrar
+una regla o limpiar todas. Las reglas aprendidas no modifican por sí
+solas horarios antiguos. El uso de copias de seguridad del sistema
+operativo depende de la configuración de Android.
+
+Se mantiene ML Kit OCR local. Esta mejora aprende **correcciones de nombres
+confirmadas**, pero no entrena por su cuenta un modelo visual capaz de
+reconocer cualquier formato de horario. La precisión con fotos reales y
+el funcionamiento después de restaurar copias del dispositivo requieren
+pruebas adicionales.
 
 ## Estado de funcionamiento
 
