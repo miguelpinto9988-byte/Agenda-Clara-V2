@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="14dp"
+    android:background="@drawable/widget_academic_background">
+    <TextView android:id="@+id/academic_week_heading"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="▦ Horario y evaluaciones" android:textColor="#182746"
+        android:textStyle="bold" android:textSize="18sp"/>
+    <TextView android:id="@+id/academic_week_profile"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Horario seleccionado" android:textColor="#506180"
+        android:textSize="12sp" android:paddingTop="4dp"/>
+    <TextView android:id="@+id/academic_week_classes"
+        android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:text="Tus clases semanales"
+        android:textColor="#243B63" android:textSize="13sp"
+        android:paddingTop="10dp" android:maxLines="8" android:ellipsize="end"/>
+    <View android:layout_width="match_parent" android:layout_height="1dp"
+        android:background="#DCE5FA"/>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Evaluaciones por curso" android:textColor="#182746"
+        android:textStyle="bold" android:textSize="14sp" android:paddingTop="9dp"/>
+    <TextView android:id="@+id/academic_week_evaluations"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="No hay evaluaciones registradas."
+        android:textColor="#425778" android:textSize="12sp"
+        android:paddingTop="5dp" android:maxLines="4" android:ellipsize="end"/>
+</LinearLayout>
