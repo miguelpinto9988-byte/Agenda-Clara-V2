@@ -39,12 +39,16 @@ def main():
             if picture.format!="PNG":raise RuntimeError("Invalid PNG source")
             picture.load()
             if name=="ac_day_landscape":
-                if picture.width<900 or picture.height<320:
-                    raise RuntimeError("Canva landscape export too small; refusing blurry output: "
+                if picture.width<600 or picture.height<200:
+                    raise RuntimeError("Canva landscape preview below safe widget size: "
                                        +str(picture.size))
-                # The exported Canva image has the unaltered approved landscape
-                # layered across the top 960x320 pixels of a 960x656 design.
-                result=picture.convert("RGB").crop((0,0,960,320))
+                # Canva may scale the complete 960x656 page to 600x410.
+                # The approved original 3:1 photo occupies the whole top strip.
+                landscape_h=round(picture.width/3)
+                if picture.height<landscape_h:
+                    raise RuntimeError("Landscape crop exceeds preview")
+                full=picture.convert("RGB").crop((0,0,picture.width,landscape_h))
+                result=full.resize((960,320),Image.Resampling.LANCZOS)
                 result=result.quantize(colors=256,method=Image.Quantize.MEDIANCUT,
                     dither=Image.Dither.FLOYDSTEINBERG)
             else:
