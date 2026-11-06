@@ -1,0 +1,127 @@
+name: Agenda Clara 3.15.0 - Widgets academicos y tablero - APK Android
+on:
+  push:
+    branches: [feat/widgets-academicos-tablero-notas-3-15-0-20261105]
+    paths:
+      - 'updates/phase81/**'
+      - '.github/workflows/agenda-clara-widgets-3150-final.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: agenda-clara-widgets-3150-final
+  cancel-in-progress: true
+jobs:
+  construir:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperar Agenda Clara 3.14.0 verificada
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 42121072005 --repo "$GITHUB_REPOSITORY" --name Agenda-Clara-3.14.0-Silabos-Revisados-Fuentes --dir previous
+          unzip -q previous/Agenda-Clara-3.14.0-Silabos-Revisados-Fuentes.zip
+          test -s AgendaClara/gradlew
+      - name: Incorporar nuevos widgets y verificar Fotografia intacta
+        run: |
+          set -euo pipefail
+          python3 -m py_compile updates/phase81/apply_widgets_315.py
+          python3 updates/phase81/apply_widgets_315.py
+          grep -q "versionCode 67" AgendaClara/app/build.gradle
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Probar modelos y layouts XML
+        shell: bash
+        run: bash updates/phase81/qa_widget_models.sh
+      - name: Recuperar firma de desarrollo
+        env:
+          SIGNING_JKS_BASE64: ${{ secrets.SIGNING_JKS_BASE64 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$SIGNING_JKS_BASE64"
+          mkdir -p AgendaClara/signing
+          printf '%s' "$SIGNING_JKS_BASE64" | base64 -d > AgendaClara/signing/development.jks
+          chmod 600 AgendaClara/signing/development.jks
+          keytool -list -keystore AgendaClara/signing/development.jks -storepass android -alias agendaclara >/dev/null
+      - name: Preparar Android SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          SDKMANAGER="$(command -v sdkmanager || true)"
+          if [ -z "$SDKMANAGER" ]; then SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"; fi
+          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses >/dev/null || true
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" 'platforms;android-36' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - name: Compilar APK 3.15.0
+        working-directory: AgendaClara
+        shell: bash
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon --stacktrace :app:assembleDebug
+      - name: Verificar version y firma
+        run: |
+          set -euo pipefail
+          APK=AgendaClara/app/build/outputs/apk/debug/app-debug.apk
+          test -s "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | grep -q "name='pe.agendaclara.app' versionCode='67' versionName='3.15.0'"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.15.0-Widgets-Academicos-APK
+          path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+          if-no-files-found: error
+      - name: Guardar fuentes reconstruidas sin firma
+        run: |
+          set -euo pipefail
+          rm -f AgendaClara/signing/development.jks
+          rm -rf AgendaClara/.gradle AgendaClara/app/build AgendaClara/build
+          zip -q -r Agenda-Clara-3.15.0-Widgets-Academicos-Fuentes.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.15.0-Widgets-Academicos-Fuentes
+          path: Agenda-Clara-3.15.0-Widgets-Academicos-Fuentes.zip
+          retention-days: 30
+  android:
+    needs: construir
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: Agenda-Clara-3.15.0-Widgets-Academicos-APK
+          path: artifact-apk
+      - name: Habilitar KVM
+        run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - name: Instalar APK y verificar proveedores Android 15
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: default
+          profile: pixel_6
+          avd-name: agenda-clara-315-widgets
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: |
+            adb install -r artifact-apk/app-debug.apk
+            adb shell am start -n pe.agendaclara.app/.MainActivity
+            sleep 8
+            adb shell pidof pe.agendaclara.app
+            adb shell dumpsys package pe.agendaclara.app | grep -q AcademicDayWidget
+            adb shell dumpsys package pe.agendaclara.app | grep -q AcademicWeekWidget
+            adb shell dumpsys package pe.agendaclara.app | grep -q StickyNotesWidget
+            adb shell dumpsys package pe.agendaclara.app | grep -q PhotoWidget
+            echo 'PASS: APK abre y cuatro proveedores de widget presentes'
