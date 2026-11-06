@@ -71,7 +71,9 @@ def patched_activity(s):
             }catch(RuntimeException error){break;}
         }
         if(pair==null){onComplete.run();return;}
-        ScheduleEntry first=approved.get(pair.earlier),second=approved.get(pair.later);""",
+        final SchedulePhotoReview.Pair selectedPair=pair;
+        ScheduleEntry first=approved.get(selectedPair.earlier),
+                second=approved.get(selectedPair.later);""",
         "reuse exact decisions in course review")
     s=once(s,
         """        separate.setOnClickListener(v->{
@@ -79,19 +81,19 @@ def patched_activity(s):
             rejected.add(SchedulePhotoReview.pairKey(pair));popup.dismiss();""",
         """        separate.setOnClickListener(v->{
             rememberAfterSave(first.course,second.course,false,"");
-            SchedulePhotoReview.reject(approved,pair);
-            rejected.add(SchedulePhotoReview.pairKey(pair));popup.dismiss();""",
+            SchedulePhotoReview.reject(approved,selectedPair);
+            rejected.add(SchedulePhotoReview.pairKey(selectedPair));popup.dismiss();""",
         "learn separation only after save")
     s=once(s,
         """            if(pair.exact){
                 SchedulePhotoReview.accept(approved,pair);
                 confirmed.add(pair.later);popup.dismiss();""",
-        """            if(pair.exact){
+        """            if(selectedPair.exact){
                 String leftName=first.course,rightName=second.course;
-                SchedulePhotoReview.accept(approved,pair);
+                SchedulePhotoReview.accept(approved,selectedPair);
                 rememberAfterSave(leftName,rightName,true,
                     ScheduleCourseRecognition.preferred(leftName,rightName));
-                confirmed.add(pair.later);popup.dismiss();""",
+                confirmed.add(selectedPair.later);popup.dismiss();""",
         "learn exact merge")
     s=once(s,
         """                SchedulePhotoReview.acceptWithName(approved,pair,title);
@@ -102,6 +104,10 @@ def patched_activity(s):
                 confirmed.add(pair.later);
                 choice.dismiss();""",
         "learn user-named merge")
+    s=once(s,
+        "chooseFinalCourseName(approved,pair,confirmed,rejected,onComplete);",
+        "chooseFinalCourseName(approved,selectedPair,confirmed,rejected,onComplete);",
+        "capture final pair for alternative-name dialog")
     s=once(s,
         """        List<String> alerts=ScheduleCourseSemanticGuard.audit(approved);
         if(!alerts.isEmpty()){""",
