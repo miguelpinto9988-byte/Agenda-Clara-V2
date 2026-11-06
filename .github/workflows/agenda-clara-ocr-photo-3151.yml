@@ -1,7 +1,7 @@
 name: Agenda Clara 3.15.4 - Widgets y OCR fotografia verificados
 on:
   push:
-    branches: [main, fix/syllabus-contextual-partials-3154-20261106]
+    branches: [main]
     paths:
       - 'updates/phase82/**'
       - 'updates/phase83/**'
