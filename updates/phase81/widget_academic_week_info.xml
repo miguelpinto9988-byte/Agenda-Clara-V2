@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp" android:minHeight="235dp"
+    android:minResizeWidth="200dp" android:minResizeHeight="145dp"
+    android:targetCellWidth="4" android:targetCellHeight="4"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/widget_academic_week"
+    android:previewLayout="@layout/widget_academic_week"
+    android:configure="pe.agendaclara.app.AcademicWidgetSettingsActivity"
+    android:widgetFeatures="reconfigurable"
+    android:description="@string/academic_week_widget_description"
+    android:widgetCategory="home_screen"/>
