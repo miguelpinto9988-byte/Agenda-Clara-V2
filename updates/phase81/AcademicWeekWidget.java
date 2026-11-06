@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import java.util.List;
+import java.util.LinkedHashMap;
 
 /** Horario semanal + evaluaciones, with dates scoped to each individual course. */
 public final class AcademicWeekWidget extends AppWidgetProvider {
@@ -38,26 +39,31 @@ public final class AcademicWeekWidget extends AppWidgetProvider {
             List<ScheduleEntry> entries=AcademicWidgetRepository.classes(c,p.id);
             StringBuilder courses=new StringBuilder();
             StringBuilder evaluations=new StringBuilder();
-            int shown=0,exams=0;
+            int shown=0,exams=0,hiddenExams=0;
+            LinkedHashMap<String,String> distinctCourses=new LinkedHashMap<>();
             for(ScheduleEntry entry:entries){
-                if(shown>=5)break;
+                distinctCourses.put(AcademicSchedules.key(entry.course),entry.course);
+                if(shown>=5)continue;
                 if(shown++>0)courses.append("\n");
                 courses.append(ScheduleEntry.dayName(entry.day).substring(0,3))
                         .append(" ").append(AcademicWidgetRepository.timeLabel(entry.start))
                         .append("  ").append(settings.hidePrivateTitles?
                             "Clase programada":AcademicWidgetRepository.shortText(entry.course,34));
-                List<Task> matched=AcademicWidgetRepository.linkedTasks(
-                        c,p.id,entry.course,true);
-                if(!matched.isEmpty()){
-                    Task task=matched.get(0);
+            }
+            // A course may have several weekly sessions and several evaluations.
+            // Process all distinct courses, including those beyond the 5 visible sessions.
+            for(String course:distinctCourses.values()){
+                for(Task task:AcademicWidgetRepository.linkedTasks(c,p.id,course,true)){
+                    if(exams>=4){hiddenExams++;continue;}
                     if(exams++>0)evaluations.append("\n");
                     evaluations.append(settings.hidePrivateTitles?"Evaluación del curso":
-                            AcademicWidgetRepository.shortText(entry.course,25))
+                            AcademicWidgetRepository.shortText(course,22))
                             .append(": ").append(settings.hidePrivateTitles?
-                                "Evaluación":AcademicWidgetRepository.shortText(task.title,25))
+                                "Evaluación":AcademicWidgetRepository.shortText(task.title,21))
                             .append(" · ").append(AcademicWidgetRepository.evaluationLabel(task));
                 }
             }
+            if(hiddenExams>0)evaluations.append("\n+").append(hiddenExams).append(" evaluaciones más");
             if(entries.size()>shown)courses.append("\n+").append(entries.size()-shown).append(" clases más");
             v.setTextViewText(R.id.academic_week_classes,
                     courses.length()>0?courses.toString():"Todavía no hay clases en este horario.");
