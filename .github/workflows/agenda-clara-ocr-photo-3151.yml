@@ -1,7 +1,7 @@
 name: Agenda Clara 3.15.8 - Canva Mi dia PNG, widgets y OCR
 on:
   push:
-    branches: [main, feat/canva-mi-dia-png-3158-20261106]
+    branches: [main]
     paths:
       - 'updates/phase82/**'
       - 'updates/phase83/**'
