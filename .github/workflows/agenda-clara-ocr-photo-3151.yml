@@ -1,7 +1,7 @@
 name: Agenda Clara 3.15.3 - Widgets y OCR fotografia verificados
 on:
   push:
-    branches: [main, fix/widget-remoteviews-inflation-3153-20261106]
+    branches: [main]
     paths:
       - 'updates/phase82/**'
       - 'updates/phase83/**'
