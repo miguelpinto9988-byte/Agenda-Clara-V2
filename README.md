@@ -1,7 +1,7 @@
 # Agenda Clara — Android nativo
 
-**Versión actual de la aplicación:** 3.15.7 (`versionCode 74`). El historial
-de migraciones se mantiene hasta `updates/phase88`.
+**Versión actual de la aplicación:** 3.15.8 (`versionCode 75`). El historial
+de migraciones se mantiene hasta `updates/phase89`.
 
 ## Widgets disponibles y corrección de carga
 
@@ -26,8 +26,8 @@ La actividad auxiliar de comprobación existe solo en el código `debug`.
 
 ## Compilación y pruebas de main
 
-- Flujo principal: [Agenda Clara 3.15.7 — Widgets, OCR fotográfico y sílabos](.github/workflows/agenda-clara-ocr-photo-3151.yml).
-- Los cambios de `updates/phase82/**`, `updates/phase83/**`, `updates/phase84/**`, `updates/phase85/**`, `updates/phase86/**`, `updates/phase87/**`, `updates/phase88/**`
+- Flujo principal: [Agenda Clara 3.15.8 — Mi día PNG, widgets, OCR y sílabos](.github/workflows/agenda-clara-ocr-photo-3151.yml).
+- Los cambios de `updates/phase82/**`, `updates/phase83/**`, `updates/phase84/**`, `updates/phase85/**`, `updates/phase86/**`, `updates/phase87/**`, `updates/phase88/**`, `updates/phase89/**`
   y del propio flujo activan la compilación Android 3.15.7 en `main`.
 - Se reconstruyen las fuentes, se prueban los datos académicos y el OCR,
   se usa la firma de desarrollo guardada en el secreto
@@ -183,6 +183,39 @@ La validación de la rama de desarrollo
 [42218967305](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42218967305)
 terminó con regresiones y emulador Android 15 aprobados. La comprobación
 visual con fotografías reales sigue siendo recomendable.
+
+## Widget «Mi día académico» — diseño PNG de Canva (3.15.8)
+
+El widget `AcademicDayWidget` conserva el proveedor Android ya instalado,
+los horarios y las tareas por perfil, pero presenta la composición aprobada
+en Canva: **paisaje de lago lavanda, ocho iconos PNG transparentes, dos
+tarjetas de clases, fecha, aulas y pie de navegación**.
+
+Los nueve PNG originales/fuentes aprobados se almacenan directamente en
+`updates/phase89/assets/`, se incorporan a
+`res/drawable-nodpi/` durante la compilación y **no se convierten a SVG**.
+El gorrito está colocado como **último elemento del diseño XML**, por
+delante de la imagen y las tarjetas. El paisaje se adapta a la resolución
+del widget utilizando una exportación PNG disponible de Canva.
+
+Los nombres de los cursos, horarios, aulas y número de tareas se
+obtienen dinámicamente de las sesiones habilitadas del perfil elegido;
+no son textos copiados de la maqueta. Cuando hay dos clases en el día
+se muestran ambas. Una vista compacta muestra una sola tarjeta.
+Si no hay clases hoy, el widget muestra la próxima sesión real, cuando
+exista, en lugar de inventar otra asignatura. Los botones conservan la
+navegación al horario y a las tareas, la opción de ocultar títulos privados
+y la selección de tema claro/oscuro.
+
+La migración `updates/phase89/apply_canva_day_widget_3158.py` no modifica
+el contenido de `PhotoWidget`, `AcademicWeekWidget`, tareas ni notas.
+Las pruebas verifican recursos PNG, transparencia, orden de capas, datos
+académicos y representación nativa por Android `RemoteViews`.
+
+**Límite:** esta integración es un rediseño del widget *Mi día*, no la
+conversión automática de todos los diseños de Canva en componentes Android.
+La ilustración se obtiene de una exportación previa de Canva con resolución
+de presentación; los textos y las tarjetas son recursos nativos adaptativos.
 
 ## Estado de funcionamiento
 
