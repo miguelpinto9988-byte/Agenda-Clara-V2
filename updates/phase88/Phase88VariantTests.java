@@ -61,8 +61,8 @@ public final class Phase88VariantTests {
         refuses(groups,"Investigacion educativa"); // Missing explicit group.
         List<ScheduleAdaptiveRules.Rule> conflicting=new ArrayList<>();
         conflicting=learn(conflicting,"Didáctica educativa","Didactica educatíva",
-            true,"Didáctica educativa");
-        conflicting=learn(conflicting,"Didáctica educativa","Didactica educatíva",
+            true,"Didáctica general");
+        conflicting=learn(conflicting,"Didáctica educativa","Didactica evaluativa",
             true,"Didáctica aplicada");
         refuses(conflicting,"Didactica educativa"); // Two equally supported destinations.
         // Rejection remembered against exact observed/canonical pair overrides
