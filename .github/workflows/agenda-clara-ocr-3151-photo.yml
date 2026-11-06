@@ -1,0 +1,60 @@
+name: Agenda Clara 3.15.1 - OCR pregunta por palabra compartida
+on:
+  push:
+    branches: [fix/ocr-confirmar-cursos-3-15-1-20261105]
+    paths:
+      - 'updates/phase82/qa_emulator_shared_word.py'
+      - '.github/workflows/agenda-clara-ocr-3151-photo.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  palabra-compartida-android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Descargar APK 3.15.1 verificada
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifact-apk
+          gh run download 42160093888 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.15.1-OCR-Confirmar-Cursos-APK --dir artifact-apk
+          test -s artifact-apk/app-debug.apk
+      - name: Preparar imagen sintética de horario
+        shell: bash
+        run: |
+          python3 -m pip install --quiet --user Pillow
+          python3 updates/phase82/generate_shared_word_fixture.py
+          test -s /tmp/horario_ocr_regresion.png
+      - name: Habilitar KVM
+        run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - name: Probar reconocimiento OCR local en Android 15
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: default
+          profile: pixel_6
+          avd-name: agenda-clara-ocr-photo-3151
+          disable-animations: true
+          script: |
+            adb install -r artifact-apk/app-debug.apk
+            adb push /tmp/horario_ocr_regresion.png /sdcard/Download/horario_ocr_regresion.png
+            adb shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/horario_ocr_regresion.png
+            adb shell am start -n pe.agendaclara.app/.MainActivity
+            sleep 7
+            python3 updates/phase82/qa_emulator_shared_word.py
+      - name: Adjuntar captura y diagnóstico
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.15.1-Palabra-Compartida-Capturas
+          path: screenshots/
+          if-no-files-found: ignore
