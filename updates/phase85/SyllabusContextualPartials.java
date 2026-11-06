@@ -133,6 +133,7 @@ public final class SyllabusContextualPartials {
 
     private static int ordinalValue(String word) {
         String x = fold(word).replaceAll("[°ºª]", "");
+        if (x.startsWith("decim") || x.startsWith("10")) return 10;
         if (x.startsWith("primer") || x.startsWith("1")) return 1;
         if (x.startsWith("segund") || x.startsWith("2")) return 2;
         if (x.startsWith("tercer") || x.startsWith("3")) return 3;
@@ -142,7 +143,6 @@ public final class SyllabusContextualPartials {
         if (x.startsWith("septim") || x.startsWith("7")) return 7;
         if (x.startsWith("octav") || x.startsWith("8")) return 8;
         if (x.startsWith("noven") || x.startsWith("9")) return 9;
-        if (x.startsWith("decim") || x.startsWith("10")) return 10;
         for (int n = 1; n <= 10; n++) {
             String[] roman = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x"};
             if (roman[n].equals(x)) return n;
