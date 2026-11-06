@@ -1,7 +1,7 @@
 # Agenda Clara — Android nativo
 
-**Versión actual de la aplicación:** 3.15.6 (`versionCode 73`). El historial
-de migraciones se mantiene hasta `updates/phase87`.
+**Versión actual de la aplicación:** 3.15.7 (`versionCode 74`). El historial
+de migraciones se mantiene hasta `updates/phase88`.
 
 ## Widgets disponibles y corrección de carga
 
@@ -26,9 +26,9 @@ La actividad auxiliar de comprobación existe solo en el código `debug`.
 
 ## Compilación y pruebas de main
 
-- Flujo principal: [Agenda Clara 3.15.6 — Widgets, OCR fotográfico y sílabos](.github/workflows/agenda-clara-ocr-photo-3151.yml).
-- Los cambios de `updates/phase82/**`, `updates/phase83/**`, `updates/phase84/**`, `updates/phase85/**`, `updates/phase86/**`, `updates/phase87/**`
-  y del propio flujo activan la compilación Android 3.15.6 en `main`.
+- Flujo principal: [Agenda Clara 3.15.7 — Widgets, OCR fotográfico y sílabos](.github/workflows/agenda-clara-ocr-photo-3151.yml).
+- Los cambios de `updates/phase82/**`, `updates/phase83/**`, `updates/phase84/**`, `updates/phase85/**`, `updates/phase86/**`, `updates/phase87/**`, `updates/phase88/**`
+  y del propio flujo activan la compilación Android 3.15.7 en `main`.
 - Se reconstruyen las fuentes, se prueban los datos académicos y el OCR,
   se usa la firma de desarrollo guardada en el secreto
   `SIGNING_JKS_BASE64`, y se valida la APK en emulador Android 15.
@@ -147,6 +147,42 @@ confirmadas**, pero no entrena por su cuenta un modelo visual capaz de
 reconocer cualquier formato de horario. La precisión con fotos reales y
 el funcionamiento después de restaurar copias del dispositivo requieren
 pruebas adicionales.
+
+## Aprendizaje de variantes nuevas de nombres (3.15.7)
+
+La fase 88 añade una funcionalidad a la memoria local 3.15.6: si una
+fotografía contiene **solo una variante no vista antes** de un curso conocido,
+el OCR puede **sugerir** el nombre canónico confirmado en importaciones
+anteriores. No es necesario que estén presentes simultáneamente las dos
+variantes antiguas. Por ejemplo, tras confirmar «Tendencias» y «Tendencias
+educativas», una lectura «Tendencas educativas» puede proponer
+«Tendencias educativas».
+
+La sugerencia aparece dentro de la tarjeta del curso, indicando el nombre
+detectado, el canónico y una variante confirmada anterior. Antes de cambiar
+la clase, la persona debe pulsar «Revisar variante sugerida» y **aceptar**
+expresamente. Rechazarla mantiene el nombre leído; ambas decisiones se
+aprenden únicamente **después de guardar el horario**. Las sesiones no
+marcadas permanecen sin marcar, y no se modifican días, horas ni aulas.
+
+El comparador es conservador: tolera cambios ortográficos pequeños
+en nombres con varias palabras, pero **no basta compartir «educativa»**,
+«Tendencias» u otra palabra aislada para proponer una asignatura distinta.
+Bloquea niveles I/II, grupos diferentes, rechazos previos y dos nombres
+canónicos contradictorios. Si no hay una única propuesta segura,
+**no presenta sugerencia** y se mantiene la revisión manual.
+
+Funciona completamente en el dispositivo sin conectarse a internet
+ni subir fotografías. Reutiliza las reglas de pares ya guardadas
+(hasta 80). No aprende ni edita horarios antiguos silenciosamente.
+Una puntuación de similitud léxica **no es una probabilidad ni equivale a
+comprensión visual general**.
+
+[Ver reglas, pruebas y limitaciones de la fase 88](updates/phase88/README.md).
+La validación de la rama de desarrollo
+[42218967305](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42218967305)
+terminó con regresiones y emulador Android 15 aprobados. La comprobación
+visual con fotografías reales sigue siendo recomendable.
 
 ## Estado de funcionamiento
 
