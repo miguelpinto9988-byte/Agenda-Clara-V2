@@ -46,6 +46,8 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+      - name: Verificar selección de horarios, cursos, tareas y evaluaciones por perfil
+        run: bash updates/phase81/qa_widget_models.sh
       - name: Probar refresco concurrente de los widgets académicos
         run: bash updates/phase83/qa_widget_sync.sh
       - name: Probar coincidencia de una sola palabra y variantes OCR
