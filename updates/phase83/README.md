@@ -31,3 +31,10 @@
 - No fusionar con `main` ni afirmar «APK final» sin esas verificaciones.
 
 Rama: `fix/widgets-3151-refresh-qa-20261105`.
+
+## Correcciones adicionales de calidad de datos y migración
+- **Evaluaciones del widget semanal:** las candidatas de todos los cursos vinculados al perfil se reúnen antes de escoger las cuatro visibles. Las próximas aparecen en orden cronológico, las vencidas a continuación y las de fecha desconocida al final; los nombres y fechas existentes se conservan.
+- **Migración Python transaccional:** `apply_widget_refresh_3152.py` verifica anclajes, crea archivos temporales en el mismo directorio, sustituye atómicamente los destinos y revierte los cambios si falla cualquier escritura. Una segunda ejecución correcta no vuelve a modificar el proyecto.
+- **Pruebas añadidas:** `test_widget_patch.py` cubre éxito, repetición segura, recurso fotográfico faltante, código previo incompatible y reversión ante un fallo de escritura. `AcademicWidgetEvaluationOrderTests.java` comprueba la prioridad de evaluaciones de distintos cursos sin alterar los registros.
+- **Comprobaciones locales:** las cuatro pruebas Python de migración, la prueba Java de ordenación global, la prueba Java de concurrencia y una compilación de sintaxis Java con interfaces Android simuladas finalizaron correctamente.
+- **Límite:** las verificaciones locales no sustituyen una compilación de APK ni el uso de los widgets en un lanzador Android real. El flujo CI de esta rama debe completar esos pasos antes de distribución.
