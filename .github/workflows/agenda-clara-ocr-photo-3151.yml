@@ -1,7 +1,7 @@
 name: Agenda Clara 3.15.5 - Widgets y OCR fotografia verificados
 on:
   push:
-    branches: [main, fix/photo-course-semantic-review-3155-20261106]
+    branches: [main]
     paths:
       - 'updates/phase82/**'
       - 'updates/phase83/**'
