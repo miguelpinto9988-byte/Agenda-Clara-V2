@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ android:id="@+id/academic_day_root" android:layout_width="match_parent"
+ android:layout_height="match_parent" android:background="@drawable/ac_day_shell"
+ android:padding="7dp">
+ <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+ android:orientation="vertical">
+ <FrameLayout android:layout_width="match_parent" android:layout_height="86dp"
+ android:background="@drawable/ac_day_header_clip" android:clipToOutline="true">
+ <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
+ android:src="@drawable/ac_day_landscape" android:scaleType="fitXY"
+ android:contentDescription="Paisaje original del lago lavanda en PNG"/>
+ <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+ android:layout_margin="9dp" android:background="@drawable/ac_day_header_panel"
+ android:orientation="horizontal" android:padding="7dp">
+ <ImageView android:layout_width="36dp" android:layout_height="36dp" android:src="@drawable/ac_day_icon_calendar" />
+ <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+ android:orientation="vertical" android:layout_marginStart="5dp">
+ <TextView android:id="@+id/academic_day_heading" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mi día académico" android:textSize="17sp" android:textColor="#101947" android:textStyle="bold" android:maxLines="1" android:ellipsize="end" />
+ <TextView android:id="@+id/academic_day_date" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hoy" android:textSize="11sp" android:textColor="#36335E"  android:maxLines="1" android:ellipsize="end" />
+ <TextView android:id="@+id/academic_day_profile" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Horario académico" android:textSize="10sp" android:textColor="#36335E"  android:maxLines="1" android:ellipsize="end" />
+ </LinearLayout></LinearLayout></FrameLayout>
+ <FrameLayout android:id="@+id/academic_day_card_1" android:layout_width="match_parent" android:layout_height="65dp" android:layout_marginTop="4dp" android:background="@drawable/ac_day_card_lilac" android:padding="7dp">
+<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center_vertical">
+<FrameLayout android:layout_width="5dp" android:layout_height="48dp" android:background="@drawable/ac_day_accent_lilac"/>
+<LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginStart="7dp">
+<TextView android:id="@+id/academic_day_course" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Clase programada" android:textSize="14sp" android:textColor="#111A49" android:textStyle="bold" android:maxLines="1" android:ellipsize="end" />
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="3dp"><ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@drawable/ac_day_icon_clock" /><TextView android:id="@+id/academic_day_time" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="—" android:textSize="11sp" android:textColor="#46527C"  android:maxLines="1" android:ellipsize="end" android:layout_marginStart="4dp"/></LinearLayout>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="3dp"><ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@drawable/ac_day_icon_room" /><TextView android:id="@+id/academic_day_room" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="—" android:textSize="10sp" android:textColor="#46527C"  android:maxLines="1" android:ellipsize="end" android:layout_marginStart="4dp"/></LinearLayout>
+</LinearLayout><ImageView android:layout_width="43dp" android:layout_height="43dp" android:src="@drawable/ac_day_icon_books" android:layout_marginStart="3dp"/></LinearLayout></FrameLayout>
+ <FrameLayout android:id="@+id/academic_day_card_2" android:layout_width="match_parent" android:layout_height="65dp" android:layout_marginTop="4dp" android:background="@drawable/ac_day_card_mint" android:padding="7dp">
+<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center_vertical">
+<FrameLayout android:layout_width="5dp" android:layout_height="48dp" android:background="@drawable/ac_day_accent_mint"/>
+<LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginStart="7dp">
+<TextView android:id="@+id/academic_day_course_2" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Clase programada" android:textSize="14sp" android:textColor="#111A49" android:textStyle="bold" android:maxLines="1" android:ellipsize="end" />
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="3dp"><ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@drawable/ac_day_icon_clock" /><TextView android:id="@+id/academic_day_time_2" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="—" android:textSize="11sp" android:textColor="#46527C"  android:maxLines="1" android:ellipsize="end" android:layout_marginStart="4dp"/></LinearLayout>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="3dp"><ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@drawable/ac_day_icon_room" /><TextView android:id="@+id/academic_day_room_2" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="—" android:textSize="10sp" android:textColor="#46527C"  android:maxLines="1" android:ellipsize="end" android:layout_marginStart="4dp"/></LinearLayout>
+</LinearLayout><ImageView android:layout_width="43dp" android:layout_height="43dp" android:src="@drawable/ac_day_icon_flask" android:layout_marginStart="3dp"/></LinearLayout></FrameLayout>
+ <LinearLayout android:layout_width="match_parent" android:layout_height="28dp"
+ android:layout_marginTop="3dp" android:orientation="horizontal"
+ android:gravity="center_vertical">
+ <ImageView android:layout_width="21dp" android:layout_height="21dp" android:src="@drawable/ac_day_icon_check" />
+ <TextView android:id="@+id/academic_day_tasks_label" android:layout_width="0dp" android:layout_height="wrap_content" android:text="0 clases hoy" android:textSize="11sp" android:textColor="#111A49" android:textStyle="bold" android:maxLines="1" android:ellipsize="end" android:layout_weight="1" android:layout_marginStart="3dp"/>
+ <TextView android:id="@+id/academic_day_tasks" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 tareas" android:textSize="10sp" android:textColor="#46527C"  android:maxLines="1" android:ellipsize="end" android:padding="3dp"/>
+ <TextView android:id="@+id/academic_day_cta" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ver horario" android:textSize="11sp" android:textColor="#6126D5" android:textStyle="bold" android:maxLines="1" android:ellipsize="end" android:layout_marginStart="3dp"/>
+ <ImageView android:layout_width="19dp" android:layout_height="19dp" android:src="@drawable/ac_day_icon_arrow" android:id="@+id/academic_day_arrow"/>
+ </LinearLayout></LinearLayout>
+ <!-- Absolutely last child: real transparent PNG birrete in the highest visual layer. -->
+ <ImageView android:id="@+id/academic_day_cap_front"
+ android:layout_width="57dp" android:layout_height="57dp"
+ android:layout_gravity="top|end" android:layout_marginTop="3dp"
+ android:layout_marginEnd="2dp" android:src="@drawable/ac_day_icon_cap"
+ android:elevation="4dp" android:contentDescription="Birrete PNG frontal"/>
+</FrameLayout>
