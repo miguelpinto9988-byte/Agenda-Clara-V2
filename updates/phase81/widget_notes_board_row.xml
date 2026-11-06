@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/notes_board_row"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:id="@+id/sticky_widget_row"
+    android:layout_width="match_parent" android:layout_height="152dp"
     android:orientation="vertical" android:padding="12dp"
     android:background="@drawable/widget_note_card_yellow">
-    <TextView android:id="@+id/notes_board_title"
+    <TextView android:id="@+id/sticky_widget_title"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="Estudio" android:textColor="#182746"
         android:textSize="14sp" android:textStyle="bold"
         android:singleLine="true" android:ellipsize="end"/>
-    <TextView android:id="@+id/notes_board_body"
+    <TextView android:id="@+id/sticky_widget_body"
+        android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:text="Contenido de la nota"
+        android:textColor="#34435D" android:textSize="12sp" android:paddingTop="6dp"
+        android:maxLines="5" android:ellipsize="end"/>
+    <TextView android:id="@+id/sticky_widget_date"
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="Contenido de la nota" android:textColor="#34435D"
-        android:textSize="12sp" android:paddingTop="4dp"
-        android:maxLines="3" android:ellipsize="end"/>
+        android:singleLine="true" android:ellipsize="end"
+        android:textColor="#455978" android:textSize="10sp"/>
 </LinearLayout>
