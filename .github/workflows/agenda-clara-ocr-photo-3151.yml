@@ -1,19 +1,20 @@
-name: Agenda Clara 3.15.4 - Widgets y OCR fotografia verificados
+name: Agenda Clara 3.15.5 - Widgets y OCR fotografia verificados
 on:
   push:
-    branches: [main]
+    branches: [main, fix/photo-course-semantic-review-3155-20261106]
     paths:
       - 'updates/phase82/**'
       - 'updates/phase83/**'
       - 'updates/phase84/**'
       - 'updates/phase85/**'
+      - 'updates/phase86/**'
       - '.github/workflows/agenda-clara-ocr-photo-3151.yml'
   workflow_dispatch:
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: agenda-clara-widgets-photo-3154-${{ github.ref }}
+  group: agenda-clara-widgets-photo-3155-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   compilar-y-probar:
@@ -53,12 +54,20 @@ jobs:
           python3 updates/phase84/apply_widget_remoteviews_fix.py
           python3 updates/phase84/qa_widget_remoteviews.py
           python3 updates/phase84/install_widget_render_probe.py
-      - name: Aplicar lector contextual de sílabos 3.15.4 sin alterar widgets
+      - name: Aplicar lector contextual de sílabos 3.15.5 sin alterar widgets
         shell: bash
         run: |
           set -euo pipefail
           python3 -m py_compile updates/phase85/*.py
           python3 updates/phase85/apply_contextual_syllabus.py
+      - name: Mejorar OCR de fotografías con análisis semántico y auditoría interna
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile updates/phase86/*.py
+          python3 updates/phase86/apply_photo_semantics_3155.py
+          grep -q 'reviewSavedCourseNames' AgendaClara/app/src/main/java/pe/agendaclara/app/ScheduleActivity.java
+          grep -q 'confirmPhotoGroupSummary' AgendaClara/app/src/main/java/pe/agendaclara/app/ScheduleActivity.java
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -103,12 +112,15 @@ jobs:
             "$DIR/ScheduleParser.java" \
             "$DIR/ScheduleGridInterpreter.java" \
             "$DIR/SchedulePhotoReview.java" \
+            "$DIR/ScheduleCourseSemanticGuard.java" \
             "$DIR/ScheduleVirtualGrid.java" \
             "$DIR/ScheduleOcrFusion.java" \
             updates/phase82/Phase82PhotoCourseTests.java \
+            updates/phase86/Phase86SemanticPhotoTests.java \
             updates/phase76/Phase76RecognitionTests.java \
             updates/phase77/Phase77FusionTests.java
           java -cp "$OUT" pe.agendaclara.app.Phase82PhotoCourseTests
+          java -cp "$OUT" pe.agendaclara.app.Phase86SemanticPhotoTests
           java -cp "$OUT" pe.agendaclara.app.Phase76RecognitionTests
           java -cp "$OUT" pe.agendaclara.app.Phase77FusionTests
       - name: Recuperar firma de desarrollo
@@ -132,7 +144,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.13'
-      - name: Compilar APK 3.15.4
+      - name: Compilar APK 3.15.5
         working-directory: AgendaClara
         run: |
           chmod +x gradlew
@@ -144,10 +156,10 @@ jobs:
           test -s "$APK"
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "$APK"
           "$ANDROID_HOME/build-tools/35.0.0/aapt" dump xmltree "$APK" AndroidManifest.xml | grep -q ScheduleActivity
-          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | grep -q "name='pe.agendaclara.app' versionCode='71' versionName='3.15.4'"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | grep -q "name='pe.agendaclara.app' versionCode='72' versionName='3.15.5'"
       - uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.15.4-Widgets-OCR-Foto-APK
+          name: Agenda-Clara-3.15.5-Widgets-OCR-Foto-APK
           path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
@@ -155,11 +167,11 @@ jobs:
         run: |
           rm -f AgendaClara/signing/development.jks
           rm -rf AgendaClara/.gradle AgendaClara/app/build AgendaClara/build
-          zip -q -r Agenda-Clara-3.15.4-Widgets-OCR-Foto-Fuentes.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks'
+          zip -q -r Agenda-Clara-3.15.5-Widgets-OCR-Foto-Fuentes.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks'
       - uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.15.4-Widgets-OCR-Foto-Fuentes
-          path: Agenda-Clara-3.15.4-Widgets-OCR-Foto-Fuentes.zip
+          name: Agenda-Clara-3.15.5-Widgets-OCR-Foto-Fuentes
+          path: Agenda-Clara-3.15.5-Widgets-OCR-Foto-Fuentes.zip
           retention-days: 30
   android:
     needs: compilar-y-probar
@@ -169,7 +181,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: Agenda-Clara-3.15.4-Widgets-OCR-Foto-APK
+          name: Agenda-Clara-3.15.5-Widgets-OCR-Foto-APK
           path: artifact-apk
       - name: Habilitar KVM
         run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
@@ -180,7 +192,7 @@ jobs:
           arch: x86_64
           target: default
           profile: pixel_6
-          avd-name: agenda-clara-3154-widgets-photo
+          avd-name: agenda-clara-3155-widgets-photo
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: |
@@ -192,7 +204,7 @@ jobs:
             adb shell dumpsys package pe.agendaclara.app | grep -q AcademicDayWidget
             adb shell dumpsys package pe.agendaclara.app | grep -q AcademicWeekWidget
             adb shell dumpsys package pe.agendaclara.app | grep -q PhotoWidget
-            echo 'PASS: APK 3.15.4 opens with academic and photo widget providers'
+            echo 'PASS: APK 3.15.5 opens with academic and photo widget providers'
             adb logcat -c
             adb shell am start -n pe.agendaclara.app/.WidgetRenderProbeActivity
             sleep 5
