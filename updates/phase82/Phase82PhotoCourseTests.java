@@ -22,7 +22,9 @@ public final class Phase82PhotoCourseTests {
         shared("Tecnología educativa","Recursos de tecnología");
         shared("Didáctica de la matemática","Evaluación matemática");
         shared("Historia universal","Seminario de historia");
-        shared("Fundamentos de la educación","Psicología de la educación");
+        check(ScheduleCourseRecognition.compare("Fundamentos de la educación",
+                "Psicología de la educación")==ScheduleCourseRecognition.Relation.DIFFERENT,
+                "Common word educación must not cause an unrelated-course prompt");
         shared("Curso de investigación","Seminario de investigación");
         check(ScheduleCourseRecognition.compare("Didáctica de la matemática",
                 "Evaluación matemática")==ScheduleCourseRecognition.Relation.SHARED_WORD,
