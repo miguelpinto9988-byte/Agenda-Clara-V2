@@ -11,10 +11,12 @@
 - `AcademicWidgetSync.java`: versión de la clase con bandera `dirty` y repetición hasta procesar todos los cambios recibidos.
 - `apply_widget_refresh_3152.py`: integración sobre fuentes 3.15.1 (versionCode 68); valida anclajes, preserva SHA-256 de cinco archivos del widget fotográfico e incrementa a 3.15.2 (versionCode 69).
 - `qa_widget_sync.sh`: prueba JVM con actualización concurrente y fallo simulado de un proveedor.
+- `Phase83WidgetDataTests.java`: datos de prueba para aislamiento por curso y perfil, tareas completadas/futuras y fechas de evaluación no confirmadas.
 - `.github/workflows/agenda-clara-ocr-photo-3151.yml`: cadena 3.15.0 → corrección OCR 3.15.1 → actualización de widgets 3.15.2, pruebas JVM, compilación y verificación Android.
 
 ## Verificaciones realizadas en una copia local de fuentes 3.15.0
 - Correcta la prueba de concurrencia con `javac` y dos proveedores simulados.
+- Correcto el ensayo JVM de datos sobre `AcademicWidgetModels` extraído de las fuentes 3.15.0: próximo curso del perfil elegido; tareas vinculadas, sin tareas completadas, futuras ni de otros cursos; evaluaciones por perfil con fecha desconocida preservada.
 - Válido el manifiesto de proveedores `AcademicDayWidget`, `AcademicWeekWidget` y `PhotoWidget`.
 - Diseños XML de widgets académicos y notas analizados sin errores.
 - Cinco archivos del widget fotográfico idénticos mediante comparación SHA-256 antes y después de simular el parche.
