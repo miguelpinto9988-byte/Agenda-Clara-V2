@@ -1,64 +1,60 @@
 # Agenda Clara — Android nativo
 
-**Versión integrada de la rama principal:** 3.15.2 (`versionCode 69`).
+**Versión actual de la aplicación:** 3.15.3 (`versionCode 70`). El historial
+de migraciones se mantiene hasta `updates/phase84`.
 
-La rama `main` contiene el historial de migraciones hasta la fase 83, incluidas
-las correcciones de los widgets académicos, la revisión del reconocimiento de cursos
-mediante fotografía y la conservación del widget fotográfico de imagen fija.
+## Widgets disponibles y corrección de carga
 
-## Compilación activa de main
+La app declara cinco proveedores Android en `AndroidManifest.xml`:
+`TaskWidget` (tareas), `StickyNotesWidget` (notas adhesivas),
+`AcademicDayWidget` (Mi día académico), `AcademicWeekWidget` (horario y
+evaluaciones) y `PhotoWidget` (fotografía fija).
 
-- **Flujo principal:** [Agenda Clara 3.15.2 — Widgets y OCR fotografía](.github/workflows/agenda-clara-ocr-photo-3151.yml).
-- Ante cambios de `updates/phase82/**`, `updates/phase83/**` o del propio flujo
-  en `main`, GitHub Actions reconstruye las fuentes, ejecuta pruebas y compila
-  la APK Android 3.15.2.
-- El flujo usa el secreto `SIGNING_JKS_BASE64` para firmar la APK de desarrollo
-  (la clave privada no está en el repositorio), verifica versión, firma y
-  proveedores de los widgets, y comprueba la apertura de la app en Android 15.
-- **Validación integral aprobada directamente en `main`:**
-  [42168646679](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42168646679),
-  con `compilar-y-probar` y `android` correctos. Esta ejecución generó
-  los artefactos de APK y fuentes Android 3.15.2.
-- El flujo anterior [3.13.3](.github/workflows/agenda-clara-ci.yml) se conserva
-  solo para activación manual: no genera una APK antigua automáticamente al
-  actualizar `main`.
+En 3.15.2 los widgets académicos tenían separadores `<View />` en dos
+diseños XML. Esa clase genérica **no está autorizada por el inflador Android
+`RemoteViews`** y puede hacer que el lanzador muestre «No se puede cargar el
+widget». La fase 84 sustituye ambos separadores por `<FrameLayout />` con
+idénticas dimensiones y colores, preservando el diseño y los datos de usuario.
 
-## Reconstrucción de fuentes y limitaciones conocidas
+El flujo 3.15.3 verifica todas las clases XML, los cinco receptores del
+manifiesto y la inflación de **13 diseños XML** usando `RemoteViews.apply`
+en Android 15 (no solo la presencia de los proveedores). La prueba de rama
+[42173111205](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42173111205)
+terminó con compilación, firma, instalación y **13/13 diseños cargados**.
+La actividad auxiliar de comprobación existe solo en el código `debug`.
 
-La arquitectura del repositorio sigue siendo **basada en migraciones**:
-el archivo `Agenda-Clara-1.3.0-Fuentes-Sin-Clave.zip` contiene el proyecto
-inicial, y los scripts `updates/**` conservan los cambios posteriores. El
-árbol completo de Android 3.15.2 se reconstruye durante CI y se publica como
-artefacto de fuentes, no como un árbol de archivos `AgendaClara/` en Git.
+## Compilación y pruebas de main
 
-**Dependencia temporal de CI:** el flujo 3.15.2 descarga las fuentes
-3.15.0 de la ejecución GitHub Actions `42145182419`. Dicho artefacto tiene
-retención limitada; antes de su caducidad debe sustituirse por una fuente base
-permanente o por una reconstrucción íntegra a partir del ZIP inicial y las
-migraciones. No debe afirmarse que la compilación será reproducible
-indefinidamente mientras dependa de un artefacto temporal.
+- Flujo principal: [Agenda Clara 3.15.3 — Widgets y OCR](.github/workflows/agenda-clara-ocr-photo-3151.yml).
+- Los cambios de `updates/phase82/**`, `updates/phase83/**`, `updates/phase84/**`
+  y del propio flujo activan la compilación Android 3.15.3 en `main`.
+- Se reconstruyen las fuentes, se prueban los datos académicos y el OCR,
+  se usa la firma de desarrollo guardada en el secreto
+  `SIGNING_JKS_BASE64`, y se valida la APK en emulador Android 15.
+- El flujo antiguo [3.13.3](.github/workflows/agenda-clara-ci.yml)
+  permanece disponible solo para ejecución manual.
 
-## Cambios de la versión 3.15.2
+El proyecto Android completo no está versionado como carpeta `AgendaClara/`:
+las fuentes se reconstruyen a partir del ZIP base y las migraciones, y se
+entregan como artefactos del flujo automatizado.
 
-- Los widgets del día y de la semana mantienen los datos del perfil académico
-  seleccionado; las tareas están asociadas a su curso y las evaluaciones sin
-  fecha no reciben fechas inventadas.
-- La sincronización conserva las solicitudes de actualización concurrentes y
-  aísla los fallos de cada proveedor de widget.
-- Las evaluaciones semanales se priorizan globalmente entre cursos por
-  proximidad de fecha, antes de limitar las líneas visibles.
-- El importador OCR solicita revisar las coincidencias significativas entre
-  nombres de cursos, sin fusionarlos silenciosamente.
-- Los cinco archivos principales del widget fotográfico (código,
-  configuración y recursos) se conservan sin modificación en esta fase.
-- La migración Python 3.15.2 es repetible y revierte escrituras incompletas.
+**Limitación de reproducibilidad:** el flujo toma fuentes 3.15.0 del
+artefacto de GitHub Actions `42145182419`, con retención limitada. Antes
+de caducar, sustituir esta dependencia por una fuente base permanente o
+reconstrucción totalmente versionada.
 
-Consulte el [informe técnico de la fase 83](updates/phase83/README.md).
+## Estado de funcionamiento
 
-## Validación pendiente de interfaz
+- **Verificado por CI:** generación APK 3.15.3, firma de desarrollo,
+  instalación/apertura en Android 15, 13/13 diseños `RemoteViews`,
+  pruebas académicas y de OCR sintético.
+- **No verificado todavía:** presentación de datos reales en el lanzador
+  del teléfono del usuario, todos los tamaños de pantalla, interacción de
+  los botones y colecciones en los widgets, persistencia de una foto real
+  tras reiniciar y precisión OCR con fotografías reales. Un resultado
+  13/13 de inflación no demuestra que todo el comportamiento sea perfecto.
 
-La ejecución automatizada prueba JVM, compilación, firma, instalación y
-apertura en Android 15. Para una entrega final al usuario sigue siendo
-recomendable probar los tamaños reales de los widgets en el lanzador,
-el comportamiento con varios perfiles, la persistencia de la fotografía
-seleccionada y el OCR con fotografías reales y consentimiento.
+Se mantienen las mejoras de la 3.15.2: filtrado por perfil y curso,
+actualizaciones concurrentes, fechas de evaluación confirmadas y revisión
+humana de coincidencias OCR. La fase 84 no modifica el contenido del
+widget fotográfico.
