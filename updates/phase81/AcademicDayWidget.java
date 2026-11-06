@@ -82,6 +82,10 @@ public final class AcademicDayWidget extends AppWidgetProvider {
             v.setTextViewText(R.id.academic_day_course,"No se pudo consultar tu horario");
             v.setTextViewText(R.id.academic_day_tasks,"Abre Agenda Clara para revisar tus datos.");
         }
+        AcademicWidgetTheme.apply(c,v,R.id.academic_day_root,
+                new int[]{R.id.academic_day_heading,R.id.academic_day_course,R.id.academic_day_tasks_label},
+                new int[]{R.id.academic_day_profile,R.id.academic_day_time,R.id.academic_day_tasks},
+                WidgetAppearance.read(c,id).theme);
         m.updateAppWidget(id,v);
     }
     @Override public void onUpdate(Context c,AppWidgetManager m,int[] ids){
