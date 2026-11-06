@@ -1,16 +1,17 @@
-name: Agenda Clara 3.15.1 - Confirmacion de cursos OCR por fotografia
+name: Agenda Clara 3.15.2 - Widgets y OCR fotografia verificados
 on:
   push:
-    branches: [fix/ocr-photo-confirm-all-overlaps-3-15-1-20261105]
+    branches: [fix/widgets-3151-refresh-qa-20261105]
     paths:
       - 'updates/phase82/**'
+      - 'updates/phase83/**'
       - '.github/workflows/agenda-clara-ocr-photo-3151.yml'
   workflow_dispatch:
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: agenda-clara-ocr-photo-3151
+  group: agenda-clara-widgets-photo-3152
   cancel-in-progress: true
 jobs:
   compilar-y-probar:
@@ -35,10 +36,18 @@ jobs:
           python3 -m py_compile updates/phase82/*.py
           python3 updates/phase82/apply_photo_course_confirmation.py
           python3 updates/phase82/qa_photo_course_confirmation.py
+      - name: Aplicar sincronización fiable de widgets y proteger fotografía fija
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile updates/phase83/apply_widget_refresh_3152.py
+          python3 updates/phase83/apply_widget_refresh_3152.py
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+      - name: Probar refresco concurrente de los widgets académicos
+        run: bash updates/phase83/qa_widget_sync.sh
       - name: Probar coincidencia de una sola palabra y variantes OCR
         shell: bash
         run: |
@@ -81,7 +90,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.13'
-      - name: Compilar APK 3.15.1
+      - name: Compilar APK 3.15.2
         working-directory: AgendaClara
         run: |
           chmod +x gradlew
@@ -93,10 +102,10 @@ jobs:
           test -s "$APK"
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "$APK"
           "$ANDROID_HOME/build-tools/35.0.0/aapt" dump xmltree "$APK" AndroidManifest.xml | grep -q ScheduleActivity
-          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | grep -q "name='pe.agendaclara.app' versionCode='68' versionName='3.15.1'"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | grep -q "name='pe.agendaclara.app' versionCode='69' versionName='3.15.2'"
       - uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.15.1-OCR-Foto-Confirmacion-APK
+          name: Agenda-Clara-3.15.2-Widgets-OCR-Foto-APK
           path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
           if-no-files-found: error
@@ -104,11 +113,11 @@ jobs:
         run: |
           rm -f AgendaClara/signing/development.jks
           rm -rf AgendaClara/.gradle AgendaClara/app/build AgendaClara/build
-          zip -q -r Agenda-Clara-3.15.1-OCR-Foto-Fuentes.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks'
+          zip -q -r Agenda-Clara-3.15.2-Widgets-OCR-Foto-Fuentes.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks'
       - uses: actions/upload-artifact@v4
         with:
-          name: Agenda-Clara-3.15.1-OCR-Foto-Fuentes
-          path: Agenda-Clara-3.15.1-OCR-Foto-Fuentes.zip
+          name: Agenda-Clara-3.15.2-Widgets-OCR-Foto-Fuentes
+          path: Agenda-Clara-3.15.2-Widgets-OCR-Foto-Fuentes.zip
           retention-days: 30
   android:
     needs: compilar-y-probar
@@ -118,7 +127,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: Agenda-Clara-3.15.1-OCR-Foto-Confirmacion-APK
+          name: Agenda-Clara-3.15.2-Widgets-OCR-Foto-APK
           path: artifact-apk
       - name: Habilitar KVM
         run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
@@ -129,7 +138,7 @@ jobs:
           arch: x86_64
           target: default
           profile: pixel_6
-          avd-name: agenda-clara-3151-photo
+          avd-name: agenda-clara-3152-widgets-photo
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: |
@@ -138,4 +147,7 @@ jobs:
             sleep 8
             adb shell pidof pe.agendaclara.app
             adb shell pidof pe.agendaclara.app
-            echo 'PASS: APK 3.15.1 launches; photo schedule screen registered'
+            adb shell dumpsys package pe.agendaclara.app | grep -q AcademicDayWidget
+            adb shell dumpsys package pe.agendaclara.app | grep -q AcademicWeekWidget
+            adb shell dumpsys package pe.agendaclara.app | grep -q PhotoWidget
+            echo 'PASS: APK 3.15.2 opens with academic and photo widget providers'
