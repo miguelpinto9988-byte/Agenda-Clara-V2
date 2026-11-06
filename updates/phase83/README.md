@@ -23,18 +23,21 @@
 - Se inspeccionaron los anclajes reales del sincronizador original de 3.15.0.
 - La ejecución 42145182419 de GitHub Actions terminó correctamente para la base 3.15.0.
 
-## Validaciones aún necesarias
-- El flujo CI de esta rama debe compilar, firmar e instalar efectivamente la APK 3.15.2; la existencia del flujo no demuestra su éxito.
+## Validación automatizada completada
+- La ejecución [42164898395](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42164898395) compiló la APK 3.15.2, verificó su firma e instaló/abrió la aplicación en un emulador Android 15. Los trabajos `compilar-y-probar` y `android` finalizaron correctamente.
+
+## Validaciones manuales pendientes
 - Colocar cada widget en el launcher y comprobar sus datos con horarios, tareas y evaluaciones de prueba (perfiles separados, cambios concurrentes, modo claro/oscuro y tamaños pequeños).
 - Probar el reconocimiento OCR completo de una fotografía real con consentimiento del usuario, revisar coincidencias y confirmar guardado; pruebas sintéticas no garantizan precisión en cualquier imagen.
 - Comprobar persistencia y cambio manual de fotografía en el widget sobre un dispositivo real.
-- No fusionar con `main` ni afirmar «APK final» sin esas verificaciones.
+- La promoción a `main` conserva los ensayos técnicos verificados, pero no sustituye las pruebas manuales de interacción real.
 
-Rama: `fix/widgets-3151-refresh-qa-20261105`.
+Origen de la integración: `fix/widgets-3151-refresh-qa-20261105`; destino: `main`.
 
 ## Correcciones adicionales de calidad de datos y migración
 - **Evaluaciones del widget semanal:** las candidatas de todos los cursos vinculados al perfil se reúnen antes de escoger las cuatro visibles. Las próximas aparecen en orden cronológico, las vencidas a continuación y las de fecha desconocida al final; los nombres y fechas existentes se conservan.
 - **Migración Python transaccional:** `apply_widget_refresh_3152.py` verifica anclajes, crea archivos temporales en el mismo directorio, sustituye atómicamente los destinos y revierte los cambios si falla cualquier escritura. Una segunda ejecución correcta no vuelve a modificar el proyecto.
 - **Pruebas añadidas:** `test_widget_patch.py` cubre éxito, repetición segura, recurso fotográfico faltante, código previo incompatible y reversión ante un fallo de escritura. `AcademicWidgetEvaluationOrderTests.java` comprueba la prioridad de evaluaciones de distintos cursos sin alterar los registros.
 - **Comprobaciones locales:** las cuatro pruebas Python de migración, la prueba Java de ordenación global, la prueba Java de concurrencia y una compilación de sintaxis Java con interfaces Android simuladas finalizaron correctamente.
-- **Límite:** las verificaciones locales no sustituyen una compilación de APK ni el uso de los widgets en un lanzador Android real. El flujo CI de esta rama debe completar esos pasos antes de distribución.
+- **Límite:** la compilación e instalación Android 15 ya pasaron en CI. Sigue pendiente la validación interactiva de los widgets en un lanzador físico y el OCR con fotografías reales.
+- **Reproducibilidad futura:** el flujo depende temporalmente de un artefacto de fuentes 3.15.0 con retención limitada; debe sustituirse por una fuente permanente antes de caducar.
