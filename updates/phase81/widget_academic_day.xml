@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="14dp"
+    android:background="@drawable/widget_academic_background">
+    <TextView android:id="@+id/academic_day_heading"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="☀ Mi día académico" android:textSize="18sp"
+        android:textStyle="bold" android:textColor="#182746"/>
+    <TextView android:id="@+id/academic_day_profile"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Horario seleccionado" android:textColor="#506180"
+        android:textSize="12sp" android:paddingTop="4dp"/>
+    <TextView android:id="@+id/academic_day_course"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Próxima clase" android:textColor="#18346B"
+        android:textSize="17sp" android:textStyle="bold"
+        android:paddingTop="14dp" android:maxLines="2" android:ellipsize="end"/>
+    <TextView android:id="@+id/academic_day_time"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Consulta tu próximo curso" android:textColor="#526581"
+        android:textSize="13sp" android:paddingTop="3dp"/>
+    <View android:layout_width="match_parent" android:layout_height="1dp"
+        android:layout_marginTop="12dp" android:background="#DCE5FA"/>
+    <TextView android:id="@+id/academic_day_tasks_label"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Tareas del curso" android:textColor="#182746"
+        android:textSize="14sp" android:textStyle="bold"
+        android:paddingTop="10dp"/>
+    <TextView android:id="@+id/academic_day_tasks"
+        android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:text="No hay tareas pendientes."
+        android:textColor="#425778" android:textSize="13sp"
+        android:paddingTop="6dp" android:maxLines="5"
+        android:ellipsize="end"/>
+</LinearLayout>
