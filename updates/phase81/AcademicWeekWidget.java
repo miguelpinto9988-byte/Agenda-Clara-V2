@@ -58,7 +58,7 @@ public final class AcademicWeekWidget extends AppWidgetProvider {
                             .append(" · ").append(AcademicWidgetRepository.evaluationLabel(task));
                 }
             }
-            if(entries.size()>shown)courses.append("\n+").append(entries.size()-shown)+" clases más";
+            if(entries.size()>shown)courses.append("\n+").append(entries.size()-shown).append(" clases más");
             v.setTextViewText(R.id.academic_week_classes,
                     courses.length()>0?courses.toString():"Todavía no hay clases en este horario.");
             v.setTextViewText(R.id.academic_week_evaluations,
