@@ -48,6 +48,15 @@ jobs:
           java-version: '17'
       - name: Verificar selección de horarios, cursos, tareas y evaluaciones por perfil
         run: bash updates/phase81/qa_widget_models.sh
+      - name: Probar asociación de widgets con datos de prueba
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$(mktemp -d)"
+          javac -encoding UTF-8 -d "$OUT" \
+            updates/phase81/AcademicWidgetModels.java \
+            updates/phase83/Phase83WidgetDataTests.java
+          java -cp "$OUT" pe.agendaclara.app.Phase83WidgetDataTests
       - name: Probar refresco concurrente de los widgets académicos
         run: bash updates/phase83/qa_widget_sync.sh
       - name: Probar coincidencia de una sola palabra y variantes OCR
