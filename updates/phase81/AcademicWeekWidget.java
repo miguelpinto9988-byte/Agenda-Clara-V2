@@ -75,6 +75,10 @@ public final class AcademicWeekWidget extends AppWidgetProvider {
             v.setTextViewText(R.id.academic_week_evaluations,
                     "Abre Agenda Clara y comprueba el horario seleccionado.");
         }
+        AcademicWidgetTheme.apply(c,v,R.id.academic_week_root,
+                new int[]{R.id.academic_week_heading},
+                new int[]{R.id.academic_week_profile,R.id.academic_week_classes,R.id.academic_week_evaluations},
+                WidgetAppearance.read(c,id).theme);
         m.updateAppWidget(id,v);
     }
     @Override public void onUpdate(Context c,AppWidgetManager m,int[] ids){
