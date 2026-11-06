@@ -65,6 +65,7 @@ def recognition(s):
         String[] sw=shortName.split(" ");
         if(shortName.length()>=3&&longName.startsWith(shortName+" ")&&
                 longName.split(" ").length>sw.length){
+            if(sw.length==1&&GENERIC.contains(shortName))return Relation.SHARED_START;
             return shortName.length()>=6?Relation.TRUNCATED:Relation.SHARED_START;
         }
         if(ScheduleCourseSemanticGuard.strongBeginning(cleanedLeft,cleanedRight))
