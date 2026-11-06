@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sticky_widget_row" android:layout_width="match_parent"
+    android:layout_height="95dp" android:orientation="vertical"
+    android:padding="10dp" android:background="@drawable/widget_note_card_yellow">
+    <TextView android:id="@+id/sticky_widget_title"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Nota" android:textSize="13sp" android:textStyle="bold"
+        android:textColor="#182746" android:singleLine="true" android:ellipsize="end"/>
+    <TextView android:id="@+id/sticky_widget_body"
+        android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:maxLines="2" android:ellipsize="end"
+        android:paddingTop="3dp" android:textSize="11sp" android:textColor="#34435D"/>
+    <TextView android:id="@+id/sticky_widget_date"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:singleLine="true" android:ellipsize="end" android:textSize="10sp"
+        android:textColor="#495E7A"/>
+</LinearLayout>
