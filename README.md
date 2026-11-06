@@ -1,6 +1,6 @@
 # Agenda Clara — Android nativo
 
-**Versión actual de la aplicación:** 3.15.3 (`versionCode 70`). El historial
+**Versión actual de la aplicación:** 3.15.4 (`versionCode 71`). El historial
 de migraciones se mantiene hasta `updates/phase85`.
 
 ## Widgets disponibles y corrección de carga
