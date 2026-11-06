@@ -18,9 +18,10 @@ idénticas dimensiones y colores, preservando el diseño y los datos de usuario.
 
 El flujo 3.15.3 verifica todas las clases XML, los cinco receptores del
 manifiesto y la inflación de **13 diseños XML** usando `RemoteViews.apply`
-en Android 15 (no solo la presencia de los proveedores). La prueba de rama
-[42173111205](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42173111205)
-terminó con compilación, firma, instalación y **13/13 diseños cargados**.
+en Android 15 (no solo la presencia de los proveedores). La verificación completa en **main**
+[42173553585](https://github.com/miguelpinto9988-byte/Agenda-Clara-V2/actions/runs/42173553585)
+terminó correctamente: compilación, firma, instalación Android 15 y **13/13 diseños cargados**.
+Los artefactos de esa ejecución incluyen la APK 3.15.3 y sus fuentes.
 La actividad auxiliar de comprobación existe solo en el código `debug`.
 
 ## Compilación y pruebas de main
