@@ -57,6 +57,7 @@ def atomic(path: Path, data: bytes) -> None:
 def planned() -> dict[Path, bytes]:
     source = {
         JAVA / 'AcademicWeekWidget.java': STAGE / 'AcademicWeekWidget.java',
+        Path('AgendaClara/app/src/debug/java/pe/agendaclara/app/WidgetRenderProbeActivity.java'): STAGE / 'WidgetRenderProbeActivity.java',
         RES / 'layout/widget_academic_week.xml': STAGE / 'widget_academic_week.xml',
     }
     files = {dst: src.read_bytes() for dst, src in source.items()}

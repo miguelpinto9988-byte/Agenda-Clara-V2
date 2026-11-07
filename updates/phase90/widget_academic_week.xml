@@ -8,7 +8,7 @@
  <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
   android:orientation="vertical" android:padding="6dp">
   <FrameLayout android:id="@+id/ac_week_heading" android:layout_width="match_parent"
-   android:layout_height="52dp" android:background="@drawable/ac_week_card"
+   android:layout_height="45dp" android:background="@drawable/ac_week_card"
    android:padding="4dp">
    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
     android:gravity="center_vertical" android:orientation="horizontal">
@@ -19,7 +19,7 @@
      android:scaleType="fitCenter" android:contentDescription="Mi horario" />
    </LinearLayout>
   </FrameLayout>
-  <LinearLayout android:layout_width="match_parent" android:layout_height="43dp"
+  <LinearLayout android:layout_width="match_parent" android:layout_height="38dp"
    android:orientation="horizontal" android:gravity="center_vertical"
    android:layout_marginTop="4dp">
    <ImageView android:id="@+id/ac_week_previous" android:layout_width="38dp"
@@ -46,7 +46,7 @@
     android:contentDescription="Día siguiente" />
   </LinearLayout>
   <FrameLayout android:id="@+id/ac_week_card_1" android:layout_width="match_parent"
-   android:layout_height="64dp" android:layout_marginTop="4dp">
+   android:layout_height="60dp" android:layout_marginTop="4dp">
    <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
     android:src="@drawable/ac_week_card" android:scaleType="fitXY" />
    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
@@ -89,7 +89,7 @@
    </LinearLayout>
   </FrameLayout>
   <FrameLayout android:id="@+id/ac_week_card_2" android:layout_width="match_parent"
-   android:layout_height="64dp" android:layout_marginTop="4dp">
+   android:layout_height="60dp" android:layout_marginTop="4dp">
    <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
     android:src="@drawable/ac_week_card_alt" android:scaleType="fitXY" />
    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"

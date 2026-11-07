@@ -33,6 +33,8 @@ for e in all_elements:
         if value.startswith('@drawable/'):
             label = value.split('/')[-1]
             assert (app / 'res/drawable-nodpi' / (label + '.png')).is_file(), label
+probe = Path('AgendaClara/app/src/debug/java/pe/agendaclara/app/WidgetRenderProbeActivity.java').read_text(encoding='utf-8')
+assert 'R.id.ac_week_course_1' in probe and 'R.id.academic_week_classes' not in probe
 src = java.read_text(encoding='utf-8')
 for token in ('AcademicWidgetRepository.classes', 'selectedDate(context, id)',
               'ACTION_NEXT', 'ACTION_PREV', 'setOnClickPendingIntent',

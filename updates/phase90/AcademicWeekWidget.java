@@ -106,6 +106,9 @@ public final class AcademicWeekWidget extends AppWidgetProvider {
         int height = opts == null ? 235 : opts.getInt(
                 AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 235);
         boolean compact = height < 205;
+        // Small widgets: preserve navigation and the first readable class.
+        views.setViewVisibility(R.id.ac_week_heading,
+                height < 175 ? View.GONE : View.VISIBLE);
         AcademicSchedules.Profile profile = null;
         try { profile = AcademicWidgetRepository.profile(context, id); }
         catch (RuntimeException ignored) { }
