@@ -9,7 +9,7 @@ on:
       - '.github/workflows/agenda-clara-canva-sticky-31510.yml'
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
   actions: read
 concurrency:
   group: agenda-clara-canva-sticky-31510-${{ github.ref }}
@@ -138,3 +138,27 @@ jobs:
             adb logcat -d -s AgendaWidgetQA:I '*:S' > widget_render.log
             cat widget_render.log
             grep -Fq 'PASS: 13/13 widget XML layouts inflated with RemoteViews.apply' widget_render.log
+      - name: Guardar diagnóstico si falla el emulador
+        if: failure()
+        shell: bash
+        run: |
+          set +e
+          mkdir -p .github-diagnostics
+          REPORT=.github-diagnostics/notas-31510-android.log
+          printf 'Build SHA: %s\nRun: %s\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" > "$REPORT"
+          if [ -f widget_render.log ]; then
+            echo '--- WidgetRenderProbeActivity ---' >> "$REPORT"
+            cat widget_render.log >> "$REPORT"
+          else
+            echo 'widget_render.log was not produced (possible emulator startup error)' >> "$REPORT"
+          fi
+          echo '--- adb devices ---' >> "$REPORT"
+          adb devices -l >> "$REPORT" 2>&1 || true
+          echo '--- last Android log lines ---' >> "$REPORT"
+          adb logcat -d -t 400 '*:W' >> "$REPORT" 2>&1 || true
+          echo '--- diagnostic complete ---' >> "$REPORT"
+          git config user.name 'agenda-clara-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add "$REPORT"
+          git commit -m 'ci: record sticky widget emulator diagnostics [skip ci]' || true
+          git push origin "HEAD:${GITHUB_REF_NAME}" || true
