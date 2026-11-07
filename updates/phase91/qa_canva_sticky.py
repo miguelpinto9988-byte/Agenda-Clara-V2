@@ -15,6 +15,7 @@ checks={
 }
 for name,wanted in checks.items():
  root=ET.parse(res/'layout'/name).getroot()
+ assert not any(e.tag=='View' for e in root.iter()),'RemoteViews disallows android.view.View'
  ids={e.get(ns+'id','').split('/')[-1] for e in root.iter()}
  assert wanted<=ids,(name,wanted-ids)
  assert ('GridView' if name=='widget_notes_board.xml' else 'ListView' if name=='widget_notes_board_compact.xml' else 'ImageView') in ET.tostring(root,encoding='unicode')

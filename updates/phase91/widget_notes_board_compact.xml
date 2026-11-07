@@ -5,8 +5,8 @@
  <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
   android:src="@drawable/ac_notes_landscape" android:scaleType="centerCrop"
   android:contentDescription="@null"/>
- <View android:layout_width="match_parent" android:layout_height="match_parent"
-  android:background="#9AFFFFFF"/>
+ <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
+  android:background="#9AFFFFFF" android:contentDescription="@null"/>
  <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
    android:orientation="vertical" android:padding="5dp">
   <LinearLayout android:layout_width="match_parent" android:layout_height="43dp"
