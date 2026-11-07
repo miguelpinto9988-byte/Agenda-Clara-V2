@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/sticky_widget_root"
+ android:layout_width="match_parent" android:layout_height="match_parent"
+ android:background="@drawable/ac_notes_shell" android:clipToOutline="true">
+ <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
+  android:src="@drawable/ac_notes_landscape" android:scaleType="centerCrop"
+  android:contentDescription="@null"/>
+ <View android:layout_width="match_parent" android:layout_height="match_parent"
+  android:background="#9AFFFFFF"/>
+ <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+   android:orientation="vertical" android:padding="8dp">
+  <LinearLayout android:layout_width="match_parent" android:layout_height="53dp"
+   android:gravity="center_vertical" android:orientation="horizontal">
+   <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
+    <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
+      android:src="@drawable/ac_notes_header" android:scaleType="fitXY" android:contentDescription="@null"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+     android:gravity="center_vertical" android:orientation="horizontal" android:paddingStart="6dp" android:paddingEnd="7dp">
+      <ImageView android:layout_width="30dp" android:layout_height="30dp"
+       android:src="@drawable/ac_notes_stack" android:contentDescription="@null"/>
+      <TextView android:id="@+id/sticky_widget_header" android:layout_width="0dp"
+       android:layout_height="match_parent" android:layout_weight="1" android:gravity="center_vertical"
+       android:layout_marginStart="3dp" android:text="Notas adhesivas" android:textColor="#122B60"
+       android:textStyle="bold" android:textSize="17sp" android:singleLine="true" android:ellipsize="end"
+       android:contentDescription="Abrir todas las notas adhesivas"/>
+      <FrameLayout android:layout_width="53dp" android:layout_height="31dp">
+       <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
+        android:src="@drawable/ac_notes_counter" android:scaleType="fitXY" android:contentDescription="@null"/>
+       <TextView android:id="@+id/sticky_widget_count" android:layout_width="match_parent"
+        android:layout_height="match_parent" android:gravity="center" android:text="0"
+        android:textStyle="bold" android:textColor="#193666" android:textSize="10sp"
+        android:singleLine="true" android:ellipsize="end"/>
+      </FrameLayout>
+    </LinearLayout>
+   </FrameLayout>
+   <FrameLayout android:id="@+id/sticky_widget_add" android:layout_width="68dp"
+    android:layout_height="47dp" android:layout_marginStart="3dp"
+    android:contentDescription="Crear una nota adhesiva">
+    <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
+      android:src="@drawable/ac_notes_add" android:scaleType="fitXY" android:contentDescription="@null"/>
+    <TextView android:id="@+id/sticky_widget_add_label" android:layout_width="match_parent"
+      android:layout_height="match_parent" android:gravity="center" android:text="＋"
+      android:textColor="#103D76" android:textSize="12sp"
+      android:textStyle="bold"/>
+   </FrameLayout>
+  </LinearLayout>
+  <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+   android:paddingTop="3dp">
+   <GridView android:id="@+id/sticky_widget_list" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:numColumns="2" android:horizontalSpacing="4dp" android:verticalSpacing="4dp" android:stretchMode="columnWidth" android:clipToPadding="false"/>
+   <TextView android:id="@+id/sticky_widget_empty" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:gravity="center" android:padding="10dp"
+    android:background="@drawable/ac_notes_empty" android:text="Sin notas. Pulsa ＋ para crear una."
+    android:textColor="#173A67" android:textSize="13sp" android:textStyle="bold"/>
+  </FrameLayout>
+ </LinearLayout>
+</FrameLayout>

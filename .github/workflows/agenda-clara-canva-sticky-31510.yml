@@ -1,0 +1,140 @@
+name: Agenda Clara 3.15.10 - Notas adhesivas Canva PNG
+on:
+  push:
+    branches:
+      - main
+      - feat/canva-notas-adhesivas-png-31510-20261106
+    paths:
+      - 'updates/phase91/**'
+      - '.github/workflows/agenda-clara-canva-sticky-31510.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: agenda-clara-canva-sticky-31510-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperar fuentes 3.15.9 verificadas
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh run download 42320282360 --repo "$GITHUB_REPOSITORY" \
+            --name Agenda-Clara-3.15.9-Mi-Horario-Fuentes --dir previous
+          test -s previous/Agenda-Clara-3.15.9-Mi-Horario-Fuentes.zip
+          unzip -q previous/Agenda-Clara-3.15.9-Mi-Horario-Fuentes.zip
+          grep -q 'versionCode 76' AgendaClara/app/build.gradle
+      - name: Integrar PNG individuales y probar widget Notas adhesivas
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet Pillow
+          python3 -m py_compile updates/phase91/*.py
+          python3 updates/phase91/apply_canva_sticky_31510.py
+          python3 updates/phase91/apply_canva_sticky_31510.py
+          python3 updates/phase91/qa_canva_sticky.py
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Instalar firma de desarrollo
+        env:
+          SIGNING_JKS_BASE64: ${{ secrets.SIGNING_JKS_BASE64 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$SIGNING_JKS_BASE64"
+          mkdir -p AgendaClara/signing
+          printf '%s' "$SIGNING_JKS_BASE64" | base64 -d > AgendaClara/signing/development.jks
+          chmod 600 AgendaClara/signing/development.jks
+          keytool -list -keystore AgendaClara/signing/development.jks -storepass android -alias agendaclara >/dev/null
+      - name: Preparar Android SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          SDKMANAGER="$(command -v sdkmanager || true)"
+          if [ -z "$SDKMANAGER" ]; then SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"; fi
+          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses >/dev/null || true
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" 'platforms;android-36' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - name: Compilar APK
+        working-directory: AgendaClara
+        shell: bash
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon :app:assembleDebug
+      - name: Verificar versión y firma
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK=AgendaClara/app/build/outputs/apk/debug/app-debug.apk
+          test -s "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | \
+            grep -q "name='pe.agendaclara.app' versionCode='77' versionName='3.15.10'"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.15.10-Notas-Canva-APK
+          path: AgendaClara/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+          if-no-files-found: error
+      - name: Guardar fuentes sin clave de firma
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f AgendaClara/signing/development.jks
+          rm -rf AgendaClara/.gradle AgendaClara/app/build AgendaClara/build
+          zip -q -r Agenda-Clara-3.15.10-Notas-Canva-Fuentes.zip AgendaClara -x 'AgendaClara/signing/*' 'AgendaClara/*.jks'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Agenda-Clara-3.15.10-Notas-Canva-Fuentes
+          path: Agenda-Clara-3.15.10-Notas-Canva-Fuentes.zip
+          retention-days: 30
+          if-no-files-found: error
+  android:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: Agenda-Clara-3.15.10-Notas-Canva-APK
+          path: artifact-apk
+      - name: Permitir aceleración del emulador
+        run: if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+      - name: Verificar widget y las 13 plantillas en Android 15
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: default
+          profile: pixel_6
+          avd-name: agenda-clara-31510-notas
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: |
+            adb install -r artifact-apk/app-debug.apk
+            adb shell am start -n pe.agendaclara.app/.MainActivity
+            sleep 8
+            adb shell pidof pe.agendaclara.app
+            adb shell dumpsys package pe.agendaclara.app | grep -q StickyNotesWidget
+            adb shell dumpsys package pe.agendaclara.app | grep -q AcademicDayWidget
+            adb shell dumpsys package pe.agendaclara.app | grep -q AcademicWeekWidget
+            adb shell dumpsys package pe.agendaclara.app | grep -q PhotoWidget
+            adb logcat -c
+            adb shell am start -n pe.agendaclara.app/.WidgetRenderProbeActivity
+            sleep 5
+            adb logcat -d -s AgendaWidgetQA:I '*:S' > widget_render.log
+            cat widget_render.log
+            grep -Fq 'PASS: 13/13 widget XML layouts inflated with RemoteViews.apply' widget_render.log
